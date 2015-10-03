@@ -11,13 +11,16 @@ public class MasterManager : GameMonoBehaviour
 	private List<GameObject> viewPrefabs;
 	private ViewManager currentViewManager;
 	private View currentView;
-	private int currentViewId {
+	private int currentViewId
+	{
 		get {return (int)currentView;}
 	}
-	private string currentViewStr {
+	private string currentViewStr
+	{
 		get {return currentView.ToString();}
 	}
-	public enum View {
+	public enum View
+	{
 		Home = 0,
 		Game = 1,
 	}

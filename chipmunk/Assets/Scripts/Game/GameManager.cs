@@ -19,7 +19,8 @@ public class GameManager : GameMonoBehaviour
 
 	private void InitStage()
 	{
-		if (stageManager == null) {
+		if (stageManager == null)
+		{
 			GameObject stageGameObject = Instantiate(stagePrefab);
 			stageGameObject.transform.SetParent(transform.parent);
 			stageManager = stageGameObject.GetComponent<StageManager>();

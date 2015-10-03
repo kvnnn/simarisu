@@ -76,7 +76,7 @@ public class MasterManager : GameMonoBehaviour
 		string viewStr = view.ToString();
 
 		GameObject viewGameObject = Instantiate(viewPrefabs[viewId]);
-		viewGameObject.transform.parent = viewBaseTransform;
+		viewGameObject.transform.SetParent(viewBaseTransform);
 		viewGameObject.name = viewStr;
 
 		ViewManager viewManager = viewGameObject.GetComponent<ViewManager>();

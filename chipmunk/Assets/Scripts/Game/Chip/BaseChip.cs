@@ -2,9 +2,12 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class BaseChip : GameMonoBehaviour
+public class BaseChip
 {
-	public string name {get; private set;}
+	public DataRow rawData {get; private set;}
+
+	public int id {get; private set;}
+	public string chipName {get; private set;}
 	public string description {get; private set;}
 	public string sprite {get; private set;}
 	public string effect {get; private set;}
@@ -31,8 +34,8 @@ public class BaseChip : GameMonoBehaviour
 	public string position {get; private set;}
 	public string range {get; private set;}
 
-	public void Init()
+	public BaseChip(DataRow rawData)
 	{
-
+		this.rawData = rawData;
 	}
 }

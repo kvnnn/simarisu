@@ -5,8 +5,12 @@ using System.Collections.Generic;
 public class AttackChip : BaseChip
 {
 	// damage depends on user character power
-	public virtual int damage
+	public override int damage
 	{
 		get {return 5;}
+	}
+
+	public AttackChip(DataRow rawData) : base(rawData)
+	{
 	}
 }

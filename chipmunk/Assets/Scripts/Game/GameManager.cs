@@ -11,6 +11,12 @@ public class GameManager : GameMonoBehaviour
 	[SerializeField]
 	private CharacterManager characterManager;
 
+	private ChipListParts chipListParts;
+	public bool isUIPartsInstantiated
+	{
+		get {return chipListParts != null;}
+	}
+
 	public IEnumerator InitGame()
 	{
 		InitStage();
@@ -38,5 +44,10 @@ public class GameManager : GameMonoBehaviour
 	public void StartGame()
 	{
 
+	}
+
+	public void InitUI(ChipListParts chipListParts)
+	{
+		this.chipListParts = chipListParts;
 	}
 }

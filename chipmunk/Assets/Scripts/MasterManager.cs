@@ -9,6 +9,7 @@ public class MasterManager : GameMonoBehaviour
 
 	[SerializeField]
 	private List<GameObject> viewPrefabs;
+	private ViewManager currentViewManager;
 	private View currentView;
 	private int currentViewId {
 		get {return (int)currentView;}
@@ -18,6 +19,7 @@ public class MasterManager : GameMonoBehaviour
 	}
 	public enum View {
 		Home = 0,
+		Game = 1,
 	}
 
 	void Awake()
@@ -52,8 +54,20 @@ public class MasterManager : GameMonoBehaviour
 		Transform viewTransform = viewBaseTransform.Find(currentViewStr);
 		viewGameObject = (viewTransform != null) ? viewTransform.gameObject : ImportView(currentView);
 
-		ViewManager viewManager = viewGameObject.GetComponent<ViewManager>();
-		viewManager.Show();
+		HideCurrentView();
+		currentViewManager = viewGameObject.GetComponent<ViewManager>();
+		ShowCurrentView();
+	}
+
+	private void HideCurrentView()
+	{
+		if (currentViewManager == null) {return;}
+		currentViewManager.Hide();
+	}
+
+	private void ShowCurrentView()
+	{
+		currentViewManager.Show();
 	}
 
 	private GameObject ImportView(View view)
@@ -66,7 +80,7 @@ public class MasterManager : GameMonoBehaviour
 		viewGameObject.name = viewStr;
 
 		ViewManager viewManager = viewGameObject.GetComponent<ViewManager>();
-		viewManager.Init();
+		viewManager.Init(this);
 
 		return viewGameObject;
 	}

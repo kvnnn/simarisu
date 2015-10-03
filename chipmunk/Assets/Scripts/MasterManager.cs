@@ -51,6 +51,9 @@ public class MasterManager : GameMonoBehaviour
 		GameObject viewGameObject = null;
 		Transform viewTransform = viewBaseTransform.Find(currentViewStr);
 		viewGameObject = (viewTransform != null) ? viewTransform.gameObject : ImportView(currentView);
+
+		ViewManager viewManager = viewGameObject.GetComponent<ViewManager>();
+		viewManager.Show();
 	}
 
 	private GameObject ImportView(View view)
@@ -61,6 +64,10 @@ public class MasterManager : GameMonoBehaviour
 		GameObject viewGameObject = Instantiate(viewPrefabs[viewId]);
 		viewGameObject.transform.parent = viewBaseTransform;
 		viewGameObject.name = viewStr;
+
+		ViewManager viewManager = viewGameObject.GetComponent<ViewManager>();
+		viewManager.Init();
+
 		return viewGameObject;
 	}
 }

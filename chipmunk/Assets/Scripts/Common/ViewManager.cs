@@ -4,9 +4,11 @@ using System.Collections.Generic;
 
 public class ViewManager : GameMonoBehaviour
 {
-	public virtual void Init()
-	{
+	protected MasterManager masterManager;
 
+	public virtual void Init(MasterManager masterManager)
+	{
+		this.masterManager = masterManager;
 	}
 
 	public void Show()

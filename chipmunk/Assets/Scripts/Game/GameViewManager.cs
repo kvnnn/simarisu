@@ -9,7 +9,7 @@ public class GameViewManager : ViewManager
 
 	protected override void BeforeShow()
 	{
-		gameManager.InitGame();
+		GameStartCoroutine(gameManager.InitGame());
 	}
 
 	protected override void AfterShow()

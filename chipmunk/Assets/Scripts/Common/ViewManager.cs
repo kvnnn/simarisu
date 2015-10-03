@@ -66,4 +66,9 @@ public class ViewManager : GameMonoBehaviour
 	{
 
 	}
+
+	public void GameStartCoroutine(IEnumerator routine)
+	{
+		masterManager.StartCoroutine(routine);
+	}
 }

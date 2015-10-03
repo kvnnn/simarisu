@@ -6,14 +6,15 @@ public class GameManager : GameMonoBehaviour
 {
 	[SerializeField]
 	private GameObject stagePrefab;
-	private StageManager stageManager;
+	public StageManager stageManager {get; private set;}
 
 	[SerializeField]
 	private CharacterManager characterManager;
 
-	public void InitGame()
+	public IEnumerator InitGame()
 	{
 		InitStage();
+		yield return new WaitForEndOfFrame();
 		InitCharacter();
 	}
 

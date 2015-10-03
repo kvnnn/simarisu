@@ -5,6 +5,9 @@ using System.Collections.Generic;
 public class CharacterManager : GameMonoBehaviour
 {
 	[SerializeField]
+	private GameManager gameManager;
+
+	[SerializeField]
 	private GameObject characterPrefab;
 
 	private UserCharacter user;
@@ -15,11 +18,13 @@ public class CharacterManager : GameMonoBehaviour
 		DestroyAll();
 
 		// For test
-		AddCharacter<UserCharacter>(1);
-		AddCharacter<MonsterCharacter>(2);
+		var uc = AddCharacter<UserCharacter>(1);
+		uc.MoveTo(gameManager.stageManager.GetCellPosition(1,1));
+		var mc = AddCharacter<MonsterCharacter>(2);
+		mc.MoveTo(gameManager.stageManager.GetCellPosition(4,1));
 	}
 
-	private void AddCharacter<T>(int characterId)
+	private T AddCharacter<T>(int characterId)
 		where T : BaseCharacter
 	{
 		GameObject characterGameObject = Instantiate(characterPrefab);
@@ -27,6 +32,8 @@ public class CharacterManager : GameMonoBehaviour
 
 		T character = characterGameObject.AddComponent<T>();
 		character.Init(GetSprite(characterId));
+
+		return character;
 	}
 
 	private Sprite GetSprite(int characterId)

@@ -28,6 +28,11 @@ public class BaseCharacter : GameMonoBehaviour
 		spriteRenderer.sprite = sprite;
 	}
 
+	public void MoveTo(Vector3 position)
+	{
+		transform.MoveTo(position);
+	}
+
 	protected void SetDirection(Direction direction)
 	{
 		transform.RotateY(180 * (int)direction);

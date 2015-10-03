@@ -10,7 +10,7 @@ GameObject:
   - 4: {fileID: 422092}
   - 114: {fileID: 11470526}
   m_Layer: 0
-  m_Name: CharacterManager
+  m_Name: ChipManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -81,6 +81,22 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!1 &196042
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 471424}
+  - 114: {fileID: 11414300}
+  m_Layer: 0
+  m_Name: CharacterManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!4 &412044
 Transform:
   m_ObjectHideFlags: 1
@@ -92,8 +108,9 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 471658}
-  - {fileID: 422092}
+  - {fileID: 471424}
   - {fileID: 485210}
+  - {fileID: 422092}
   m_Father: {fileID: 0}
   m_RootOrder: 0
 --- !u!4 &422092
@@ -102,6 +119,18 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 107498}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 412044}
+  m_RootOrder: 3
+--- !u!4 &471424
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 196042}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -145,7 +174,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stagePrefab: {fileID: 140300, guid: 46940d14453a6436887ab62b297c8bf5, type: 2}
-  characterManager: {fileID: 11470526}
+  characterManager: {fileID: 11414300}
+  chipManager: {fileID: 11470526}
+--- !u!114 &11414300
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 196042}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b99a0aa4a4154406b00cd7492968902, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameManager: {fileID: 11411804}
+  characterPrefab: {fileID: 196486, guid: bdad3ee2ba4b048c6b9cb197d40e7bb0, type: 2}
 --- !u!114 &11425948
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -179,6 +222,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameManager: {fileID: 11411804}
+  uiBaseTransform: {fileID: 22445406}
+  chipListPartsPrefab: {fileID: 151678, guid: d2b8dfa0966894ef1affefb910aaf813, type: 2}
+  chipSeletPartsPrefab: {fileID: 152218, guid: 71063ca6cf5c24a57b28a8169133f18e, type: 2}
 --- !u!114 &11441198
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -203,11 +249,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 107498}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8b99a0aa4a4154406b00cd7492968902, type: 3}
+  m_Script: {fileID: 11500000, guid: c6bc38fd34d68418a9d74332f0f085d4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameManager: {fileID: 11411804}
-  characterPrefab: {fileID: 196486, guid: bdad3ee2ba4b048c6b9cb197d40e7bb0, type: 2}
 --- !u!223 &22301652
 Canvas:
   m_ObjectHideFlags: 1
@@ -233,7 +277,7 @@ RectTransform:
   m_GameObject: {fileID: 142758}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 471658}
   m_RootOrder: 0
@@ -257,6 +301,14 @@ Prefab:
       propertyPath: gameManager
       value: 
       objectReference: {fileID: 11411804}
+    - target: {fileID: 0}
+      propertyPath: chipListPartsPrefab
+      value: 
+      objectReference: {fileID: 151678, guid: d2b8dfa0966894ef1affefb910aaf813, type: 2}
+    - target: {fileID: 0}
+      propertyPath: chipSeletPartsPrefab
+      value: 
+      objectReference: {fileID: 152218, guid: 71063ca6cf5c24a57b28a8169133f18e, type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 136164}

@@ -11,10 +11,16 @@ public class GameManager : GameMonoBehaviour
 	[SerializeField]
 	private CharacterManager characterManager;
 
-	public IEnumerator InitGame()
+	[SerializeField]
+	private ChipManager chipManager;
+
+	public ChipListParts chipListParts {get; private set;}
+	public ChipSelectParts chipSelectParts {get; private set;}
+
+	public void InitGame()
 	{
+		InitChip();
 		InitStage();
-		yield return new WaitForEndOfFrame();
 		InitCharacter();
 	}
 
@@ -35,8 +41,19 @@ public class GameManager : GameMonoBehaviour
 		characterManager.Init();
 	}
 
+	private void InitChip()
+	{
+		chipManager.Init();
+	}
+
 	public void StartGame()
 	{
+		characterManager.ForDebug();
+	}
 
+	public void InitUI(ChipListParts chipListParts, ChipSelectParts chipSelectParts)
+	{
+		this.chipListParts = chipListParts;
+		this.chipSelectParts = chipSelectParts;
 	}
 }

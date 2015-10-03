@@ -70,7 +70,7 @@ public class MasterManager : GameMonoBehaviour
 
 	private void ShowCurrentView()
 	{
-		currentViewManager.Show();
+		StartCoroutine(currentViewManager.Show());
 	}
 
 	private GameObject ImportView(View view)

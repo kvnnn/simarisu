@@ -11,11 +11,12 @@ public class ViewManager : GameMonoBehaviour
 		this.masterManager = masterManager;
 	}
 
-	public void Show()
+	public IEnumerator Show()
 	{
 		BeforeShow();
 		ShowView();
 		OnShow();
+		yield return new WaitForEndOfFrame();
 		AfterShow();
 	}
 
@@ -65,10 +66,5 @@ public class ViewManager : GameMonoBehaviour
 	protected virtual void AfterHide()
 	{
 
-	}
-
-	public void GameStartCoroutine(IEnumerator routine)
-	{
-		masterManager.StartCoroutine(routine);
 	}
 }

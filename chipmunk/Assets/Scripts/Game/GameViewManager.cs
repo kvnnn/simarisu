@@ -11,6 +11,8 @@ public class GameViewManager : ViewManager
 	private Transform uiBaseTransform;
 	[SerializeField]
 	private GameObject chipListPartsPrefab;
+	[SerializeField]
+	private GameObject chipSeletPartsPrefab;
 
 	protected override void BeforeShow()
 	{
@@ -25,15 +27,16 @@ public class GameViewManager : ViewManager
 
 	private void InitUI()
 	{
-		ChipListParts chipListParts = InstantiateUI<ChipListParts>(chipListPartsPrefab);
-		gameManager.InitUI(chipListParts);
+		ChipListParts chipListParts = InstantiateUI<ChipListParts>(chipListPartsPrefab, gameManager.chipListParts != null);
+		ChipSelectParts chipSelectParts = InstantiateUI<ChipSelectParts>(chipSeletPartsPrefab, gameManager.chipSelectParts != null);
+		gameManager.InitUI(chipListParts, chipSelectParts);
 	}
 
-	private T InstantiateUI<T>(GameObject prefab)
+	private T InstantiateUI<T>(GameObject prefab, bool isInstantiated)
 		where T : BaseUIParts
 	{
 		T uiParts = null;
-		if (!gameManager.isUIPartsInstantiated) {
+		if (!isInstantiated) {
 			GameObject uiPartsGameObject = Instantiate(prefab);
 			uiPartsGameObject.transform.SetParent(uiBaseTransform);
 			uiParts = uiPartsGameObject.GetComponent<T>();

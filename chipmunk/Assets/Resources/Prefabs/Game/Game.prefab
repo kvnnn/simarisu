@@ -181,6 +181,7 @@ MonoBehaviour:
   gameManager: {fileID: 11411804}
   uiBaseTransform: {fileID: 22445406}
   chipListPartsPrefab: {fileID: 151678, guid: d2b8dfa0966894ef1affefb910aaf813, type: 2}
+  chipSeletPartsPrefab: {fileID: 152218, guid: 71063ca6cf5c24a57b28a8169133f18e, type: 2}
 --- !u!114 &11441198
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -263,6 +264,10 @@ Prefab:
       propertyPath: chipListPartsPrefab
       value: 
       objectReference: {fileID: 151678, guid: d2b8dfa0966894ef1affefb910aaf813, type: 2}
+    - target: {fileID: 0}
+      propertyPath: chipSeletPartsPrefab
+      value: 
+      objectReference: {fileID: 152218, guid: 71063ca6cf5c24a57b28a8169133f18e, type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 136164}

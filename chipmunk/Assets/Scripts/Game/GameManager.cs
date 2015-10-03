@@ -8,9 +8,13 @@ public class GameManager : GameMonoBehaviour
 	private GameObject stagePrefab;
 	private StageManager stageManager;
 
+	[SerializeField]
+	private CharacterManager characterManager;
+
 	public void InitGame()
 	{
 		InitStage();
+		InitCharacter();
 	}
 
 	private void InitStage()
@@ -22,6 +26,11 @@ public class GameManager : GameMonoBehaviour
 		}
 
 		stageManager.Init();
+	}
+
+	private void InitCharacter()
+	{
+		characterManager.Init();
 	}
 
 	public void StartGame()

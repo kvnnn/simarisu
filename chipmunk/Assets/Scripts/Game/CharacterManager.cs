@@ -16,7 +16,10 @@ public class CharacterManager : GameMonoBehaviour
 	public void Init()
 	{
 		DestroyAll();
+	}
 
+	public void ForDebug()
+	{
 		// For test
 		var uc = AddCharacter<UserCharacter>(1);
 		uc.MoveTo(gameManager.stageManager.GetCellPosition(1,1));

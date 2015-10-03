@@ -16,7 +16,7 @@ public class GameViewManager : ViewManager
 
 	protected override void BeforeShow()
 	{
-		GameStartCoroutine(gameManager.InitGame());
+		gameManager.InitGame();
 		InitUI();
 	}
 

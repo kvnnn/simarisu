@@ -17,17 +17,24 @@ public class ChipManager : GameMonoBehaviour
 	public void SetUIParts(ChipListParts chipListParts, ChipSelectParts chipSelectParts)
 	{
 		this.chipListParts = chipListParts;
-		this.chipSelectParts = chipSelectParts;
-
+		chipListParts.chipPartsClick += ChipPartsClick;
 		UpdateChipParts();
+
+		this.chipSelectParts = chipSelectParts;
+		ResetChipSelectParts();
+	}
+
+	public void ResetChipSelectParts()
+	{
+		chipSelectParts.ResetFocus();
 	}
 
 	public void UpdateChipParts()
 	{
-		chipListParts.UpdateChipParts(SelectChips());
+		chipListParts.SetChips(SelectChipsFromDeck());
 	}
 
-	public List<BaseChip> SelectChips()
+	public List<BaseChip> SelectChipsFromDeck()
 	{
 		// For test
 		List<BaseChip> chips = new List<BaseChip>(){
@@ -43,5 +50,10 @@ public class ChipManager : GameMonoBehaviour
 	public void UpdateDeck()
 	{
 
+	}
+
+	private void ChipPartsClick(int chipIndex, BaseChip chip)
+	{
+		chipSelectParts.SetChipToFocusSelectParts(chipIndex, chip);
 	}
 }

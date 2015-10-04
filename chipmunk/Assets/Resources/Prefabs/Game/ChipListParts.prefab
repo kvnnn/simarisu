@@ -363,7 +363,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 11494000}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 11420276}
+        m_MethodName: ChipClick
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 11466248}
+          m_ObjectArgumentAssemblyTypeName: ChipParts, Assembly-CSharp
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &11408128
@@ -424,7 +435,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Button
+  m_Text: 
 --- !u!114 &11413382
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -436,6 +447,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f8b0fe5fe72e4f3a9c629c93d70b015, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  text: {fileID: 11495760}
 --- !u!114 &11419718
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -467,7 +479,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Button
+  m_Text: 
 --- !u!114 &11420272
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -685,7 +697,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 11424946}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 11420276}
+        m_MethodName: ChipClick
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 11464556}
+          m_ObjectArgumentAssemblyTypeName: ChipParts, Assembly-CSharp
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &11436902
@@ -726,7 +749,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 11480542}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 11420276}
+        m_MethodName: ChipClick
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 11460034}
+          m_ObjectArgumentAssemblyTypeName: ChipParts, Assembly-CSharp
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &11437742
@@ -778,7 +812,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Button
+  m_Text: 
 --- !u!114 &11441112
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -790,6 +824,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f8b0fe5fe72e4f3a9c629c93d70b015, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  text: {fileID: 11480856}
 --- !u!114 &11451176
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -819,6 +854,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f8b0fe5fe72e4f3a9c629c93d70b015, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  text: {fileID: 11498030}
 --- !u!114 &11455048
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -857,7 +893,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 11473612}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 11420276}
+        m_MethodName: ChipClick
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 11451666}
+          m_ObjectArgumentAssemblyTypeName: ChipParts, Assembly-CSharp
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &11460034
@@ -871,6 +918,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f8b0fe5fe72e4f3a9c629c93d70b015, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  text: {fileID: 11419718}
 --- !u!114 &11462572
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -902,7 +950,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Button
+  m_Text: 
 --- !u!114 &11464556
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -914,6 +962,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f8b0fe5fe72e4f3a9c629c93d70b015, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  text: {fileID: 11462572}
 --- !u!114 &11466248
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -925,6 +974,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f8b0fe5fe72e4f3a9c629c93d70b015, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  text: {fileID: 11412516}
 --- !u!114 &11467468
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -936,6 +986,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f8b0fe5fe72e4f3a9c629c93d70b015, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  text: {fileID: 11438994}
 --- !u!114 &11467676
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -974,7 +1025,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 11426988}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 11420276}
+        m_MethodName: ChipClick
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 11413382}
+          m_ObjectArgumentAssemblyTypeName: ChipParts, Assembly-CSharp
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &11468754
@@ -1015,7 +1077,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 11408128}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 11420276}
+        m_MethodName: ChipClick
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 11467468}
+          m_ObjectArgumentAssemblyTypeName: ChipParts, Assembly-CSharp
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &11472702
@@ -1162,7 +1235,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Button
+  m_Text: 
 --- !u!114 &11483906
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1219,7 +1292,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 11423330}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 11420276}
+        m_MethodName: ChipClick
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 11441112}
+          m_ObjectArgumentAssemblyTypeName: ChipParts, Assembly-CSharp
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &11494000
@@ -1280,7 +1364,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Button
+  m_Text: 
 --- !u!114 &11498030
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1312,7 +1396,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Button
+  m_Text: 
 --- !u!222 &22209166
 CanvasRenderer:
   m_ObjectHideFlags: 1

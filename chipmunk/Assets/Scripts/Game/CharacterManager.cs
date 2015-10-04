@@ -21,7 +21,7 @@ public class CharacterManager : GameMonoBehaviour
 	public void ForDebug()
 	{
 		// For test
-		userCharacter = AddUserCharacter(1);
+		userCharacter = AddUserCharacter(User.GetUser());
 		userCharacter.MoveTo(new Vector2(1,1), gameManager.stageManager.GetCellPosition(1,1));
 
 		var mc = AddMonster(Monster.GetMonster(0));
@@ -90,11 +90,10 @@ public class CharacterManager : GameMonoBehaviour
 		return character;
 	}
 
-	private UserCharacter AddUserCharacter(int characterId)
+	private UserCharacter AddUserCharacter(User data)
 	{
-		// For debug
-		UserCharacter character = AddCharacter<UserCharacter>(characterId.ToString());
-		character.Init(null);
+		UserCharacter character = AddCharacter<UserCharacter>(data.sprite);
+		character.Init(data);
 		return character;
 	}
 

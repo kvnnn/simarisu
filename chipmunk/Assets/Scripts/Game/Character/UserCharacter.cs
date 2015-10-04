@@ -4,8 +4,11 @@ using System.Collections.Generic;
 
 public class UserCharacter : BaseCharacter
 {
-	public void Init(Monster data)
+	private User user;
+
+	public void Init(User user)
 	{
+		this.user = user;
 		base.Init();
 	}
 }

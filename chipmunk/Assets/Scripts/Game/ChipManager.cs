@@ -12,7 +12,6 @@ public class ChipManager : GameMonoBehaviour
 
 	public void Init()
 	{
-
 	}
 
 	public void SetUIParts(ChipListParts chipListParts, ChipSelectParts chipSelectParts)
@@ -31,7 +30,13 @@ public class ChipManager : GameMonoBehaviour
 	public List<BaseChip> SelectChips()
 	{
 		// For test
-		List<BaseChip> chips = new List<BaseChip>();
+		List<BaseChip> chips = new List<BaseChip>(){
+			Chip.GetBaseChip(0),
+			Chip.GetBaseChip(1),
+			Chip.GetBaseChip(2),
+			Chip.GetBaseChip(3),
+			Chip.GetBaseChip(4),
+		};
 		return chips;
 	}
 

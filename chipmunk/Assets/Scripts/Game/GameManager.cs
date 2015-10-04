@@ -13,6 +13,7 @@ public class GameManager : GameMonoBehaviour
 	[SerializeField]
 	private ChipManager chipManager;
 
+#region InitManager
 	public void InitGame()
 	{
 		InitChip();
@@ -41,7 +42,9 @@ public class GameManager : GameMonoBehaviour
 	{
 		chipManager.Init();
 	}
+#endregion
 
+#region Game
 	public void StartGame()
 	{
 		characterManager.ForDebug();
@@ -83,15 +86,20 @@ public class GameManager : GameMonoBehaviour
 		characterManager.UserCharacterAction(chip, stageManager);
 		yield return new WaitForSeconds(1);
 	}
+#endregion
 
+#region UIParts
 	public void InitUI(ChipListParts chipListParts, ChipSelectParts chipSelectParts, ButtonParts startBattleButtonParts)
 	{
 		startBattleButtonParts.buttonClick += StartBattleButtonClick;
 		chipManager.SetUIParts(chipListParts, chipSelectParts, startBattleButtonParts);
 	}
+#endregion
 
+#region Event
 	public void StartBattleButtonClick(ButtonParts button)
 	{
 		StartBattle();
 	}
+#endregion
 }

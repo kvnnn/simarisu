@@ -27,9 +27,6 @@ public class MasterManager : GameMonoBehaviour
 
 	void Awake()
 	{
-		// Debug
-		// PlayerPrefs.DeleteAll();
-
 		Time.timeScale = 1f;
 	}
 
@@ -41,7 +38,6 @@ public class MasterManager : GameMonoBehaviour
 
 	void OnApplicationQuit()
 	{
-		// PlayerPrefs.Flush();
 	}
 
 	public void ChangeView(View view)

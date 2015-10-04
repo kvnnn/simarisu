@@ -49,6 +49,7 @@ public class ChipSelectFrameParts : BaseUIParts
 		}
 	}
 
+#region Focus
 	public void Focus()
 	{
 		image.color = Color.green;
@@ -58,4 +59,5 @@ public class ChipSelectFrameParts : BaseUIParts
 	{
 		image.color = Color.white;
 	}
+#endregion
 }

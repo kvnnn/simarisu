@@ -46,8 +46,10 @@ public class ChipListParts : BaseUIParts
 		}
 	}
 
+#region Event
 	public void ChipClick(ChipParts parts)
 	{
 		chipPartsClick(chipPartsLists.IndexOf(parts), parts.GetChip());
 	}
+#endregion
 }

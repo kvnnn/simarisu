@@ -50,6 +50,22 @@ public class CharacterManager : GameMonoBehaviour
 		monsters.Add(mc);
 	}
 
+#region CharacterStatus
+	public bool UserCharacterDead()
+	{
+		return userCharacter.isDead;
+	}
+
+	public bool MonsterAllDead()
+	{
+		foreach (MonsterCharacter monster in monsters)
+		{
+			if (!monster.isDead) {return false;}
+		}
+		return true;
+	}
+#endregion
+
 #region CharacterAction
 	public void UserCharacterAction(Chip chip, StageManager stageManager)
 	{

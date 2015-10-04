@@ -9,6 +9,6 @@ public class UserCharacter : BaseCharacter
 	public void Init(User user)
 	{
 		this.user = user;
-		base.Init();
+		base.Init(user.hp, user.damage);
 	}
 }

@@ -14,7 +14,7 @@ public class MonsterCharacter : BaseCharacter
 	public void Init(Monster monster)
 	{
 		this.monster = monster;
-		base.Init();
+		base.Init(monster.hp, monster.damage);
 	}
 
 	public Chip SelectChip()

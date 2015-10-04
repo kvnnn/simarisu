@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -9,6 +10,17 @@ public class CharacterManager : GameMonoBehaviour
 
 	[SerializeField]
 	private GameObject characterPrefab;
+	[SerializeField]
+	private GameObject hpLabelPrefab;
+
+	[SerializeField]
+	private Transform uiBaseTransform;
+	[SerializeField]
+	private Canvas uiBaseCanvas;
+	private Camera uiCamera
+	{
+		get {return uiBaseCanvas.worldCamera;}
+	}
 
 	private UserCharacter userCharacter;
 	private List<MonsterCharacter> monsters = new List<MonsterCharacter>();
@@ -86,6 +98,11 @@ public class CharacterManager : GameMonoBehaviour
 
 		T character = characterGameObject.AddComponent<T>();
 		character.SetSprite(GetSprite(spriteId));
+		character.getUIPosition = GetUIPosition;
+
+		GameObject hpLabelGo = Instantiate(hpLabelPrefab);
+		hpLabelGo.transform.SetParent(uiBaseTransform);
+		character.SetHpLabel(hpLabelGo.GetComponent<HpLabelParts>());
 
 		return character;
 	}
@@ -130,6 +147,16 @@ public class CharacterManager : GameMonoBehaviour
 			monster.DestroyIfExist();
 		}
 		monsters = new List<MonsterCharacter>();
+	}
+#endregion
+
+#region Position of World/UI
+	private Vector2 GetUIPosition(Vector3 position)
+	{
+		Vector2 screenPosition = Camera.main.WorldToScreenPoint(position);
+		Vector2 uiPosition = Vector2.zero;
+		RectTransformUtility.ScreenPointToLocalPointInRectangle(uiBaseCanvas.transform as RectTransform, screenPosition, uiCamera, out uiPosition);
+		return uiPosition;
 	}
 #endregion
 }

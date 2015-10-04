@@ -45,6 +45,7 @@ public class ChipManager : GameMonoBehaviour
 		UpdateStartBattleButton();
 	}
 
+#region ChipSelectParts
 	private void ResetChipSelectParts()
 	{
 		ResetChipSelectFocus();
@@ -55,7 +56,9 @@ public class ChipManager : GameMonoBehaviour
 	{
 		chipSelectParts.ResetFocus();
 	}
+#endregion
 
+#region ChipParts
 	public void FocusSelectParts(int index)
 	{
 		chipSelectParts.FocusTo(index);
@@ -65,7 +68,9 @@ public class ChipManager : GameMonoBehaviour
 	{
 		chipListParts.SetChips(SelectChipsFromDeck());
 	}
+#endregion
 
+#region Deck
 	private List<BaseChip> SelectChipsFromDeck()
 	{
 		// For test
@@ -83,15 +88,20 @@ public class ChipManager : GameMonoBehaviour
 	{
 
 	}
+#endregion
 
+#region Button
 	private void UpdateStartBattleButton()
 	{
 		startBattleButtonParts.isEnabled = chipSelectParts.isSetComplete;
 	}
+#endregion
 
+#region Event
 	private void ChipPartsClick(int chipIndex, BaseChip chip)
 	{
 		chipSelectParts.SetChipToFocusSelectParts(chipIndex, chip);
 		UpdateStartBattleButton();
 	}
+#endregion
 }

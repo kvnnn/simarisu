@@ -28,6 +28,7 @@ public class CharacterManager : GameMonoBehaviour
 		monsters.Add(mc);
 	}
 
+#region CharacterAction
 	public void UserCharacterAction(BaseChip chip, StageManager stageManager)
 	{
 		ActionCharacter(userCharacter, chip, stageManager);
@@ -64,7 +65,9 @@ public class CharacterManager : GameMonoBehaviour
 
 		return true;
 	}
+#endregion
 
+#region Add/Delete Character
 	private T AddCharacter<T>(int characterId)
 		where T : BaseCharacter
 	{
@@ -104,4 +107,5 @@ public class CharacterManager : GameMonoBehaviour
 		}
 		monsters = new List<MonsterCharacter>();
 	}
+#endregion
 }

@@ -11,6 +11,7 @@ public class ViewManager : GameMonoBehaviour
 		this.masterManager = masterManager;
 	}
 
+#region Show
 	public IEnumerator Show()
 	{
 		BeforeShow();
@@ -39,7 +40,9 @@ public class ViewManager : GameMonoBehaviour
 	{
 
 	}
+#endregion
 
+#region Hide
 	public void Hide()
 	{
 		BeforeHide();
@@ -67,4 +70,5 @@ public class ViewManager : GameMonoBehaviour
 	{
 
 	}
+#endregion
 }

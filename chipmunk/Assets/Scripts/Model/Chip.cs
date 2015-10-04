@@ -20,6 +20,11 @@ public class Chip
 #region Static
 	public static Chip GetChip(int id)
 	{
+		return GetChip(id.ToString());
+	}
+
+	public static Chip GetChip(string id)
+	{
 		string query = string.Format("select * from chip where id = {0}", id);
 		DataTable table = Database.instance.Execute(query);
 		return new Chip(table.Rows[0]);

@@ -35,6 +35,15 @@ public class CharacterManager : GameMonoBehaviour
 		ActionCharacter(userCharacter, chip, stageManager);
 	}
 
+	public void MonsterActions(StageManager stageManager)
+	{
+		foreach (MonsterCharacter monster in monsters)
+		{
+			Chip chip = monster.SelectChip();
+			ActionCharacter(monster, chip, stageManager);
+		}
+	}
+
 	public void ActionCharacter(BaseCharacter character, Chip chip, StageManager stageManager)
 	{
 		switch (chip.type)

@@ -16,6 +16,11 @@ public class Monster
 #region Static
 	public static Monster GetMonster(int id)
 	{
+		return GetMonster(id.ToString());
+	}
+
+	public static Monster GetMonster(string id)
+	{
 		string query = string.Format("select * from monster where id = {0}", id);
 		DataTable table = Database.instance.Execute(query);
 		return new Monster(table.Rows[0]);
@@ -41,6 +46,24 @@ public class Monster
 		sprite = rawData["sprite"].ToString();
 		chipsStr = rawData["chips"].ToString();
 		hp = (int)rawData["hp"];
+	}
+
+	private List<Chip> _chips;
+	public List<Chip> chips
+	{
+		get
+		{
+			if (_chips == null)
+			{
+				_chips = new List<Chip>();
+				string[] ids = chipsStr.Split(',');
+				foreach (string id in ids)
+				{
+					_chips.Add(Chip.GetChip(id));
+				}
+			}
+			return _chips;
+		}
 	}
 #endregion
 }

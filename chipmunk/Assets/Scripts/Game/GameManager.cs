@@ -85,6 +85,7 @@ public class GameManager : GameMonoBehaviour
 		chipManager.FocusSelectParts(turn);
 		characterManager.UserCharacterAction(chip, stageManager);
 		yield return new WaitForSeconds(1);
+		characterManager.MonsterActions(stageManager);
 	}
 #endregion
 

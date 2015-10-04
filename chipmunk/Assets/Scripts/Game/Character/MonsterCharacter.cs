@@ -16,4 +16,10 @@ public class MonsterCharacter : BaseCharacter
 		this.monster = monster;
 		base.Init();
 	}
+
+	public Chip SelectChip()
+	{
+		List<Chip> chips = monster.chips;
+		return chips[Random.Range(0, chips.Count - 1)];
+	}
 }

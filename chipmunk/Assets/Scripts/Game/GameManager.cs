@@ -13,6 +13,14 @@ public class GameManager : GameMonoBehaviour
 	[SerializeField]
 	private ChipManager chipManager;
 
+	private GameStatus gameStatus;
+	private enum GameStatus
+	{
+		Battle,
+		Lose,
+		Win,
+	}
+
 #region InitManager
 	public void InitGame()
 	{
@@ -53,7 +61,7 @@ public class GameManager : GameMonoBehaviour
 	private void StartBattle()
 	{
 		BeforeBattleStart();
-		StartCoroutine(BattleCoroutine(AfterBattleStart));
+		StartCoroutine(BattleCoroutine(AfterBattle));
 	}
 
 	private void BeforeBattleStart()
@@ -61,20 +69,24 @@ public class GameManager : GameMonoBehaviour
 		chipManager.ResetChipSelectFocus();
 	}
 
-	private void AfterBattleStart()
+	private void AfterBattle()
 	{
 		chipManager.UpdateParts();
+		characterManager.Init();
+
+		StartGame();
 	}
 
 	private IEnumerator BattleCoroutine(System.Action callback)
 	{
+		gameStatus = GameStatus.Battle;
 		int turn = 0;
 		List<Chip> selectedChips = chipManager.GetSelectedChips();
 		foreach (Chip chip in selectedChips)
 		{
 			yield return StartCoroutine(ExecuteTurnCoroutine(chip, turn));
+			if (IsGameFinish()) {break;}
 			turn++;
-			yield return new WaitForSeconds(1);
 		}
 
 		callback();
@@ -84,8 +96,31 @@ public class GameManager : GameMonoBehaviour
 	{
 		chipManager.FocusSelectParts(turn);
 		characterManager.UserCharacterAction(chip, stageManager);
+
 		yield return new WaitForSeconds(1);
+		if (IsGameFinish()) {yield break;}
+
 		characterManager.MonsterActions(stageManager);
+
+		yield return new WaitForSeconds(1);
+	}
+
+	public bool IsGameFinish()
+	{
+		if (characterManager.UserCharacterDead())
+		{
+			gameStatus = GameStatus.Lose;
+		}
+		else if (characterManager.MonsterAllDead())
+		{
+			gameStatus = GameStatus.Win;
+		}
+		else
+		{
+			gameStatus = GameStatus.Battle;
+		}
+
+		return gameStatus != GameStatus.Battle;
 	}
 #endregion
 

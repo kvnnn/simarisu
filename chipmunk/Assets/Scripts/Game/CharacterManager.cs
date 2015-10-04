@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -9,9 +10,29 @@ public class CharacterManager : GameMonoBehaviour
 
 	[SerializeField]
 	private GameObject characterPrefab;
+	[SerializeField]
+	private GameObject hpLabelPrefab;
+
+	[SerializeField]
+	private Transform uiBaseTransform;
+	[SerializeField]
+	private Canvas uiBaseCanvas;
+	private Camera uiCamera
+	{
+		get {return uiBaseCanvas.worldCamera;}
+	}
 
 	private UserCharacter userCharacter;
 	private List<MonsterCharacter> monsters = new List<MonsterCharacter>();
+	private List<BaseCharacter> allCharacters
+	{
+		get
+		{
+			List<BaseCharacter> list = monsters.ConvertAll(c => (BaseCharacter)c);;
+			list.Add(userCharacter);
+			return list;
+		}
+	}
 
 	public void Init()
 	{
@@ -28,6 +49,22 @@ public class CharacterManager : GameMonoBehaviour
 		mc.MoveTo(new Vector2(4,1), gameManager.stageManager.GetCellPosition(4,1));
 		monsters.Add(mc);
 	}
+
+#region CharacterStatus
+	public bool UserCharacterDead()
+	{
+		return userCharacter.isDead;
+	}
+
+	public bool MonsterAllDead()
+	{
+		foreach (MonsterCharacter monster in monsters)
+		{
+			if (!monster.isDead) {return false;}
+		}
+		return true;
+	}
+#endregion
 
 #region CharacterAction
 	public void UserCharacterAction(Chip chip, StageManager stageManager)
@@ -56,6 +93,11 @@ public class CharacterManager : GameMonoBehaviour
 				}
 			break;
 			case Chip.Type.Attack:
+				foreach (BaseCharacter target in GetCharacterInRange(character.position, chip.position, chip.range, character.directionInt))
+				{
+					if (target == character) {continue;}
+					target.Damage(CalculateDamage(character, chip));
+				}
 			break;
 			case Chip.Type.Cure:
 			break;
@@ -67,13 +109,41 @@ public class CharacterManager : GameMonoBehaviour
 	public bool IsMovable(Vector2 movePosition, StageManager stageManager)
 	{
 		if (!stageManager.HasCell(movePosition)) {return false;}
-		if (movePosition == userCharacter.position) {return false;}
-		foreach (MonsterCharacter monster in monsters)
+
+		foreach (BaseCharacter character in allCharacters)
 		{
-			if (movePosition == monster.position) {return false;}
+			if (movePosition == character.position) {return false;}
 		}
 
 		return true;
+	}
+
+	public List<BaseCharacter> GetCharacterInRange(Vector2 currentPosition, Vector2 attackPosition, Vector2 range, int direction)
+	{
+		List<BaseCharacter> targetCharacters = new List<BaseCharacter>();
+		Vector2 position = currentPosition + attackPosition.MultiplyX(direction);
+
+		// Ignore range for this time
+
+		foreach (BaseCharacter character in allCharacters)
+		{
+			if (position == character.position)
+			{
+				targetCharacters.Add(character);
+			}
+		}
+
+		return targetCharacters;
+	}
+
+	public int CalculateDamage(BaseCharacter character, Chip chip)
+	{
+		int damage = chip.damage;
+		if (damage == 0)
+		{
+			damage = character.damage;
+		}
+		return damage;
 	}
 #endregion
 
@@ -86,6 +156,11 @@ public class CharacterManager : GameMonoBehaviour
 
 		T character = characterGameObject.AddComponent<T>();
 		character.SetSprite(GetSprite(spriteId));
+		character.getUIPosition = GetUIPosition;
+
+		GameObject hpLabelGo = Instantiate(hpLabelPrefab);
+		hpLabelGo.transform.SetParent(uiBaseTransform);
+		character.SetHpLabel(hpLabelGo.GetComponent<HpLabelParts>());
 
 		return character;
 	}
@@ -130,6 +205,16 @@ public class CharacterManager : GameMonoBehaviour
 			monster.DestroyIfExist();
 		}
 		monsters = new List<MonsterCharacter>();
+	}
+#endregion
+
+#region Position of World/UI
+	private Vector2 GetUIPosition(Vector3 position)
+	{
+		Vector2 screenPosition = Camera.main.WorldToScreenPoint(position);
+		Vector2 uiPosition = Vector2.zero;
+		RectTransformUtility.ScreenPointToLocalPointInRectangle(uiBaseCanvas.transform as RectTransform, screenPosition, uiCamera, out uiPosition);
+		return uiPosition;
 	}
 #endregion
 }

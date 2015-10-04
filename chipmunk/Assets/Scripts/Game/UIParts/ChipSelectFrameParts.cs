@@ -5,7 +5,12 @@ using System.Collections.Generic;
 
 public class ChipSelectFrameParts : BaseUIParts
 {
-	private int chipIndex;
+	private int chipIndex = DEFAULT_INDEX;
+	private const int DEFAULT_INDEX = -1;
+	public bool isSet
+	{
+		get {return chipIndex != DEFAULT_INDEX;}
+	}
 
 	[SerializeField]
 	private Text text;

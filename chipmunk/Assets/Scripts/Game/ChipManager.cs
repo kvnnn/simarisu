@@ -6,6 +6,7 @@ public class ChipManager : GameMonoBehaviour
 {
 	private ChipListParts chipListParts;
 	private ChipSelectParts chipSelectParts;
+	private ButtonParts startBattleButtonParts;
 
 	private List<BaseChip> originalChipDeck = new List<BaseChip>();
 	private List<BaseChip> currentChipDeck = new List<BaseChip>();
@@ -14,7 +15,7 @@ public class ChipManager : GameMonoBehaviour
 	{
 	}
 
-	public void SetUIParts(ChipListParts chipListParts, ChipSelectParts chipSelectParts)
+	public void SetUIParts(ChipListParts chipListParts, ChipSelectParts chipSelectParts, ButtonParts startBattleButtonParts)
 	{
 		this.chipListParts = chipListParts;
 		chipListParts.chipPartsClick += ChipPartsClick;
@@ -22,6 +23,9 @@ public class ChipManager : GameMonoBehaviour
 
 		this.chipSelectParts = chipSelectParts;
 		ResetChipSelectParts();
+
+		this.startBattleButtonParts = startBattleButtonParts;
+		UpdateStartBattleButton();
 	}
 
 	public void ResetChipSelectParts()
@@ -52,8 +56,14 @@ public class ChipManager : GameMonoBehaviour
 
 	}
 
+	public void UpdateStartBattleButton()
+	{
+		startBattleButtonParts.isEnabled = chipSelectParts.isSetComplete;
+	}
+
 	private void ChipPartsClick(int chipIndex, BaseChip chip)
 	{
 		chipSelectParts.SetChipToFocusSelectParts(chipIndex, chip);
+		UpdateStartBattleButton();
 	}
 }

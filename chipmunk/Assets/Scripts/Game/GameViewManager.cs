@@ -13,6 +13,8 @@ public class GameViewManager : ViewManager
 	private GameObject chipListPartsPrefab;
 	[SerializeField]
 	private GameObject chipSeletPartsPrefab;
+	[SerializeField]
+	private GameObject startBattleButtonPartsPrefab;
 
 	protected override void BeforeShow()
 	{
@@ -29,7 +31,8 @@ public class GameViewManager : ViewManager
 	{
 		ChipListParts chipListParts = InstantiateUI<ChipListParts>(chipListPartsPrefab);
 		ChipSelectParts chipSelectParts = InstantiateUI<ChipSelectParts>(chipSeletPartsPrefab);
-		gameManager.InitUI(chipListParts, chipSelectParts);
+		ButtonParts startBattleButtonParts = InstantiateUI<ButtonParts>(startBattleButtonPartsPrefab);
+		gameManager.InitUI(chipListParts, chipSelectParts, startBattleButtonParts);
 	}
 
 	private T InstantiateUI<T>(GameObject prefab)

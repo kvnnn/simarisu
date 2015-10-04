@@ -16,6 +16,21 @@ public class ChipSelectParts : BaseUIParts
 	{
 		get {return chipSelectFrames.Count - 1 == indexOfFocusParts;}
 	}
+	public bool isSetComplete
+	{
+		get {
+			bool isAllSet = true;
+			foreach (ChipSelectFrameParts parts in chipSelectFrames)
+			{
+				if (!parts.isSet)
+				{
+					isAllSet = false;
+					break;
+				}
+			}
+			return isAllSet;
+		}
+	}
 
 	private void UpdateFocusParts(ChipSelectFrameParts parts)
 	{

@@ -10,7 +10,6 @@ public class GameManager : GameMonoBehaviour
 
 	[SerializeField]
 	private CharacterManager characterManager;
-
 	[SerializeField]
 	private ChipManager chipManager;
 
@@ -48,8 +47,19 @@ public class GameManager : GameMonoBehaviour
 		characterManager.ForDebug();
 	}
 
-	public void InitUI(ChipListParts chipListParts, ChipSelectParts chipSelectParts)
+	private void StartBattle()
 	{
-		chipManager.SetUIParts(chipListParts, chipSelectParts);
+
+	}
+
+	public void InitUI(ChipListParts chipListParts, ChipSelectParts chipSelectParts, ButtonParts startBattleButtonParts)
+	{
+		startBattleButtonParts.buttonClick += StartBattleButtonClick;
+		chipManager.SetUIParts(chipListParts, chipSelectParts, startBattleButtonParts);
+	}
+
+	public void StartBattleButtonClick(ButtonParts button)
+	{
+		StartBattle();
 	}
 }

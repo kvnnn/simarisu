@@ -1,4 +1,5 @@
 using UnityEngine;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -37,5 +38,20 @@ public class BaseChip
 	public BaseChip(DataRow rawData)
 	{
 		this.rawData = rawData;
+
+		id = (int)rawData["id"];
+		chipName = rawData["name"].ToString();
+		description = rawData["description"].ToString();
+		sprite = rawData["sprite"].ToString();
+		effect = rawData["effect"].ToString();
+		rarity = (Rarity)rawData["rarity"];
+		type = (Type)rawData["type"];
+		position = rawData["position"].ToString();
+		range = rawData["range"].ToString();
+
+		string damageStr = rawData["damage"].ToString();
+		int tryToParse = 0;
+		Int32.TryParse(damageStr, out tryToParse);
+		damage = tryToParse;
 	}
 }

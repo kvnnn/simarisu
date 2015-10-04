@@ -19,10 +19,10 @@ public class ChipManager : GameMonoBehaviour
 		this.chipListParts = chipListParts;
 		this.chipSelectParts = chipSelectParts;
 
-		UpdateView();
+		UpdateChipParts();
 	}
 
-	public void UpdateView()
+	public void UpdateChipParts()
 	{
 		chipListParts.UpdateChipParts(SelectChips());
 	}

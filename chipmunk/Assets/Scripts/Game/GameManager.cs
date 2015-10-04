@@ -14,9 +14,6 @@ public class GameManager : GameMonoBehaviour
 	[SerializeField]
 	private ChipManager chipManager;
 
-	public ChipListParts chipListParts {get; private set;}
-	public ChipSelectParts chipSelectParts {get; private set;}
-
 	public void InitGame()
 	{
 		InitChip();
@@ -53,7 +50,6 @@ public class GameManager : GameMonoBehaviour
 
 	public void InitUI(ChipListParts chipListParts, ChipSelectParts chipSelectParts)
 	{
-		this.chipListParts = chipListParts;
-		this.chipSelectParts = chipSelectParts;
+		chipManager.SetUIParts(chipListParts, chipSelectParts);
 	}
 }

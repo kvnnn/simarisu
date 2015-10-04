@@ -281,6 +281,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 1626629872}
   - 114: {fileID: 1626629873}
+  - 114: {fileID: 1626629874}
   m_Layer: 0
   m_Name: MasterManager
   m_TagString: Untagged
@@ -315,3 +316,14 @@ MonoBehaviour:
   viewPrefabs:
   - {fileID: 136164, guid: b11763e2590e44bedb4d412070044bf4, type: 2}
   - {fileID: 136164, guid: 811f150f39f97479fb63f5372dee01fc, type: 2}
+--- !u!114 &1626629874
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1626629871}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ef6fad175de14cfbb348c8a601fce5f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

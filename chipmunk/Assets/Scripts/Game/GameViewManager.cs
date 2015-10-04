@@ -27,21 +27,20 @@ public class GameViewManager : ViewManager
 
 	private void InitUI()
 	{
-		ChipListParts chipListParts = InstantiateUI<ChipListParts>(chipListPartsPrefab, gameManager.chipListParts != null);
-		ChipSelectParts chipSelectParts = InstantiateUI<ChipSelectParts>(chipSeletPartsPrefab, gameManager.chipSelectParts != null);
+		ChipListParts chipListParts = InstantiateUI<ChipListParts>(chipListPartsPrefab);
+		ChipSelectParts chipSelectParts = InstantiateUI<ChipSelectParts>(chipSeletPartsPrefab);
 		gameManager.InitUI(chipListParts, chipSelectParts);
 	}
 
-	private T InstantiateUI<T>(GameObject prefab, bool isInstantiated)
+	private T InstantiateUI<T>(GameObject prefab)
 		where T : BaseUIParts
 	{
-		T uiParts = null;
-		if (!isInstantiated) {
+		T uiParts = uiBaseTransform.GetComponentInChildren<T>();
+		if (uiParts == null)
+		{
 			GameObject uiPartsGameObject = Instantiate(prefab);
 			uiPartsGameObject.transform.SetParent(uiBaseTransform);
 			uiParts = uiPartsGameObject.GetComponent<T>();
-		} else {
-			uiParts = uiBaseTransform.GetComponentInChildren<T>();
 		}
 
 		uiParts.Init();

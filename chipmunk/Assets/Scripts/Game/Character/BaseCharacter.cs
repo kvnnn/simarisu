@@ -10,7 +10,12 @@ public class BaseCharacter : GameMonoBehaviour
 
 	protected int maxHp;
 	protected int hp;
-	protected int damage;
+	public int damage {get; private set;}
+
+	public bool isDead
+	{
+		get {return hp <= 0;}
+	}
 
 	public System.Func<Vector3, Vector2> getUIPosition;
 
@@ -19,14 +24,19 @@ public class BaseCharacter : GameMonoBehaviour
 		get {return gameObject.GetComponent<SpriteRenderer>();}
 	}
 
+	private Direction direction;
+	public int directionInt
+	{
+		get {return (int)direction;}
+	}
 	protected virtual Direction defaultDirection
 	{
 		get {return Direction.Right;}
 	}
 	protected enum Direction
 	{
-		Right = 0,
-		Left = 1,
+		Right = 1,
+		Left = -1,
 	}
 
 	protected void Init(int maxHp, int damage)
@@ -50,6 +60,27 @@ public class BaseCharacter : GameMonoBehaviour
 		spriteRenderer.sprite = sprite;
 	}
 
+	protected void SetDirection(Direction direction)
+	{
+		this.direction = direction;
+		transform.RotateY(directionInt == 1 ? 0 : 180);
+	}
+
+#region Damage/Cure
+	public void Damage(int damage)
+	{
+		hp -= damage;
+		hp = Mathf.Max(0, hp);
+		hp = Mathf.Min(maxHp, hp);
+		UpdateHpLabel();
+	}
+
+	public void Cure(int cure)
+	{
+		Damage(cure * -1);
+	}
+#endregion
+
 #region HpText
 	public void SetHpLabel(HpLabelParts label)
 	{
@@ -63,11 +94,6 @@ public class BaseCharacter : GameMonoBehaviour
 		hpLabel.MoveTo(getUIPosition(transform.position));
 	}
 #endregion
-
-	protected void SetDirection(Direction direction)
-	{
-		transform.RotateY(180 * (int)direction);
-	}
 
 	public void DestroyIfExist()
 	{

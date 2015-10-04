@@ -24,6 +24,15 @@ public class CharacterManager : GameMonoBehaviour
 
 	private UserCharacter userCharacter;
 	private List<MonsterCharacter> monsters = new List<MonsterCharacter>();
+	private List<BaseCharacter> allCharacters
+	{
+		get
+		{
+			List<BaseCharacter> list = monsters.ConvertAll(c => (BaseCharacter)c);;
+			list.Add(userCharacter);
+			return list;
+		}
+	}
 
 	public void Init()
 	{
@@ -68,6 +77,11 @@ public class CharacterManager : GameMonoBehaviour
 				}
 			break;
 			case Chip.Type.Attack:
+				foreach (BaseCharacter target in GetCharacterInRange(character.position, chip.position, chip.range, character.directionInt))
+				{
+					if (target == character) {continue;}
+					target.Damage(CalculateDamage(character, chip));
+				}
 			break;
 			case Chip.Type.Cure:
 			break;
@@ -79,13 +93,41 @@ public class CharacterManager : GameMonoBehaviour
 	public bool IsMovable(Vector2 movePosition, StageManager stageManager)
 	{
 		if (!stageManager.HasCell(movePosition)) {return false;}
-		if (movePosition == userCharacter.position) {return false;}
-		foreach (MonsterCharacter monster in monsters)
+
+		foreach (BaseCharacter character in allCharacters)
 		{
-			if (movePosition == monster.position) {return false;}
+			if (movePosition == character.position) {return false;}
 		}
 
 		return true;
+	}
+
+	public List<BaseCharacter> GetCharacterInRange(Vector2 currentPosition, Vector2 attackPosition, Vector2 range, int direction)
+	{
+		List<BaseCharacter> targetCharacters = new List<BaseCharacter>();
+		Vector2 position = currentPosition + attackPosition.MultiplyX(direction);
+
+		// Ignore range for this time
+
+		foreach (BaseCharacter character in allCharacters)
+		{
+			if (position == character.position)
+			{
+				targetCharacters.Add(character);
+			}
+		}
+
+		return targetCharacters;
+	}
+
+	public int CalculateDamage(BaseCharacter character, Chip chip)
+	{
+		int damage = chip.damage;
+		if (damage == 0)
+		{
+			damage = character.damage;
+		}
+		return damage;
 	}
 #endregion
 

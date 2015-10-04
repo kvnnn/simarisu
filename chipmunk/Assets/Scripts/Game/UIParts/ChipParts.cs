@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 public class ChipParts : BaseUIParts
 {
-	private BaseChip chip;
+	private Chip chip;
 	public bool hasChip
 	{
 		get {return chip != null;}
@@ -14,12 +14,12 @@ public class ChipParts : BaseUIParts
 	[SerializeField]
 	private Text text;
 
-	public void SetChip(BaseChip chip)
+	public void SetChip(Chip chip)
 	{
 		this.chip = chip;
 	}
 
-	public BaseChip GetChip()
+	public Chip GetChip()
 	{
 		return chip;
 	}

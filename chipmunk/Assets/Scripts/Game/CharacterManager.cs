@@ -21,35 +21,36 @@ public class CharacterManager : GameMonoBehaviour
 	public void ForDebug()
 	{
 		// For test
-		userCharacter = AddCharacter<UserCharacter>(1);
+		userCharacter = AddUserCharacter(1);
 		userCharacter.MoveTo(new Vector2(1,1), gameManager.stageManager.GetCellPosition(1,1));
-		var mc = AddCharacter<MonsterCharacter>(2);
+
+		var mc = AddMonster(Monster.GetMonster(0));
 		mc.MoveTo(new Vector2(4,1), gameManager.stageManager.GetCellPosition(4,1));
 		monsters.Add(mc);
 	}
 
 #region CharacterAction
-	public void UserCharacterAction(BaseChip chip, StageManager stageManager)
+	public void UserCharacterAction(Chip chip, StageManager stageManager)
 	{
 		ActionCharacter(userCharacter, chip, stageManager);
 	}
 
-	public void ActionCharacter(BaseCharacter character, BaseChip chip, StageManager stageManager)
+	public void ActionCharacter(BaseCharacter character, Chip chip, StageManager stageManager)
 	{
 		switch (chip.type)
 		{
-			case BaseChip.Type.Move:
+			case Chip.Type.Move:
 				Vector2 movePosition = character.position + chip.position;
 				if (IsMovable(movePosition, stageManager))
 				{
 					character.MoveTo(movePosition, stageManager.GetCellPosition(movePosition));
 				}
 			break;
-			case BaseChip.Type.Attack:
+			case Chip.Type.Attack:
 			break;
-			case BaseChip.Type.Cure:
+			case Chip.Type.Cure:
 			break;
-			case BaseChip.Type.Other:
+			case Chip.Type.Other:
 			break;
 		}
 	}
@@ -68,21 +69,36 @@ public class CharacterManager : GameMonoBehaviour
 #endregion
 
 #region Add/Delete Character
-	private T AddCharacter<T>(int characterId)
+	private T AddCharacter<T>(string spriteId)
 		where T : BaseCharacter
 	{
 		GameObject characterGameObject = Instantiate(characterPrefab);
 		characterGameObject.transform.SetParent(transform);
 
 		T character = characterGameObject.AddComponent<T>();
-		character.Init(GetSprite(characterId));
+		character.SetSprite(GetSprite(spriteId));
 
 		return character;
 	}
 
-	private Sprite GetSprite(int characterId)
+	private UserCharacter AddUserCharacter(int characterId)
 	{
-		string path = string.Format("Image/Character/{0}", characterId);
+		// For debug
+		UserCharacter character = AddCharacter<UserCharacter>(characterId.ToString());
+		character.Init(null);
+		return character;
+	}
+
+	private MonsterCharacter AddMonster(Monster data)
+	{
+		MonsterCharacter monster = AddCharacter<MonsterCharacter>(data.sprite);
+		monster.Init(data);
+		return monster;
+	}
+
+	private Sprite GetSprite(string spriteId)
+	{
+		string path = string.Format("Image/Character/{0}", spriteId);
 		return Resources.Load<Sprite>(path);
 	}
 

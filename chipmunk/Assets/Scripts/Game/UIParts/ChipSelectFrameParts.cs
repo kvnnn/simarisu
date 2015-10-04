@@ -26,6 +26,11 @@ public class ChipSelectFrameParts : BaseUIParts
 		UpdateParts(chip);
 	}
 
+	public int GetChipIndex()
+	{
+		return chipIndex;
+	}
+
 	public void UpdateParts(BaseChip chip)
 	{
 		text.text = chip.chipName;

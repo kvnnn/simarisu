@@ -15,6 +15,18 @@ public class ChipManager : GameMonoBehaviour
 	{
 	}
 
+	public List<BaseChip> GetSelectedChips()
+	{
+		List<BaseChip> chipList = new List<BaseChip>();
+
+		foreach (int index in chipSelectParts.GetSelectedChipIndexList())
+		{
+			chipList.Add(chipListParts.GetChip(index));
+		}
+
+		return chipList;
+	}
+
 	public void SetUIParts(ChipListParts chipListParts, ChipSelectParts chipSelectParts, ButtonParts startBattleButtonParts)
 	{
 		this.chipListParts = chipListParts;

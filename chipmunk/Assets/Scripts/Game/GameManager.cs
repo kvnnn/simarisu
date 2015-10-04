@@ -49,7 +49,17 @@ public class GameManager : GameMonoBehaviour
 
 	private void StartBattle()
 	{
+		StartCoroutine(BattleCoroutine());
+	}
 
+	private IEnumerator BattleCoroutine()
+	{
+		List<BaseChip> selectedChips = chipManager.GetSelectedChips();
+		foreach (BaseChip chip in selectedChips)
+		{
+			characterManager.UserCharacterAction(chip, stageManager);
+			yield return new WaitForSeconds(1);
+		}
 	}
 
 	public void InitUI(ChipListParts chipListParts, ChipSelectParts chipSelectParts, ButtonParts startBattleButtonParts)

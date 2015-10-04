@@ -10,7 +10,7 @@ public class CharacterManager : GameMonoBehaviour
 	[SerializeField]
 	private GameObject characterPrefab;
 
-	private UserCharacter user;
+	private UserCharacter userCharacter;
 	private List<MonsterCharacter> monsters = new List<MonsterCharacter>();
 
 	public void Init()
@@ -21,10 +21,48 @@ public class CharacterManager : GameMonoBehaviour
 	public void ForDebug()
 	{
 		// For test
-		var uc = AddCharacter<UserCharacter>(1);
-		uc.MoveTo(gameManager.stageManager.GetCellPosition(1,1));
+		userCharacter = AddCharacter<UserCharacter>(1);
+		userCharacter.MoveTo(new Vector2(1,1), gameManager.stageManager.GetCellPosition(1,1));
 		var mc = AddCharacter<MonsterCharacter>(2);
-		mc.MoveTo(gameManager.stageManager.GetCellPosition(4,1));
+		mc.MoveTo(new Vector2(4,1), gameManager.stageManager.GetCellPosition(4,1));
+		monsters.Add(mc);
+	}
+
+	public void UserCharacterAction(BaseChip chip, StageManager stageManager)
+	{
+		ActionCharacter(userCharacter, chip, stageManager);
+	}
+
+	public void ActionCharacter(BaseCharacter character, BaseChip chip, StageManager stageManager)
+	{
+		switch (chip.type)
+		{
+			case BaseChip.Type.Move:
+				Vector2 movePosition = character.position + chip.position;
+				if (IsMovable(movePosition, stageManager))
+				{
+					character.MoveTo(movePosition, stageManager.GetCellPosition(movePosition));
+				}
+			break;
+			case BaseChip.Type.Attack:
+			break;
+			case BaseChip.Type.Cure:
+			break;
+			case BaseChip.Type.Other:
+			break;
+		}
+	}
+
+	public bool IsMovable(Vector2 movePosition, StageManager stageManager)
+	{
+		if (!stageManager.HasCell(movePosition)) {return false;}
+		if (movePosition == userCharacter.position) {return false;}
+		foreach (MonsterCharacter monster in monsters)
+		{
+			if (movePosition == monster.position) {return false;}
+		}
+
+		return true;
 	}
 
 	private T AddCharacter<T>(int characterId)
@@ -53,8 +91,8 @@ public class CharacterManager : GameMonoBehaviour
 
 	private void DestroyUser()
 	{
-		if (user == null) {return;}
-		user.DestroyIfExist();
+		if (userCharacter == null) {return;}
+		userCharacter.DestroyIfExist();
 	}
 
 	private void DestroyAllMonster()

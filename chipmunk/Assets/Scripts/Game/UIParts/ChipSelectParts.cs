@@ -32,6 +32,18 @@ public class ChipSelectParts : BaseUIParts
 		}
 	}
 
+	public List<int> GetSelectedChipIndexList()
+	{
+		List<int> indexList = new List<int>();
+
+		foreach (ChipSelectFrameParts parts in chipSelectFrames)
+		{
+			indexList.Add(parts.GetChipIndex());
+		}
+
+		return indexList;
+	}
+
 	private void UpdateFocusParts(ChipSelectFrameParts parts)
 	{
 		if (focusParts != null)

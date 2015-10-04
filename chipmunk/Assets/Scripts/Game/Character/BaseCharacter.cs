@@ -4,6 +4,8 @@ using System.Collections.Generic;
 
 public class BaseCharacter : GameMonoBehaviour
 {
+	public Vector2 position {get; private set;}
+
 	private SpriteRenderer spriteRenderer;
 
 	protected virtual Direction defaultDirection
@@ -23,14 +25,15 @@ public class BaseCharacter : GameMonoBehaviour
 		SetSprite(sprite);
 	}
 
+	public void MoveTo(Vector2 position, Vector3 coordinate)
+	{
+		this.position = position;
+		transform.MoveTo(coordinate);
+	}
+
 	public void SetSprite(Sprite sprite)
 	{
 		spriteRenderer.sprite = sprite;
-	}
-
-	public void MoveTo(Vector3 position)
-	{
-		transform.MoveTo(position);
 	}
 
 	protected void SetDirection(Direction direction)

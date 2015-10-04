@@ -1,2 +1,4 @@
-.read db/chip
+.read db/user
 .read db/monster
+.read db/chip
+

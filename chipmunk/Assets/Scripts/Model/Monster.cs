@@ -9,6 +9,7 @@ using System.Collections.Generic;
 	sprite 			: text
 	chips				: text
 	hp					: integer
+	damage			: integer
 */
 
 public class Monster
@@ -35,6 +36,7 @@ public class Monster
 	public string sprite {get; private set;}
 	private string chipsStr;
 	public int hp {get; private set;}
+	public int damage {get; private set;}
 
 	public Monster(DataRow rawData)
 	{
@@ -46,6 +48,7 @@ public class Monster
 		sprite = rawData["sprite"].ToString();
 		chipsStr = rawData["chips"].ToString();
 		hp = (int)rawData["hp"];
+		damage = (int)rawData["damage"];
 	}
 
 	private List<Chip> _chips;

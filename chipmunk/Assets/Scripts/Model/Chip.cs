@@ -1,18 +1,43 @@
 using UnityEngine;
-using System;
 using System.Collections;
 using System.Collections.Generic;
 
-public class BaseChip
-{
-	public DataRow rawData {get; private set;}
+/*
+	id 					: integer
+	name 				: text
+	description	: text
+	sprite 			: text
+	effect 			: text
+	rarity 			: integer (1:C, 2:B, 3:A, 4:S)
+	type 				: integer (1:Move, 2:Attack, 3:Cure, 4:Other)
+	damage 			: integer
+	position 		: text
+	range 			: text
+*/
 
+public class Chip
+{
+#region Static
+	public static Chip GetChip(int id)
+	{
+		return GetChip(id.ToString());
+	}
+
+	public static Chip GetChip(string id)
+	{
+		string query = string.Format("select * from chip where id = {0}", id);
+		DataTable table = Database.instance.Execute(query);
+		return new Chip(table.Rows[0]);
+	}
+#endregion
+
+#region ChipData
+	public DataRow rawData {get; private set;}
 	public int id {get; private set;}
 	public string chipName {get; private set;}
 	public string description {get; private set;}
 	public string sprite {get; private set;}
 	public string effect {get; private set;}
-
 	public Rarity rarity {get; private set;}
 	public enum Rarity
 	{
@@ -21,7 +46,6 @@ public class BaseChip
 		B = 2,
 		C = 1,
 	}
-
 	public Type type {get; private set;}
 	public enum Type
 	{
@@ -30,12 +54,11 @@ public class BaseChip
 		Cure = 3,
 		Other = 4,
 	}
-
 	public virtual int damage {get; private set;}
 	private string positionStr;
 	public string rangeStr;
 
-	public BaseChip(DataRow rawData)
+	public Chip(DataRow rawData)
 	{
 		this.rawData = rawData;
 
@@ -46,13 +69,9 @@ public class BaseChip
 		effect = rawData["effect"].ToString();
 		rarity = (Rarity)rawData["rarity"];
 		type = (Type)rawData["type"];
+		damage = (int)rawData["damage"];
 		positionStr = rawData["position"].ToString();
 		rangeStr = rawData["range"].ToString();
-
-		string damageStr = rawData["damage"].ToString();
-		int tryToParse = 0;
-		Int32.TryParse(damageStr, out tryToParse);
-		damage = tryToParse;
 	}
 
 	private Vector2? _position = null;
@@ -82,4 +101,5 @@ public class BaseChip
 			return (Vector2)_range;
 		}
 	}
+#endregion
 }

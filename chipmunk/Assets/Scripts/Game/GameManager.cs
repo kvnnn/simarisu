@@ -69,8 +69,8 @@ public class GameManager : GameMonoBehaviour
 	private IEnumerator BattleCoroutine(System.Action callback)
 	{
 		int turn = 0;
-		List<BaseChip> selectedChips = chipManager.GetSelectedChips();
-		foreach (BaseChip chip in selectedChips)
+		List<Chip> selectedChips = chipManager.GetSelectedChips();
+		foreach (Chip chip in selectedChips)
 		{
 			yield return StartCoroutine(ExecuteTurnCoroutine(chip, turn));
 			turn++;
@@ -80,11 +80,12 @@ public class GameManager : GameMonoBehaviour
 		callback();
 	}
 
-	private IEnumerator ExecuteTurnCoroutine(BaseChip chip, int turn)
+	private IEnumerator ExecuteTurnCoroutine(Chip chip, int turn)
 	{
 		chipManager.FocusSelectParts(turn);
 		characterManager.UserCharacterAction(chip, stageManager);
 		yield return new WaitForSeconds(1);
+		characterManager.MonsterActions(stageManager);
 	}
 #endregion
 

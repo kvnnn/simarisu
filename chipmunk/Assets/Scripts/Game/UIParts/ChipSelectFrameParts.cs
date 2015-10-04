@@ -20,7 +20,7 @@ public class ChipSelectFrameParts : BaseUIParts
 		get {return gameObject.GetComponent<Image>();}
 	}
 
-	public void SetChip(int chipIndex, BaseChip chip)
+	public void SetChip(int chipIndex, Chip chip)
 	{
 		this.chipIndex = chipIndex;
 		UpdateParts(chip);
@@ -37,7 +37,7 @@ public class ChipSelectFrameParts : BaseUIParts
 		return chipIndex;
 	}
 
-	public void UpdateParts(BaseChip chip)
+	public void UpdateParts(Chip chip)
 	{
 		if (chip != null)
 		{

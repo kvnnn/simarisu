@@ -8,16 +8,16 @@ public class ChipManager : GameMonoBehaviour
 	private ChipSelectParts chipSelectParts;
 	private ButtonParts startBattleButtonParts;
 
-	private List<BaseChip> originalChipDeck = new List<BaseChip>();
-	private List<BaseChip> currentChipDeck = new List<BaseChip>();
+	private List<Chip> originalChipDeck = new List<Chip>();
+	private List<Chip> currentChipDeck = new List<Chip>();
 
 	public void Init()
 	{
 	}
 
-	public List<BaseChip> GetSelectedChips()
+	public List<Chip> GetSelectedChips()
 	{
-		List<BaseChip> chipList = new List<BaseChip>();
+		List<Chip> chipList = new List<Chip>();
 
 		foreach (int index in chipSelectParts.GetSelectedChipIndexList())
 		{
@@ -71,15 +71,15 @@ public class ChipManager : GameMonoBehaviour
 #endregion
 
 #region Deck
-	private List<BaseChip> SelectChipsFromDeck()
+	private List<Chip> SelectChipsFromDeck()
 	{
 		// For test
-		List<BaseChip> chips = new List<BaseChip>(){
-			Chip.GetBaseChip(0),
-			Chip.GetBaseChip(1),
-			Chip.GetBaseChip(2),
-			Chip.GetBaseChip(3),
-			Chip.GetBaseChip(4),
+		List<Chip> chips = new List<Chip>(){
+			Chip.GetChip(0),
+			Chip.GetChip(1),
+			Chip.GetChip(2),
+			Chip.GetChip(3),
+			Chip.GetChip(4),
 		};
 		return chips;
 	}
@@ -98,7 +98,7 @@ public class ChipManager : GameMonoBehaviour
 #endregion
 
 #region Event
-	private void ChipPartsClick(int chipIndex, BaseChip chip)
+	private void ChipPartsClick(int chipIndex, Chip chip)
 	{
 		chipSelectParts.SetChipToFocusSelectParts(chipIndex, chip);
 		UpdateStartBattleButton();

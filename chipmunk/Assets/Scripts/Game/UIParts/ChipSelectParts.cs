@@ -80,7 +80,7 @@ public class ChipSelectParts : BaseUIParts
 		FocusTo(indexOfFocusParts + 1);
 	}
 
-	public void SetChipToFocusSelectParts(int chipIndex, BaseChip chip)
+	public void SetChipToFocusSelectParts(int chipIndex, Chip chip)
 	{
 		focusParts.SetChip(chipIndex, chip);
 		ChangeFocusToNextParts();

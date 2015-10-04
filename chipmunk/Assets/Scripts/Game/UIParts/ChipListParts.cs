@@ -7,14 +7,14 @@ public class ChipListParts : BaseUIParts
 	[SerializeField]
 	private List<ChipParts> chipPartsLists;
 
-	public System.Action<int, BaseChip> chipPartsClick;
+	public System.Action<int, Chip> chipPartsClick;
 
-	public void SetChips(List<BaseChip> chips)
+	public void SetChips(List<Chip> chips)
 	{
 		RemoveAllChip();
 
 		int index = 0;
-		foreach (BaseChip chip in chips)
+		foreach (Chip chip in chips)
 		{
 			ChipParts chipParts = chipPartsLists[index];
 			chipParts.SetChip(chip);
@@ -25,7 +25,7 @@ public class ChipListParts : BaseUIParts
 		UpdateAllChip();
 	}
 
-	public BaseChip GetChip(int index)
+	public Chip GetChip(int index)
 	{
 		return chipPartsLists[index].GetChip();
 	}

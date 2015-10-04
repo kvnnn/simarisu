@@ -6,7 +6,10 @@ public class BaseCharacter : GameMonoBehaviour
 {
 	public Vector2 position {get; private set;}
 
-	private SpriteRenderer spriteRenderer;
+	private SpriteRenderer spriteRenderer
+	{
+		get {return gameObject.GetComponent<SpriteRenderer>();}
+	}
 
 	protected virtual Direction defaultDirection
 	{
@@ -18,11 +21,9 @@ public class BaseCharacter : GameMonoBehaviour
 		Left = 1,
 	}
 
-	public virtual void Init(Sprite sprite)
+	protected void Init()
 	{
-		spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
 		SetDirection(defaultDirection);
-		SetSprite(sprite);
 	}
 
 	public void MoveTo(Vector2 position, Vector3 coordinate)

@@ -16,6 +16,41 @@ public class ChipSelectParts : BaseUIParts
 	{
 		get {return chipSelectFrames.Count - 1 == indexOfFocusParts;}
 	}
+	public bool isSetComplete
+	{
+		get {
+			bool isAllSet = true;
+			foreach (ChipSelectFrameParts parts in chipSelectFrames)
+			{
+				if (!parts.isSet)
+				{
+					isAllSet = false;
+					break;
+				}
+			}
+			return isAllSet;
+		}
+	}
+
+	public List<int> GetSelectedChipIndexList()
+	{
+		List<int> indexList = new List<int>();
+
+		foreach (ChipSelectFrameParts parts in chipSelectFrames)
+		{
+			indexList.Add(parts.GetChipIndex());
+		}
+
+		return indexList;
+	}
+
+	public void ResetAllParts()
+	{
+		foreach (ChipSelectFrameParts parts in chipSelectFrames)
+		{
+			parts.RemoveChip();
+		}
+	}
 
 	private void UpdateFocusParts(ChipSelectFrameParts parts)
 	{
@@ -30,7 +65,7 @@ public class ChipSelectParts : BaseUIParts
 
 	public void ResetFocus()
 	{
-		UpdateFocusParts(chipSelectFrames[0]);
+		FocusTo(0);
 	}
 
 	public void SetChipToFocusSelectParts(int chipIndex, BaseChip chip)
@@ -39,10 +74,15 @@ public class ChipSelectParts : BaseUIParts
 		ChangeFocusToNextParts();
 	}
 
+	public void FocusTo(int index)
+	{
+		UpdateFocusParts(chipSelectFrames[index]);
+	}
+
 	private void ChangeFocusToNextParts()
 	{
 		if (isLast) {return;}
-		UpdateFocusParts(chipSelectFrames[indexOfFocusParts + 1]);
+		FocusTo(indexOfFocusParts + 1);
 	}
 
 	public void ChipSelectClick(ChipSelectFrameParts parts)

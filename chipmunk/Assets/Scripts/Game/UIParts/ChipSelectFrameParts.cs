@@ -5,7 +5,12 @@ using System.Collections.Generic;
 
 public class ChipSelectFrameParts : BaseUIParts
 {
-	private int chipIndex;
+	private int chipIndex = DEFAULT_INDEX;
+	private const int DEFAULT_INDEX = -1;
+	public bool isSet
+	{
+		get {return chipIndex != DEFAULT_INDEX;}
+	}
 
 	[SerializeField]
 	private Text text;
@@ -21,9 +26,27 @@ public class ChipSelectFrameParts : BaseUIParts
 		UpdateParts(chip);
 	}
 
+	public void RemoveChip()
+	{
+		chipIndex = DEFAULT_INDEX;
+		UpdateParts(null);
+	}
+
+	public int GetChipIndex()
+	{
+		return chipIndex;
+	}
+
 	public void UpdateParts(BaseChip chip)
 	{
-		text.text = chip.chipName;
+		if (chip != null)
+		{
+			text.text = chip.chipName;
+		}
+		else
+		{
+			text.text = "";
+		}
 	}
 
 	public void Focus()

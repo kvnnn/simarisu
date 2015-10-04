@@ -6,6 +6,7 @@ public class ChipManager : GameMonoBehaviour
 {
 	private ChipListParts chipListParts;
 	private ChipSelectParts chipSelectParts;
+	private ButtonParts startBattleButtonParts;
 
 	private List<BaseChip> originalChipDeck = new List<BaseChip>();
 	private List<BaseChip> currentChipDeck = new List<BaseChip>();
@@ -14,27 +15,58 @@ public class ChipManager : GameMonoBehaviour
 	{
 	}
 
-	public void SetUIParts(ChipListParts chipListParts, ChipSelectParts chipSelectParts)
+	public List<BaseChip> GetSelectedChips()
+	{
+		List<BaseChip> chipList = new List<BaseChip>();
+
+		foreach (int index in chipSelectParts.GetSelectedChipIndexList())
+		{
+			chipList.Add(chipListParts.GetChip(index));
+		}
+
+		return chipList;
+	}
+
+	public void SetUIParts(ChipListParts chipListParts, ChipSelectParts chipSelectParts, ButtonParts startBattleButtonParts)
 	{
 		this.chipListParts = chipListParts;
 		chipListParts.chipPartsClick += ChipPartsClick;
-		UpdateChipParts();
 
 		this.chipSelectParts = chipSelectParts;
-		ResetChipSelectParts();
+		this.startBattleButtonParts = startBattleButtonParts;
+
+		UpdateParts();
 	}
 
-	public void ResetChipSelectParts()
+	public void UpdateParts()
+	{
+		UpdateChipParts();
+		ResetChipSelectParts();
+		UpdateStartBattleButton();
+	}
+
+	private void ResetChipSelectParts()
+	{
+		ResetChipSelectFocus();
+		chipSelectParts.ResetAllParts();
+	}
+
+	public void ResetChipSelectFocus()
 	{
 		chipSelectParts.ResetFocus();
 	}
 
-	public void UpdateChipParts()
+	public void FocusSelectParts(int index)
+	{
+		chipSelectParts.FocusTo(index);
+	}
+
+	private void UpdateChipParts()
 	{
 		chipListParts.SetChips(SelectChipsFromDeck());
 	}
 
-	public List<BaseChip> SelectChipsFromDeck()
+	private List<BaseChip> SelectChipsFromDeck()
 	{
 		// For test
 		List<BaseChip> chips = new List<BaseChip>(){
@@ -47,13 +79,19 @@ public class ChipManager : GameMonoBehaviour
 		return chips;
 	}
 
-	public void UpdateDeck()
+	private void UpdateDeck()
 	{
 
+	}
+
+	private void UpdateStartBattleButton()
+	{
+		startBattleButtonParts.isEnabled = chipSelectParts.isSetComplete;
 	}
 
 	private void ChipPartsClick(int chipIndex, BaseChip chip)
 	{
 		chipSelectParts.SetChipToFocusSelectParts(chipIndex, chip);
+		UpdateStartBattleButton();
 	}
 }

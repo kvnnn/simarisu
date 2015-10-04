@@ -32,8 +32,8 @@ public class BaseChip
 	}
 
 	public virtual int damage {get; private set;}
-	public string position {get; private set;}
-	public string range {get; private set;}
+	private string positionStr;
+	public string rangeStr;
 
 	public BaseChip(DataRow rawData)
 	{
@@ -46,12 +46,40 @@ public class BaseChip
 		effect = rawData["effect"].ToString();
 		rarity = (Rarity)rawData["rarity"];
 		type = (Type)rawData["type"];
-		position = rawData["position"].ToString();
-		range = rawData["range"].ToString();
+		positionStr = rawData["position"].ToString();
+		rangeStr = rawData["range"].ToString();
 
 		string damageStr = rawData["damage"].ToString();
 		int tryToParse = 0;
 		Int32.TryParse(damageStr, out tryToParse);
 		damage = tryToParse;
+	}
+
+	private Vector2? _position = null;
+	public Vector2 position
+	{
+		get
+		{
+			if (_position == null)
+			{
+				string[] strArray = positionStr.Split(':');
+				_position = new Vector2(float.Parse(strArray[0]), float.Parse(strArray[1]));
+			}
+			return (Vector2)_position;
+		}
+	}
+
+	private Vector2? _range = null;
+	public Vector2 range
+	{
+		get
+		{
+			if (_range == null)
+			{
+				string[] strArray = rangeStr.Split(':');
+				_range = new Vector2(float.Parse(strArray[0]), float.Parse(strArray[1]));
+			}
+			return (Vector2)_range;
+		}
 	}
 }

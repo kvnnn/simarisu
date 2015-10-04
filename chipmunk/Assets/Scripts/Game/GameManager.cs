@@ -10,7 +10,6 @@ public class GameManager : GameMonoBehaviour
 
 	[SerializeField]
 	private CharacterManager characterManager;
-
 	[SerializeField]
 	private ChipManager chipManager;
 
@@ -48,8 +47,51 @@ public class GameManager : GameMonoBehaviour
 		characterManager.ForDebug();
 	}
 
-	public void InitUI(ChipListParts chipListParts, ChipSelectParts chipSelectParts)
+	private void StartBattle()
 	{
-		chipManager.SetUIParts(chipListParts, chipSelectParts);
+		BeforeBattleStart();
+		StartCoroutine(BattleCoroutine(AfterBattleStart));
+	}
+
+	private void BeforeBattleStart()
+	{
+		chipManager.ResetChipSelectFocus();
+	}
+
+	private void AfterBattleStart()
+	{
+		chipManager.UpdateParts();
+	}
+
+	private IEnumerator BattleCoroutine(System.Action callback)
+	{
+		int turn = 0;
+		List<BaseChip> selectedChips = chipManager.GetSelectedChips();
+		foreach (BaseChip chip in selectedChips)
+		{
+			yield return StartCoroutine(ExecuteTurnCoroutine(chip, turn));
+			turn++;
+			yield return new WaitForSeconds(1);
+		}
+
+		callback();
+	}
+
+	private IEnumerator ExecuteTurnCoroutine(BaseChip chip, int turn)
+	{
+		chipManager.FocusSelectParts(turn);
+		characterManager.UserCharacterAction(chip, stageManager);
+		yield return new WaitForSeconds(1);
+	}
+
+	public void InitUI(ChipListParts chipListParts, ChipSelectParts chipSelectParts, ButtonParts startBattleButtonParts)
+	{
+		startBattleButtonParts.buttonClick += StartBattleButtonClick;
+		chipManager.SetUIParts(chipListParts, chipSelectParts, startBattleButtonParts);
+	}
+
+	public void StartBattleButtonClick(ButtonParts button)
+	{
+		StartBattle();
 	}
 }

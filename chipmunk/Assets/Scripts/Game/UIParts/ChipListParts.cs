@@ -25,6 +25,11 @@ public class ChipListParts : BaseUIParts
 		UpdateAllChip();
 	}
 
+	public BaseChip GetChip(int index)
+	{
+		return chipPartsLists[index].GetChip();
+	}
+
 	public void UpdateAllChip()
 	{
 		foreach (ChipParts parts in chipPartsLists)

@@ -1,6 +1,6 @@
 0|move_right|idou|1||1|1||1:0|
 1|move_left|idou|2||1|1||-1:0|
-2|move_up|idou|3||1|1||0:1|
-3|move_down|idou|4||1|1||0:-1|
+2|move_up|idou|3||1|1||0:-1|
+3|move_down|idou|4||1|1||0:1|
 4|attack|hoge|5||1|2|0|1:0|0:0
 5|shot|fuga|6||1|2|5|1:0|6:0

@@ -13,6 +13,11 @@ public class GameManager : GameMonoBehaviour
 	[SerializeField]
 	private ChipManager chipManager;
 
+	private int point;
+	private int totalTurnCount;
+	private int stageCount;
+	private int stageIndex;
+
 	private GameStatus gameStatus;
 	private enum GameStatus
 	{
@@ -24,6 +29,8 @@ public class GameManager : GameMonoBehaviour
 #region InitManager
 	public void InitGame()
 	{
+		ResetGameStatus();
+
 		InitChip();
 		InitStage();
 		InitCharacter();
@@ -61,7 +68,7 @@ public class GameManager : GameMonoBehaviour
 	private void StartBattle()
 	{
 		BeforeBattleStart();
-		StartCoroutine(BattleCoroutine(AfterBattle));
+		StartCoroutine(BattleCoroutine(AfterBattleStart));
 	}
 
 	private void BeforeBattleStart()
@@ -69,12 +76,21 @@ public class GameManager : GameMonoBehaviour
 		chipManager.ResetChipSelectFocus();
 	}
 
-	private void AfterBattle()
+	private void AfterBattleStart()
 	{
 		chipManager.UpdateParts();
-		characterManager.Init();
 
-		StartGame();
+		if (IsGameFinish())
+		{
+			if (gameStatus == GameStatus.Win)
+			{
+				Win();
+			}
+			else
+			{
+				Lose();
+			}
+		}
 	}
 
 	private IEnumerator BattleCoroutine(System.Action callback)
@@ -84,9 +100,10 @@ public class GameManager : GameMonoBehaviour
 		List<Chip> selectedChips = chipManager.GetSelectedChips();
 		foreach (Chip chip in selectedChips)
 		{
+			turn++;
+			totalTurnCount++;
 			yield return StartCoroutine(ExecuteTurnCoroutine(chip, turn));
 			if (IsGameFinish()) {break;}
-			turn++;
 		}
 
 		callback();
@@ -94,7 +111,7 @@ public class GameManager : GameMonoBehaviour
 
 	private IEnumerator ExecuteTurnCoroutine(Chip chip, int turn)
 	{
-		chipManager.FocusSelectParts(turn);
+		chipManager.FocusSelectParts(turn - 1);
 		characterManager.UserCharacterAction(chip, stageManager);
 
 		yield return new WaitForSeconds(1);
@@ -105,7 +122,29 @@ public class GameManager : GameMonoBehaviour
 		yield return new WaitForSeconds(1);
 	}
 
-	public bool IsGameFinish()
+	public void Win()
+	{
+		characterManager.Init();
+		StartGame();
+	}
+
+	public void Lose()
+	{
+		characterManager.Init();
+		StartGame();
+	}
+#endregion
+
+#region GameStatus
+	private void ResetGameStatus()
+	{
+		point = 0;
+		totalTurnCount = 0;
+		stageCount = 1;
+		stageIndex = 0;
+	}
+
+	private bool IsGameFinish()
 	{
 		if (characterManager.UserCharacterDead())
 		{

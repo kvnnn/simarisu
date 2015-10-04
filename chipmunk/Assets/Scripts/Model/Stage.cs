@@ -43,7 +43,7 @@ public class Stage
 #region StageData
 	public DataRow rawData {get; private set;}
 	public int id {get; private set;}
-	public float rate {get; private set;}
+	public double rate {get; private set;}
 	private string monstersStr;
 	private string rangeStr;
 	public int minRange {get; private set;}
@@ -54,11 +54,11 @@ public class Stage
 		this.rawData = rawData;
 
 		id = (int)rawData["id"];
-		rate = (float)rawData["rate"];
+		rate = (double)rawData["rate"];
 		monstersStr = rawData["monsters"].ToString();
 
 		rangeStr = rawData["range"].ToString();
-		string[] ranges = rangeStr.Split(',');
+		string[] ranges = rangeStr.Split(':');
 		minRange = int.Parse(ranges[0]);
 		maxRange = int.Parse(ranges[1]);
 	}

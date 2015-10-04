@@ -49,17 +49,39 @@ public class GameManager : GameMonoBehaviour
 
 	private void StartBattle()
 	{
-		StartCoroutine(BattleCoroutine());
+		BeforeBattleStart();
+		StartCoroutine(BattleCoroutine(AfterBattleStart));
 	}
 
-	private IEnumerator BattleCoroutine()
+	private void BeforeBattleStart()
 	{
+		chipManager.ResetChipSelectFocus();
+	}
+
+	private void AfterBattleStart()
+	{
+		chipManager.UpdateParts();
+	}
+
+	private IEnumerator BattleCoroutine(System.Action callback)
+	{
+		int turn = 0;
 		List<BaseChip> selectedChips = chipManager.GetSelectedChips();
 		foreach (BaseChip chip in selectedChips)
 		{
-			characterManager.UserCharacterAction(chip, stageManager);
+			yield return StartCoroutine(ExecuteTurnCoroutine(chip, turn));
+			turn++;
 			yield return new WaitForSeconds(1);
 		}
+
+		callback();
+	}
+
+	private IEnumerator ExecuteTurnCoroutine(BaseChip chip, int turn)
+	{
+		chipManager.FocusSelectParts(turn);
+		characterManager.UserCharacterAction(chip, stageManager);
+		yield return new WaitForSeconds(1);
 	}
 
 	public void InitUI(ChipListParts chipListParts, ChipSelectParts chipSelectParts, ButtonParts startBattleButtonParts)

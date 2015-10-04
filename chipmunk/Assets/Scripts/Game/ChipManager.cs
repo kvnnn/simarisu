@@ -31,26 +31,42 @@ public class ChipManager : GameMonoBehaviour
 	{
 		this.chipListParts = chipListParts;
 		chipListParts.chipPartsClick += ChipPartsClick;
-		UpdateChipParts();
 
 		this.chipSelectParts = chipSelectParts;
-		ResetChipSelectParts();
-
 		this.startBattleButtonParts = startBattleButtonParts;
+
+		UpdateParts();
+	}
+
+	public void UpdateParts()
+	{
+		UpdateChipParts();
+		ResetChipSelectParts();
 		UpdateStartBattleButton();
 	}
 
-	public void ResetChipSelectParts()
+	private void ResetChipSelectParts()
+	{
+		ResetChipSelectFocus();
+		chipSelectParts.ResetAllParts();
+	}
+
+	public void ResetChipSelectFocus()
 	{
 		chipSelectParts.ResetFocus();
 	}
 
-	public void UpdateChipParts()
+	public void FocusSelectParts(int index)
+	{
+		chipSelectParts.FocusTo(index);
+	}
+
+	private void UpdateChipParts()
 	{
 		chipListParts.SetChips(SelectChipsFromDeck());
 	}
 
-	public List<BaseChip> SelectChipsFromDeck()
+	private List<BaseChip> SelectChipsFromDeck()
 	{
 		// For test
 		List<BaseChip> chips = new List<BaseChip>(){
@@ -63,12 +79,12 @@ public class ChipManager : GameMonoBehaviour
 		return chips;
 	}
 
-	public void UpdateDeck()
+	private void UpdateDeck()
 	{
 
 	}
 
-	public void UpdateStartBattleButton()
+	private void UpdateStartBattleButton()
 	{
 		startBattleButtonParts.isEnabled = chipSelectParts.isSetComplete;
 	}

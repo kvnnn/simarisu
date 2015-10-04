@@ -26,6 +26,12 @@ public class ChipSelectFrameParts : BaseUIParts
 		UpdateParts(chip);
 	}
 
+	public void RemoveChip()
+	{
+		chipIndex = DEFAULT_INDEX;
+		UpdateParts(null);
+	}
+
 	public int GetChipIndex()
 	{
 		return chipIndex;
@@ -33,7 +39,14 @@ public class ChipSelectFrameParts : BaseUIParts
 
 	public void UpdateParts(BaseChip chip)
 	{
-		text.text = chip.chipName;
+		if (chip != null)
+		{
+			text.text = chip.chipName;
+		}
+		else
+		{
+			text.text = "";
+		}
 	}
 
 	public void Focus()

@@ -56,7 +56,7 @@ public class Chip
 	}
 	public virtual int damage {get; private set;}
 	private string positionStr;
-	public string rangeStr;
+	private string rangeStr;
 
 	public Chip(DataRow rawData)
 	{

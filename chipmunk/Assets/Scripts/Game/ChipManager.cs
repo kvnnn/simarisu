@@ -73,7 +73,7 @@ public class ChipManager : GameMonoBehaviour
 #region Deck
 	private List<Chip> SelectChipsFromDeck()
 	{
-		// For test
+		// For Debug
 		List<Chip> chips = new List<Chip>(){
 			Chip.GetChip(0),
 			Chip.GetChip(1),

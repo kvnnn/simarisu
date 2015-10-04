@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 public class GameManager : GameMonoBehaviour
 {
@@ -13,6 +14,14 @@ public class GameManager : GameMonoBehaviour
 	[SerializeField]
 	private ChipManager chipManager;
 
+	private int point;
+	private int totalTurnCount;
+	private int stageCount;
+	private int stageIndex;
+	private Stage currentStage;
+
+	private const int MAX_MONSTER = 3;
+
 	private GameStatus gameStatus;
 	private enum GameStatus
 	{
@@ -24,9 +33,13 @@ public class GameManager : GameMonoBehaviour
 #region InitManager
 	public void InitGame()
 	{
+		ResetGameStatus();
+
 		InitChip();
 		InitStage();
 		InitCharacter();
+
+		PrepareGame();
 	}
 
 	private void InitStage()
@@ -53,15 +66,22 @@ public class GameManager : GameMonoBehaviour
 #endregion
 
 #region Game
+	public void PrepareGame()
+	{
+		currentStage = CheckAndGetCurrentStage();
+		characterManager.DestroyAll();
+	}
+
 	public void StartGame()
 	{
-		characterManager.ForDebug();
+		characterManager.AddUserCharacter(stageManager);
+		characterManager.AddMonster(PickMonster(), stageManager);
 	}
 
 	private void StartBattle()
 	{
 		BeforeBattleStart();
-		StartCoroutine(BattleCoroutine(AfterBattle));
+		StartCoroutine(BattleCoroutine(AfterBattleStart));
 	}
 
 	private void BeforeBattleStart()
@@ -69,12 +89,21 @@ public class GameManager : GameMonoBehaviour
 		chipManager.ResetChipSelectFocus();
 	}
 
-	private void AfterBattle()
+	private void AfterBattleStart()
 	{
 		chipManager.UpdateParts();
-		characterManager.Init();
 
-		StartGame();
+		if (IsGameFinish())
+		{
+			if (gameStatus == GameStatus.Win)
+			{
+				Win();
+			}
+			else
+			{
+				Lose();
+			}
+		}
 	}
 
 	private IEnumerator BattleCoroutine(System.Action callback)
@@ -84,9 +113,10 @@ public class GameManager : GameMonoBehaviour
 		List<Chip> selectedChips = chipManager.GetSelectedChips();
 		foreach (Chip chip in selectedChips)
 		{
+			turn++;
+			totalTurnCount++;
 			yield return StartCoroutine(ExecuteTurnCoroutine(chip, turn));
 			if (IsGameFinish()) {break;}
-			turn++;
 		}
 
 		callback();
@@ -94,7 +124,7 @@ public class GameManager : GameMonoBehaviour
 
 	private IEnumerator ExecuteTurnCoroutine(Chip chip, int turn)
 	{
-		chipManager.FocusSelectParts(turn);
+		chipManager.FocusSelectParts(turn - 1);
 		characterManager.UserCharacterAction(chip, stageManager);
 
 		yield return new WaitForSeconds(1);
@@ -105,7 +135,31 @@ public class GameManager : GameMonoBehaviour
 		yield return new WaitForSeconds(1);
 	}
 
-	public bool IsGameFinish()
+	public void Win()
+	{
+		stageCount++;
+		PrepareGame();
+		StartGame();
+	}
+
+	public void Lose()
+	{
+		ResetGameStatus();
+		PrepareGame();
+		StartGame();
+	}
+#endregion
+
+#region GameStatus
+	private void ResetGameStatus()
+	{
+		point = 0;
+		totalTurnCount = 0;
+		stageCount = 1;
+		stageIndex = 0;
+	}
+
+	private bool IsGameFinish()
 	{
 		if (characterManager.UserCharacterDead())
 		{
@@ -121,6 +175,40 @@ public class GameManager : GameMonoBehaviour
 		}
 
 		return gameStatus != GameStatus.Battle;
+	}
+#endregion
+
+#region Stage
+	private Stage CheckAndGetCurrentStage()
+	{
+		CheckStage();
+		return GetCurrentStage();
+	}
+
+	private Stage GetCurrentStage()
+	{
+		return Stage.GetAllStage()[stageIndex];
+	}
+
+	private void CheckStage()
+	{
+		Stage stageData = GetCurrentStage();
+		bool isProperStage = stageData.maxRange >= stageCount && stageCount >= stageData.minRange;
+
+		if (!isProperStage)
+		{
+			stageIndex++;
+			CheckStage();
+		}
+	}
+
+	private List<Monster> PickMonster()
+	{
+		List<Monster> monsterList = currentStage.monsters;
+		int numSelect = Random.Range(1, Mathf.Min(monsterList.Count, MAX_MONSTER));
+
+		System.Random random = new System.Random();
+		return monsterList.OrderBy(x => random.Next()).Take(numSelect).ToList();
 	}
 #endregion
 

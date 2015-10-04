@@ -2,12 +2,10 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 public class CharacterManager : GameMonoBehaviour
 {
-	[SerializeField]
-	private GameManager gameManager;
-
 	[SerializeField]
 	private GameObject characterPrefab;
 	[SerializeField]
@@ -34,20 +32,12 @@ public class CharacterManager : GameMonoBehaviour
 		}
 	}
 
+	private const string DEFAULT_USER_POSITION = "1,1";
+	private List<string> DEFAULT_MONSTER_POSITION = new List<string>(){"3,0","4,0","5,0","3,1","4,1","5,1","3,2","4,2","5,2"};
+
 	public void Init()
 	{
 		DestroyAll();
-	}
-
-	public void ForDebug()
-	{
-		// For test
-		userCharacter = AddUserCharacter(User.GetUser());
-		userCharacter.MoveTo(new Vector2(1,1), gameManager.stageManager.GetCellPosition(1,1));
-
-		var mc = AddMonster(Monster.GetMonster(0));
-		mc.MoveTo(new Vector2(4,1), gameManager.stageManager.GetCellPosition(4,1));
-		monsters.Add(mc);
 	}
 
 #region CharacterStatus
@@ -83,6 +73,7 @@ public class CharacterManager : GameMonoBehaviour
 
 	public void ActionCharacter(BaseCharacter character, Chip chip, StageManager stageManager)
 	{
+		if (chip == null) {return;}
 		switch (chip.type)
 		{
 			case Chip.Type.Move:
@@ -97,6 +88,10 @@ public class CharacterManager : GameMonoBehaviour
 				{
 					if (target == character) {continue;}
 					target.Damage(CalculateDamage(character, chip));
+					if (target is MonsterCharacter && target.isDead)
+					{
+						DestroyMonster(target as MonsterCharacter);
+					}
 				}
 			break;
 			case Chip.Type.Cure:
@@ -165,11 +160,36 @@ public class CharacterManager : GameMonoBehaviour
 		return character;
 	}
 
+	public void AddUserCharacter(StageManager stageManager)
+	{
+		Vector2 defaultPos = GameVector.GetFromString(DEFAULT_USER_POSITION);
+		userCharacter = AddUserCharacter(User.GetUser());
+		userCharacter.MoveTo(defaultPos, stageManager.GetCellPosition(defaultPos));
+	}
+
 	private UserCharacter AddUserCharacter(User data)
 	{
 		UserCharacter character = AddCharacter<UserCharacter>(data.sprite);
 		character.Init(data);
 		return character;
+	}
+
+	public void AddMonster(List<Monster> monsterList, StageManager stageManager)
+	{
+		int count = monsterList.Count;
+		System.Random random = new System.Random();
+		List<string> positionList = DEFAULT_MONSTER_POSITION.OrderBy(x => random.Next()).Take(count).ToList();
+
+		int index = 0;
+		foreach (Monster monster in monsterList)
+		{
+			Vector2 defaultPos = GameVector.GetFromString(positionList[index]);
+
+			MonsterCharacter mc = AddMonster(monster);
+			mc.MoveTo(defaultPos, stageManager.GetCellPosition(defaultPos));
+			monsters.Add(mc);
+			index++;
+		}
 	}
 
 	private MonsterCharacter AddMonster(Monster data)
@@ -185,7 +205,7 @@ public class CharacterManager : GameMonoBehaviour
 		return Resources.Load<Sprite>(path);
 	}
 
-	private void DestroyAll()
+	public void DestroyAll()
 	{
 		DestroyUser();
 		DestroyAllMonster();
@@ -205,6 +225,12 @@ public class CharacterManager : GameMonoBehaviour
 			monster.DestroyIfExist();
 		}
 		monsters = new List<MonsterCharacter>();
+	}
+
+	private void DestroyMonster(MonsterCharacter monster)
+	{
+		monsters.Remove(monster);
+		monster.DestroyIfExist();
 	}
 #endregion
 

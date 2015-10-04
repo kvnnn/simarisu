@@ -10,5 +10,7 @@ public class UserCharacter : BaseCharacter
 	{
 		this.user = user;
 		base.Init(user.hp, user.damage);
+
+		// base.Init(user.hp, 100); // For Debug
 	}
 }

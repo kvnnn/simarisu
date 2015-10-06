@@ -8,7 +8,7 @@ public class CardManager : GameMonoBehaviour
 	private CardListParts cardListParts;
 	private ButtonParts startBattleButtonParts;
 
-	private CardParts[] selectedCardIndex = new CardParts[MAX_COUNT];
+	private CardParts[] selectedCardParts = new CardParts[MAX_COUNT];
 	private const int MAX_COUNT = 3;
 
 	private List<Card> originalCardDeck = new List<Card>();
@@ -21,6 +21,10 @@ public class CardManager : GameMonoBehaviour
 	public List<Card> GetSelectedCards()
 	{
 		List<Card> cardList = new List<Card>();
+		foreach (CardParts cardParts in selectedCardParts)
+		{
+			cardList.Add(cardParts.GetCard());
+		}
 
 		return cardList;
 	}
@@ -37,7 +41,7 @@ public class CardManager : GameMonoBehaviour
 
 	public void UpdateParts()
 	{
-		selectedCardIndex = new CardParts[MAX_COUNT];
+		selectedCardParts = new CardParts[MAX_COUNT];
 
 		UpdateCardParts();
 		UpdateStartBattleButton();
@@ -51,20 +55,20 @@ public class CardManager : GameMonoBehaviour
 	private void SetCard(CardParts cardParts)
 	{
 		int index = NextIndex();
-		selectedCardIndex[index] = cardParts;
+		selectedCardParts[index] = cardParts;
 		cardParts.Selected(index);
 	}
 
 	private void UnsetCard(CardParts cardParts)
 	{
 		cardParts.Deselected();
-		selectedCardIndex[Array.IndexOf(selectedCardIndex, cardParts)] = null;
+		selectedCardParts[Array.IndexOf(selectedCardParts, cardParts)] = null;
 	}
 
 	private int NextIndex()
 	{
 		int index = 0;
-		foreach (CardParts card in selectedCardIndex)
+		foreach (CardParts card in selectedCardParts)
 		{
 			if (card == null) {break;}
 			index++;
@@ -73,7 +77,7 @@ public class CardManager : GameMonoBehaviour
 		return index;
 	}
 
-	private bool IsCardSet()
+	private bool IsAllCardSet()
 	{
 		return NextIndex() == MAX_COUNT;
 	}
@@ -102,7 +106,7 @@ public class CardManager : GameMonoBehaviour
 #region Button
 	private void UpdateStartBattleButton()
 	{
-		startBattleButtonParts.isEnabled = false;
+		startBattleButtonParts.isEnabled = IsAllCardSet();
 	}
 #endregion
 
@@ -113,11 +117,11 @@ public class CardManager : GameMonoBehaviour
 		{
 			UnsetCard(parts);
 		}
-		else if (!IsCardSet())
+		else if (!IsAllCardSet())
 		{
 			SetCard(parts);
-			UpdateStartBattleButton();
 		}
+		UpdateStartBattleButton();
 	}
 #endregion
 }

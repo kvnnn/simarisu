@@ -66,7 +66,7 @@ public class GameManager : GameMonoBehaviour
 
 	private void BeforeBattleStart()
 	{
-		// cardManager.ResetCardSelectFocus();
+
 	}
 
 	private void AfterBattleStart()
@@ -89,30 +89,31 @@ public class GameManager : GameMonoBehaviour
 	private IEnumerator BattleCoroutine(System.Action callback)
 	{
 		gameStatus = GameStatus.Battle;
-		int turn = 0;
 		List<Card> selectedCards = cardManager.GetSelectedCards();
 		foreach (Card card in selectedCards)
 		{
-			turn++;
-			totalTurnCount++;
-			yield return StartCoroutine(ExecuteTurnCoroutine(card, turn));
-			if (IsGameFinish()) {break;}
+			UnityEngine.Debug.LogError(card.name);
+			// totalTurnCount++;
+			// yield return StartCoroutine(ExecuteTurnCoroutine(card, turn));
+			// if (IsGameFinish()) {break;}
+
+			yield return null;
 		}
 
 		callback();
 	}
 
-	private IEnumerator ExecuteTurnCoroutine(Card card, int turn)
-	{
-		characterManager.UserCharacterAction(card);
+	// private IEnumerator ExecuteTurnCoroutine(Card card, int turn)
+	// {
+	// 	// characterManager.UserCharacterAction(card);
 
-		yield return new WaitForSeconds(1);
-		if (IsGameFinish()) {yield break;}
+	// 	// yield return new WaitForSeconds(1);
+	// 	// if (IsGameFinish()) {yield break;}
 
-		characterManager.MonsterActions();
+	// 	// characterManager.MonsterActions();
 
-		yield return new WaitForSeconds(1);
-	}
+	// 	// yield return new WaitForSeconds(1);
+	// }
 
 	public void Win()
 	{

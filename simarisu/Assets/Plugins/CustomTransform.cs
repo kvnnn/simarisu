@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public static class GameTransform
+public static class CustomTransform
 {
 	public static void MoveTo(this Transform transform, Vector3 position)
 	{

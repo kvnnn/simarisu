@@ -170,7 +170,7 @@ public class CharacterManager : GameMonoBehaviour
 		int index = 0;
 		foreach (Monster monster in monsterList)
 		{
-			Vector2 defaultPos = GameVector.GetFromString(positionList[index]);
+			Vector2 defaultPos = CustomVector.GetFromString(positionList[index]);
 
 			MonsterCharacter mc = AddMonster(monster);
 			mc.MoveTo(Vector2.zero);

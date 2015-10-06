@@ -3,7 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-public static class GameVector
+public static class CustomVector
 {
 	public static Vector2 MultiplyX(this Vector2 vector, int x)
 	{

@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class GameCanvas : GameMonoBehaviour
+public class CustomCanvas : GameMonoBehaviour
 {
 	void Awake()
 	{

@@ -13,12 +13,6 @@ public class CharacterManager : GameMonoBehaviour
 
 	[SerializeField]
 	private Transform uiBaseTransform;
-	[SerializeField]
-	private Canvas uiBaseCanvas;
-	private Camera uiCamera
-	{
-		get {return uiBaseCanvas.worldCamera;}
-	}
 
 	private UserCharacter userCharacter;
 	private List<MonsterCharacter> monsters = new List<MonsterCharacter>();
@@ -105,7 +99,7 @@ public class CharacterManager : GameMonoBehaviour
 	{
 		foreach (BaseCharacter character in allCharacters)
 		{
-			if (movePosition == character.position) {return false;}
+			// if (movePosition == character.position) {return false;}
 		}
 
 		return true;
@@ -114,17 +108,17 @@ public class CharacterManager : GameMonoBehaviour
 	public List<BaseCharacter> GetCharacterInRange(Vector2 currentPosition, Vector2 attackPosition, Vector2 range, int direction)
 	{
 		List<BaseCharacter> targetCharacters = new List<BaseCharacter>();
-		Vector2 position = currentPosition + attackPosition.MultiplyX(direction);
+		// Vector2 position = currentPosition + attackPosition.MultiplyX(direction);
 
 		// Ignore range for this time
 
-		foreach (BaseCharacter character in allCharacters)
-		{
-			if (position == character.position)
-			{
-				targetCharacters.Add(character);
-			}
-		}
+		// foreach (BaseCharacter character in allCharacters)
+		// {
+		// 	if (position == character.position)
+		// 	{
+		// 		targetCharacters.Add(character);
+		// 	}
+		// }
 
 		return targetCharacters;
 	}
@@ -145,11 +139,10 @@ public class CharacterManager : GameMonoBehaviour
 		where T : BaseCharacter
 	{
 		GameObject characterGameObject = Instantiate(characterPrefab);
-		characterGameObject.transform.SetParent(transform);
+		characterGameObject.transform.SetParent(uiBaseTransform);
 
 		T character = characterGameObject.AddComponent<T>();
 		character.SetSprite(GetSprite(spriteId));
-		character.getUIPosition = GetUIPosition;
 
 		GameObject hpLabelGo = Instantiate(hpLabelPrefab);
 		hpLabelGo.transform.SetParent(uiBaseTransform);
@@ -160,9 +153,8 @@ public class CharacterManager : GameMonoBehaviour
 
 	public void AddUserCharacter()
 	{
-		Vector2 defaultPos = GameVector.GetFromString(DEFAULT_USER_POSITION);
 		userCharacter = AddUserCharacter(User.GetUser());
-		// userCharacter.MoveTo(defaultPos, stageManager.GetCellPosition(defaultPos));
+		userCharacter.MoveTo(Vector2.zero);
 	}
 
 	private UserCharacter AddUserCharacter(User data)
@@ -184,7 +176,7 @@ public class CharacterManager : GameMonoBehaviour
 			Vector2 defaultPos = GameVector.GetFromString(positionList[index]);
 
 			MonsterCharacter mc = AddMonster(monster);
-			// mc.MoveTo(defaultPos, stageManager.GetCellPosition(defaultPos));
+			mc.MoveTo(Vector2.zero);
 			monsters.Add(mc);
 			index++;
 		}
@@ -229,16 +221,6 @@ public class CharacterManager : GameMonoBehaviour
 	{
 		monsters.Remove(monster);
 		monster.DestroyIfExist();
-	}
-#endregion
-
-#region Position of World/UI
-	private Vector2 GetUIPosition(Vector3 position)
-	{
-		Vector2 screenPosition = Camera.main.WorldToScreenPoint(position);
-		Vector2 uiPosition = Vector2.zero;
-		RectTransformUtility.ScreenPointToLocalPointInRectangle(uiBaseCanvas.transform as RectTransform, screenPosition, uiCamera, out uiPosition);
-		return uiPosition;
 	}
 #endregion
 }

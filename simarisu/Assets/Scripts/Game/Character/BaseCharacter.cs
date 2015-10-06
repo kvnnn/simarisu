@@ -6,7 +6,6 @@ using System.Collections.Generic;
 public class BaseCharacter : GameMonoBehaviour
 {
 	private HpLabelParts hpLabel;
-	public Vector2 position {get; private set;}
 
 	protected int maxHp;
 	protected int hp;
@@ -17,53 +16,31 @@ public class BaseCharacter : GameMonoBehaviour
 		get {return hp <= 0;}
 	}
 
-	public System.Func<Vector3, Vector2> getUIPosition;
-
-	private SpriteRenderer spriteRenderer
+	private RectTransform rectTransform
 	{
-		get {return gameObject.GetComponent<SpriteRenderer>();}
+		get {return (RectTransform)transform;}
 	}
-
-	private Direction direction;
-	public int directionInt
+	private Image image
 	{
-		get {return (int)direction;}
-	}
-	protected virtual Direction defaultDirection
-	{
-		get {return Direction.Right;}
-	}
-	protected enum Direction
-	{
-		Right = 1,
-		Left = -1,
+		get {return gameObject.GetComponent<Image>();}
 	}
 
 	protected void Init(int maxHp, int damage)
 	{
-		SetDirection(defaultDirection);
-
 		this.maxHp = maxHp;
 		this.hp = maxHp;
 		this.damage = damage;
 	}
 
-	public void MoveTo(Vector2 position, Vector3 coordinate)
+	public void MoveTo(Vector2 position)
 	{
-		this.position = position;
-		transform.MoveTo(coordinate);
+		rectTransform.anchoredPosition = position;
 		UpdateHpLabel();
 	}
 
 	public void SetSprite(Sprite sprite)
 	{
-		spriteRenderer.sprite = sprite;
-	}
-
-	protected void SetDirection(Direction direction)
-	{
-		this.direction = direction;
-		transform.RotateY(directionInt == 1 ? 0 : 180);
+		image.sprite = sprite;
 	}
 
 #region Damage/Cure
@@ -91,7 +68,7 @@ public class BaseCharacter : GameMonoBehaviour
 	private void UpdateHpLabel()
 	{
 		hpLabel.SetHp(hp);
-		hpLabel.MoveTo(getUIPosition(transform.position));
+		hpLabel.MoveTo(transform.position);
 	}
 #endregion
 

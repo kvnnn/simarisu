@@ -1503,7 +1503,7 @@ Canvas:
   m_OverrideSorting: 1
   m_OverridePixelPerfect: 0
   m_SortingLayerID: 0
-  m_SortingOrder: -1
+  m_SortingOrder: 4
 --- !u!223 &22358518
 Canvas:
   m_ObjectHideFlags: 1
@@ -1520,7 +1520,7 @@ Canvas:
   m_OverrideSorting: 1
   m_OverridePixelPerfect: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 1
+  m_SortingOrder: 5
 --- !u!224 &22410008
 RectTransform:
   m_ObjectHideFlags: 1
@@ -1821,6 +1821,10 @@ Prefab:
     - target: {fileID: 0}
       propertyPath: m_SizeDelta.x
       value: 615
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_SortingOrder
+      value: 5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}

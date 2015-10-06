@@ -209,7 +209,7 @@ public class GameManager : GameMonoBehaviour
 #endregion
 
 #region Event
-	public void StartBattleButtonClick(ButtonParts button)
+	private void StartBattleButtonClick(ButtonParts button)
 	{
 		StartBattle();
 	}

@@ -47,7 +47,7 @@ public class CardListParts : BaseUIParts
 	}
 
 #region Event
-	public void CardClick(CardParts parts)
+	private void CardClick(CardParts parts)
 	{
 		cardPartsClick(cardPartsLists.IndexOf(parts), parts.GetCard());
 	}

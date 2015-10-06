@@ -105,14 +105,14 @@ public class GameManager : GameMonoBehaviour
 
 	// private IEnumerator ExecuteTurnCoroutine(Card card, int turn)
 	// {
-	// 	// characterManager.UserCharacterAction(card);
+	// 	characterManager.UserCharacterAction(card);
 
-	// 	// yield return new WaitForSeconds(1);
-	// 	// if (IsGameFinish()) {yield break;}
+	// 	yield return new WaitForSeconds(1);
+	// 	if (IsGameFinish()) {yield break;}
 
-	// 	// characterManager.MonsterActions();
+	// 	characterManager.MonsterActions();
 
-	// 	// yield return new WaitForSeconds(1);
+	// 	yield return new WaitForSeconds(1);
 	// }
 
 	public void Win()

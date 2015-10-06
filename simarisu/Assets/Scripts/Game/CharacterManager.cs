@@ -144,9 +144,13 @@ public class CharacterManager : GameMonoBehaviour
 		return character;
 	}
 
-	public void AddUserCharacter()
+	public void AddUserCharacter(System.Action<Vector3> onBeginDrag, System.Action<Vector3> onDrag, System.Action<Vector3> onEndDrag)
 	{
 		userCharacter = AddUserCharacter(User.GetUser());
+		userCharacter.onBeginDrag = onBeginDrag;
+		userCharacter.onDrag = onDrag;
+		userCharacter.onEndDrag = onEndDrag;
+
 		userCharacter.MoveTo(Vector2.zero);
 	}
 

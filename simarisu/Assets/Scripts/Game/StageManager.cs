@@ -11,14 +11,12 @@ public class StageManager : GameMonoBehaviour, IPointerExitHandler
 
 	public void Init()
 	{
-		Canvas canvas = gameObject.GetComponent<Canvas>();
-		canvas.sortingOrder = -6;
 	}
 
 #region Event
 	public void OnPointerExit(PointerEventData eventData)
 	{
-		Debug.Log("マウスアウト position=" + eventData.position);
+		// Debug.Log(eventData.position);
 	}
 #endregion
 }

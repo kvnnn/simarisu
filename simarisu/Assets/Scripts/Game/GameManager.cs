@@ -11,6 +11,8 @@ public class GameManager : GameMonoBehaviour
 	private CharacterManager characterManager;
 	[SerializeField]
 	private ChipManager chipManager;
+	[SerializeField]
+	private LineManager lineManager;
 
 	private int point;
 	private int totalTurnCount;
@@ -28,33 +30,17 @@ public class GameManager : GameMonoBehaviour
 		Win,
 	}
 
-#region InitManager
 	public void InitGame()
 	{
 		ResetGameStatus();
 
-		InitChip();
-		InitStage();
-		InitCharacter();
+		stageManager.Init();
+		characterManager.Init();
+		chipManager.Init();
+		lineManager.Init();
 
 		PrepareGame();
 	}
-
-	private void InitStage()
-	{
-		stageManager.Init();
-	}
-
-	private void InitCharacter()
-	{
-		characterManager.Init();
-	}
-
-	private void InitChip()
-	{
-		chipManager.Init();
-	}
-#endregion
 
 #region Game
 	public void PrepareGame()
@@ -66,7 +52,7 @@ public class GameManager : GameMonoBehaviour
 	public void StartGame()
 	{
 		characterManager.AddMonster(PickMonster());
-		characterManager.AddUserCharacter();
+		characterManager.AddUserCharacter(CharacterOnBeginDrag, CharacterOnDrag, CharacterOnEndDrag);
 	}
 
 	private void StartBattle()
@@ -210,10 +196,34 @@ public class GameManager : GameMonoBehaviour
 	}
 #endregion
 
+#region Convert Position
+	public Vector3 GetWorldPoint(Vector3 position)
+	{
+		position = Camera.main.ScreenToWorldPoint(position);
+		position.z = 0;
+		return position;
+	}
+#endregion
+
 #region Event
 	public void StartBattleButtonClick(ButtonParts button)
 	{
 		StartBattle();
+	}
+
+	public void CharacterOnBeginDrag(Vector3 position)
+	{
+		lineManager.StartDrawing(GetWorldPoint(position));
+	}
+
+	public void CharacterOnDrag(Vector3 position)
+	{
+		lineManager.AddPoint(GetWorldPoint(position));
+	}
+
+	public void CharacterOnEndDrag(Vector3 position)
+	{
+		lineManager.EndDrawing(GetWorldPoint(position));
 	}
 #endregion
 }

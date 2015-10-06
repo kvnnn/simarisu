@@ -11,9 +11,6 @@ public class CharacterManager : GameMonoBehaviour
 	[SerializeField]
 	private GameObject hpLabelPrefab;
 
-	[SerializeField]
-	private Transform uiBaseTransform;
-
 	private UserCharacter userCharacter;
 	private List<MonsterCharacter> monsters = new List<MonsterCharacter>();
 	private List<BaseCharacter> allCharacters
@@ -139,13 +136,13 @@ public class CharacterManager : GameMonoBehaviour
 		where T : BaseCharacter
 	{
 		GameObject characterGameObject = Instantiate(characterPrefab);
-		characterGameObject.transform.SetParent(uiBaseTransform);
+		characterGameObject.transform.SetParent(transform);
 
 		T character = characterGameObject.AddComponent<T>();
 		character.SetSprite(GetSprite(spriteId));
 
 		GameObject hpLabelGo = Instantiate(hpLabelPrefab);
-		hpLabelGo.transform.SetParent(uiBaseTransform);
+		hpLabelGo.transform.SetParent(transform);
 		character.SetHpLabel(hpLabelGo.GetComponent<HpLabelParts>());
 
 		return character;

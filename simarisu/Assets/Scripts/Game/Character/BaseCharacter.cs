@@ -68,7 +68,7 @@ public class BaseCharacter : GameMonoBehaviour
 	private void UpdateHpLabel()
 	{
 		hpLabel.SetHp(hp);
-		hpLabel.MoveTo(transform.position);
+		hpLabel.MoveTo(rectTransform.anchoredPosition);
 	}
 #endregion
 

@@ -6,8 +6,7 @@ using System.Linq;
 public class GameManager : GameMonoBehaviour
 {
 	[SerializeField]
-	private GameObject stagePrefab;
-
+	private StageManager stageManager;
 	[SerializeField]
 	private CharacterManager characterManager;
 	[SerializeField]
@@ -43,7 +42,7 @@ public class GameManager : GameMonoBehaviour
 
 	private void InitStage()
 	{
-		// stageManager.Init();
+		stageManager.Init();
 	}
 
 	private void InitCharacter()

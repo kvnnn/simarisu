@@ -6,13 +6,13 @@ using System.Linq;
 public class GameManager : GameMonoBehaviour
 {
 	[SerializeField]
-	private GameObject stagePrefab;
-	public StageManager stageManager {get; private set;}
-
+	private StageManager stageManager;
 	[SerializeField]
 	private CharacterManager characterManager;
 	[SerializeField]
-	private ChipManager chipManager;
+	private CardManager cardManager;
+	[SerializeField]
+	private LineManager lineManager;
 
 	private int point;
 	private int totalTurnCount;
@@ -30,40 +30,17 @@ public class GameManager : GameMonoBehaviour
 		Win,
 	}
 
-#region InitManager
 	public void InitGame()
 	{
 		ResetGameStatus();
 
-		InitChip();
-		InitStage();
-		InitCharacter();
+		stageManager.Init();
+		characterManager.Init();
+		cardManager.Init();
+		lineManager.Init();
 
 		PrepareGame();
 	}
-
-	private void InitStage()
-	{
-		if (stageManager == null)
-		{
-			GameObject stageGameObject = Instantiate(stagePrefab);
-			stageGameObject.transform.SetParent(transform.parent);
-			stageManager = stageGameObject.GetComponent<StageManager>();
-		}
-
-		stageManager.Init();
-	}
-
-	private void InitCharacter()
-	{
-		characterManager.Init();
-	}
-
-	private void InitChip()
-	{
-		chipManager.Init();
-	}
-#endregion
 
 #region Game
 	public void PrepareGame()
@@ -74,8 +51,8 @@ public class GameManager : GameMonoBehaviour
 
 	public void StartGame()
 	{
-		characterManager.AddUserCharacter(stageManager);
-		characterManager.AddMonster(PickMonster(), stageManager);
+		characterManager.AddMonster(PickMonster());
+		characterManager.AddUserCharacter(CharacterOnBeginDrag, CharacterOnDrag, CharacterOnEndDrag);
 	}
 
 	private void StartBattle()
@@ -86,12 +63,12 @@ public class GameManager : GameMonoBehaviour
 
 	private void BeforeBattleStart()
 	{
-		chipManager.ResetChipSelectFocus();
+		// cardManager.ResetCardSelectFocus();
 	}
 
 	private void AfterBattleStart()
 	{
-		chipManager.UpdateParts();
+		cardManager.UpdateParts();
 
 		if (IsGameFinish())
 		{
@@ -110,27 +87,26 @@ public class GameManager : GameMonoBehaviour
 	{
 		gameStatus = GameStatus.Battle;
 		int turn = 0;
-		List<Chip> selectedChips = chipManager.GetSelectedChips();
-		foreach (Chip chip in selectedChips)
+		List<Card> selectedCards = cardManager.GetSelectedCards();
+		foreach (Card card in selectedCards)
 		{
 			turn++;
 			totalTurnCount++;
-			yield return StartCoroutine(ExecuteTurnCoroutine(chip, turn));
+			yield return StartCoroutine(ExecuteTurnCoroutine(card, turn));
 			if (IsGameFinish()) {break;}
 		}
 
 		callback();
 	}
 
-	private IEnumerator ExecuteTurnCoroutine(Chip chip, int turn)
+	private IEnumerator ExecuteTurnCoroutine(Card card, int turn)
 	{
-		chipManager.FocusSelectParts(turn - 1);
-		characterManager.UserCharacterAction(chip, stageManager);
+		characterManager.UserCharacterAction(card);
 
 		yield return new WaitForSeconds(1);
 		if (IsGameFinish()) {yield break;}
 
-		characterManager.MonsterActions(stageManager);
+		characterManager.MonsterActions();
 
 		yield return new WaitForSeconds(1);
 	}
@@ -213,10 +189,19 @@ public class GameManager : GameMonoBehaviour
 #endregion
 
 #region UIParts
-	public void InitUI(ChipListParts chipListParts, ChipSelectParts chipSelectParts, ButtonParts startBattleButtonParts)
+	public void InitUI(CardListParts cardListParts, ButtonParts startBattleButtonParts)
 	{
 		startBattleButtonParts.buttonClick += StartBattleButtonClick;
-		chipManager.SetUIParts(chipListParts, chipSelectParts, startBattleButtonParts);
+		cardManager.SetUIParts(cardListParts, startBattleButtonParts);
+	}
+#endregion
+
+#region Convert Position
+	public Vector3 GetWorldPoint(Vector3 position)
+	{
+		position = Camera.main.ScreenToWorldPoint(position);
+		position.z = 0;
+		return position;
 	}
 #endregion
 
@@ -224,6 +209,21 @@ public class GameManager : GameMonoBehaviour
 	public void StartBattleButtonClick(ButtonParts button)
 	{
 		StartBattle();
+	}
+
+	public void CharacterOnBeginDrag(Vector3 position)
+	{
+		lineManager.StartDrawing(GetWorldPoint(position));
+	}
+
+	public void CharacterOnDrag(Vector3 position)
+	{
+		lineManager.AddPoint(GetWorldPoint(position));
+	}
+
+	public void CharacterOnEndDrag(Vector3 position)
+	{
+		lineManager.EndDrawing(GetWorldPoint(position));
 	}
 #endregion
 }

@@ -1,5 +1,5 @@
 drop table if exists monster;
-create table monster(id integer, name text, description text, sprite text, chips text, hp integer, damage integer);
+create table monster(id integer, name text, description text, sprite text, card text, hp integer, damage integer);
 insert into monster values(0, 'monster1', 'm1', '1', '0,1,2,3,4', 5, 1);
 insert into monster values(1, 'monster2', 'm2', '2', '0,1,2,3,4', 6, 2);
 insert into monster values(2, 'monster3', 'm3', '3', '0,1,2,3,4', 7, 2);

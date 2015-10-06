@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -6,22 +7,17 @@ public class MonsterCharacter : BaseCharacter
 {
 	private Monster monster;
 
-	protected override Direction defaultDirection
-	{
-		get {return Direction.Left;}
-	}
-
 	public void Init(Monster monster)
 	{
 		this.monster = monster;
 		base.Init(monster.hp, monster.damage);
 	}
 
-	public Chip SelectChip()
+	public Card SelectCard()
 	{
-		List<Chip> chips = monster.chips;
+		List<Card> cards = monster.card;
 
 		// return null; //For Debug
-		return chips[Random.Range(0, chips.Count - 1)];
+		return cards[Random.Range(0, cards.Count - 1)];
 	}
 }

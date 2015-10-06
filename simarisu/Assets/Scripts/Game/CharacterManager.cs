@@ -11,15 +11,6 @@ public class CharacterManager : GameMonoBehaviour
 	[SerializeField]
 	private GameObject hpLabelPrefab;
 
-	[SerializeField]
-	private Transform uiBaseTransform;
-	[SerializeField]
-	private Canvas uiBaseCanvas;
-	private Camera uiCamera
-	{
-		get {return uiBaseCanvas.worldCamera;}
-	}
-
 	private UserCharacter userCharacter;
 	private List<MonsterCharacter> monsters = new List<MonsterCharacter>();
 	private List<BaseCharacter> allCharacters
@@ -57,57 +48,55 @@ public class CharacterManager : GameMonoBehaviour
 #endregion
 
 #region CharacterAction
-	public void UserCharacterAction(Chip chip, StageManager stageManager)
+	public void UserCharacterAction(Card card)
 	{
-		ActionCharacter(userCharacter, chip, stageManager);
+		ActionCharacter(userCharacter, card);
 	}
 
-	public void MonsterActions(StageManager stageManager)
+	public void MonsterActions()
 	{
 		foreach (MonsterCharacter monster in monsters)
 		{
-			Chip chip = monster.SelectChip();
-			ActionCharacter(monster, chip, stageManager);
+			Card card = monster.SelectCard();
+			ActionCharacter(monster, card);
 		}
 	}
 
-	public void ActionCharacter(BaseCharacter character, Chip chip, StageManager stageManager)
+	public void ActionCharacter(BaseCharacter character, Card card)
 	{
-		if (chip == null) {return;}
-		switch (chip.type)
+		if (card == null) {return;}
+		switch (card.type)
 		{
-			case Chip.Type.Move:
-				Vector2 movePosition = character.position + chip.position;
-				if (IsMovable(movePosition, stageManager))
-				{
-					character.MoveTo(movePosition, stageManager.GetCellPosition(movePosition));
-				}
+			case Card.Type.Move:
+				// Vector2 movePosition = character.position + card.position;
+				// if (IsMovable(movePosition))
+				// {
+				// 	character.MoveTo(movePosition, stageManager.GetCellPosition(movePosition));
+				// }
 			break;
-			case Chip.Type.Attack:
-				foreach (BaseCharacter target in GetCharacterInRange(character.position, chip.position, chip.range, character.directionInt))
-				{
-					if (target == character) {continue;}
-					target.Damage(CalculateDamage(character, chip));
-					if (target is MonsterCharacter && target.isDead)
-					{
-						DestroyMonster(target as MonsterCharacter);
-					}
-				}
+			case Card.Type.Attack:
+				// foreach (BaseCharacter target in GetCharacterInRange(character.position, card.position, card.range, character.directionInt))
+				// {
+				// 	if (target == character) {continue;}
+				// 	target.Damage(CalculateDamage(character, card));
+				// 	if (target is MonsterCharacter && target.isDead)
+				// 	{
+				// 		DestroyMonster(target as MonsterCharacter);
+				// 	}
+				// }
 			break;
-			case Chip.Type.Cure:
+			case Card.Type.Cure:
 			break;
-			case Chip.Type.Other:
+			case Card.Type.Other:
 			break;
 		}
 	}
 
-	public bool IsMovable(Vector2 movePosition, StageManager stageManager)
+	public bool IsMovable(Vector2 movePosition)
 	{
-		if (!stageManager.HasCell(movePosition)) {return false;}
-
 		foreach (BaseCharacter character in allCharacters)
 		{
-			if (movePosition == character.position) {return false;}
+			// if (movePosition == character.position) {return false;}
 		}
 
 		return true;
@@ -116,24 +105,24 @@ public class CharacterManager : GameMonoBehaviour
 	public List<BaseCharacter> GetCharacterInRange(Vector2 currentPosition, Vector2 attackPosition, Vector2 range, int direction)
 	{
 		List<BaseCharacter> targetCharacters = new List<BaseCharacter>();
-		Vector2 position = currentPosition + attackPosition.MultiplyX(direction);
+		// Vector2 position = currentPosition + attackPosition.MultiplyX(direction);
 
 		// Ignore range for this time
 
-		foreach (BaseCharacter character in allCharacters)
-		{
-			if (position == character.position)
-			{
-				targetCharacters.Add(character);
-			}
-		}
+		// foreach (BaseCharacter character in allCharacters)
+		// {
+		// 	if (position == character.position)
+		// 	{
+		// 		targetCharacters.Add(character);
+		// 	}
+		// }
 
 		return targetCharacters;
 	}
 
-	public int CalculateDamage(BaseCharacter character, Chip chip)
+	public int CalculateDamage(BaseCharacter character, Card card)
 	{
-		int damage = chip.damage;
+		int damage = card.damage;
 		if (damage == 0)
 		{
 			damage = character.damage;
@@ -151,20 +140,18 @@ public class CharacterManager : GameMonoBehaviour
 
 		T character = characterGameObject.AddComponent<T>();
 		character.SetSprite(GetSprite(spriteId));
-		character.getUIPosition = GetUIPosition;
-
-		GameObject hpLabelGo = Instantiate(hpLabelPrefab);
-		hpLabelGo.transform.SetParent(uiBaseTransform);
-		character.SetHpLabel(hpLabelGo.GetComponent<HpLabelParts>());
 
 		return character;
 	}
 
-	public void AddUserCharacter(StageManager stageManager)
+	public void AddUserCharacter(System.Action<Vector3> onBeginDrag, System.Action<Vector3> onDrag, System.Action<Vector3> onEndDrag)
 	{
-		Vector2 defaultPos = GameVector.GetFromString(DEFAULT_USER_POSITION);
 		userCharacter = AddUserCharacter(User.GetUser());
-		userCharacter.MoveTo(defaultPos, stageManager.GetCellPosition(defaultPos));
+		userCharacter.onBeginDrag = onBeginDrag;
+		userCharacter.onDrag = onDrag;
+		userCharacter.onEndDrag = onEndDrag;
+
+		userCharacter.MoveTo(Vector2.zero);
 	}
 
 	private UserCharacter AddUserCharacter(User data)
@@ -174,7 +161,7 @@ public class CharacterManager : GameMonoBehaviour
 		return character;
 	}
 
-	public void AddMonster(List<Monster> monsterList, StageManager stageManager)
+	public void AddMonster(List<Monster> monsterList)
 	{
 		int count = monsterList.Count;
 		System.Random random = new System.Random();
@@ -183,10 +170,10 @@ public class CharacterManager : GameMonoBehaviour
 		int index = 0;
 		foreach (Monster monster in monsterList)
 		{
-			Vector2 defaultPos = GameVector.GetFromString(positionList[index]);
+			Vector2 defaultPos = CustomVector.GetFromString(positionList[index]);
 
 			MonsterCharacter mc = AddMonster(monster);
-			mc.MoveTo(defaultPos, stageManager.GetCellPosition(defaultPos));
+			mc.MoveTo(Vector2.zero);
 			monsters.Add(mc);
 			index++;
 		}
@@ -201,7 +188,7 @@ public class CharacterManager : GameMonoBehaviour
 
 	private Sprite GetSprite(string spriteId)
 	{
-		string path = string.Format("Image/Character/{0}", spriteId);
+		string path = string.Format("Characters/Images/{0}", spriteId);
 		return Resources.Load<Sprite>(path);
 	}
 
@@ -231,16 +218,6 @@ public class CharacterManager : GameMonoBehaviour
 	{
 		monsters.Remove(monster);
 		monster.DestroyIfExist();
-	}
-#endregion
-
-#region Position of World/UI
-	private Vector2 GetUIPosition(Vector3 position)
-	{
-		Vector2 screenPosition = Camera.main.WorldToScreenPoint(position);
-		Vector2 uiPosition = Vector2.zero;
-		RectTransformUtility.ScreenPointToLocalPointInRectangle(uiBaseCanvas.transform as RectTransform, screenPosition, uiCamera, out uiPosition);
-		return uiPosition;
 	}
 #endregion
 }

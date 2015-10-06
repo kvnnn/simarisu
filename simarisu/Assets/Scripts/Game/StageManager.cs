@@ -1,37 +1,22 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 
-public class StageManager : GameMonoBehaviour
+public class StageManager : GameMonoBehaviour, IPointerExitHandler
 {
-	public const int MAX_X = 5;
-	public const int MIN_X = 0;
-	public const int MAX_Y = 2;
-	public const int MIN_Y = 0;
+	[SerializeField]
+	private Image stageImage;
 
 	public void Init()
 	{
-
 	}
 
-	public Vector3 GetCellPosition(int x, int y)
+#region Event
+	public void OnPointerExit(PointerEventData eventData)
 	{
-		Transform cellTransform = transform.Find(string.Format("{0},{1}", x, y));
-		return cellTransform.position;
+		// Debug.Log(eventData.position);
 	}
-
-	public Vector3 GetCellPosition(Vector2 position)
-	{
-		return GetCellPosition((int)position.x, (int)position.y);
-	}
-
-	public bool HasCell(int x, int y)
-	{
-		return x >= MIN_X && x <= MAX_X && y >= MIN_Y && y <= MAX_Y;
-	}
-
-	public bool HasCell(Vector2 position)
-	{
-		return HasCell((int)position.x, (int)position.y);
-	}
+#endregion
 }

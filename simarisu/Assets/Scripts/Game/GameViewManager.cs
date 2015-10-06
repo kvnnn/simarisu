@@ -10,9 +10,7 @@ public class GameViewManager : ViewManager
 	[SerializeField]
 	private Transform uiBaseTransform;
 	[SerializeField]
-	private GameObject chipListPartsPrefab;
-	[SerializeField]
-	private GameObject chipSeletPartsPrefab;
+	private GameObject cardListPartsPrefab;
 	[SerializeField]
 	private GameObject startBattleButtonPartsPrefab;
 
@@ -29,10 +27,9 @@ public class GameViewManager : ViewManager
 
 	private void InitUI()
 	{
-		ChipListParts chipListParts = InstantiateUI<ChipListParts>(chipListPartsPrefab);
-		ChipSelectParts chipSelectParts = InstantiateUI<ChipSelectParts>(chipSeletPartsPrefab);
+		CardListParts cardListParts = InstantiateUI<CardListParts>(cardListPartsPrefab);
 		ButtonParts startBattleButtonParts = InstantiateUI<ButtonParts>(startBattleButtonPartsPrefab);
-		gameManager.InitUI(chipListParts, chipSelectParts, startBattleButtonParts);
+		gameManager.InitUI(cardListParts, startBattleButtonParts);
 	}
 
 	private T InstantiateUI<T>(GameObject prefab)

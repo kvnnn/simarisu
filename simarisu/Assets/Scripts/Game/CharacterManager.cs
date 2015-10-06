@@ -57,42 +57,42 @@ public class CharacterManager : GameMonoBehaviour
 #endregion
 
 #region CharacterAction
-	public void UserCharacterAction(Chip chip, StageManager stageManager)
+	public void UserCharacterAction(Chip chip)
 	{
-		ActionCharacter(userCharacter, chip, stageManager);
+		ActionCharacter(userCharacter, chip);
 	}
 
-	public void MonsterActions(StageManager stageManager)
+	public void MonsterActions()
 	{
 		foreach (MonsterCharacter monster in monsters)
 		{
 			Chip chip = monster.SelectChip();
-			ActionCharacter(monster, chip, stageManager);
+			ActionCharacter(monster, chip);
 		}
 	}
 
-	public void ActionCharacter(BaseCharacter character, Chip chip, StageManager stageManager)
+	public void ActionCharacter(BaseCharacter character, Chip chip)
 	{
 		if (chip == null) {return;}
 		switch (chip.type)
 		{
 			case Chip.Type.Move:
-				Vector2 movePosition = character.position + chip.position;
-				if (IsMovable(movePosition, stageManager))
-				{
-					character.MoveTo(movePosition, stageManager.GetCellPosition(movePosition));
-				}
+				// Vector2 movePosition = character.position + chip.position;
+				// if (IsMovable(movePosition))
+				// {
+				// 	character.MoveTo(movePosition, stageManager.GetCellPosition(movePosition));
+				// }
 			break;
 			case Chip.Type.Attack:
-				foreach (BaseCharacter target in GetCharacterInRange(character.position, chip.position, chip.range, character.directionInt))
-				{
-					if (target == character) {continue;}
-					target.Damage(CalculateDamage(character, chip));
-					if (target is MonsterCharacter && target.isDead)
-					{
-						DestroyMonster(target as MonsterCharacter);
-					}
-				}
+				// foreach (BaseCharacter target in GetCharacterInRange(character.position, chip.position, chip.range, character.directionInt))
+				// {
+				// 	if (target == character) {continue;}
+				// 	target.Damage(CalculateDamage(character, chip));
+				// 	if (target is MonsterCharacter && target.isDead)
+				// 	{
+				// 		DestroyMonster(target as MonsterCharacter);
+				// 	}
+				// }
 			break;
 			case Chip.Type.Cure:
 			break;
@@ -101,10 +101,8 @@ public class CharacterManager : GameMonoBehaviour
 		}
 	}
 
-	public bool IsMovable(Vector2 movePosition, StageManager stageManager)
+	public bool IsMovable(Vector2 movePosition)
 	{
-		if (!stageManager.HasCell(movePosition)) {return false;}
-
 		foreach (BaseCharacter character in allCharacters)
 		{
 			if (movePosition == character.position) {return false;}
@@ -160,11 +158,11 @@ public class CharacterManager : GameMonoBehaviour
 		return character;
 	}
 
-	public void AddUserCharacter(StageManager stageManager)
+	public void AddUserCharacter()
 	{
 		Vector2 defaultPos = GameVector.GetFromString(DEFAULT_USER_POSITION);
 		userCharacter = AddUserCharacter(User.GetUser());
-		userCharacter.MoveTo(defaultPos, stageManager.GetCellPosition(defaultPos));
+		// userCharacter.MoveTo(defaultPos, stageManager.GetCellPosition(defaultPos));
 	}
 
 	private UserCharacter AddUserCharacter(User data)
@@ -174,7 +172,7 @@ public class CharacterManager : GameMonoBehaviour
 		return character;
 	}
 
-	public void AddMonster(List<Monster> monsterList, StageManager stageManager)
+	public void AddMonster(List<Monster> monsterList)
 	{
 		int count = monsterList.Count;
 		System.Random random = new System.Random();
@@ -186,7 +184,7 @@ public class CharacterManager : GameMonoBehaviour
 			Vector2 defaultPos = GameVector.GetFromString(positionList[index]);
 
 			MonsterCharacter mc = AddMonster(monster);
-			mc.MoveTo(defaultPos, stageManager.GetCellPosition(defaultPos));
+			// mc.MoveTo(defaultPos, stageManager.GetCellPosition(defaultPos));
 			monsters.Add(mc);
 			index++;
 		}

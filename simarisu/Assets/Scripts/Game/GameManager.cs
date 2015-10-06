@@ -7,7 +7,6 @@ public class GameManager : GameMonoBehaviour
 {
 	[SerializeField]
 	private GameObject stagePrefab;
-	public StageManager stageManager {get; private set;}
 
 	[SerializeField]
 	private CharacterManager characterManager;
@@ -44,14 +43,7 @@ public class GameManager : GameMonoBehaviour
 
 	private void InitStage()
 	{
-		if (stageManager == null)
-		{
-			GameObject stageGameObject = Instantiate(stagePrefab);
-			stageGameObject.transform.SetParent(transform.parent);
-			stageManager = stageGameObject.GetComponent<StageManager>();
-		}
-
-		stageManager.Init();
+		// stageManager.Init();
 	}
 
 	private void InitCharacter()
@@ -74,8 +66,8 @@ public class GameManager : GameMonoBehaviour
 
 	public void StartGame()
 	{
-		characterManager.AddUserCharacter(stageManager);
-		characterManager.AddMonster(PickMonster(), stageManager);
+		characterManager.AddUserCharacter();
+		characterManager.AddMonster(PickMonster());
 	}
 
 	private void StartBattle()
@@ -125,12 +117,12 @@ public class GameManager : GameMonoBehaviour
 	private IEnumerator ExecuteTurnCoroutine(Chip chip, int turn)
 	{
 		chipManager.FocusSelectParts(turn - 1);
-		characterManager.UserCharacterAction(chip, stageManager);
+		characterManager.UserCharacterAction(chip);
 
 		yield return new WaitForSeconds(1);
 		if (IsGameFinish()) {yield break;}
 
-		characterManager.MonsterActions(stageManager);
+		characterManager.MonsterActions();
 
 		yield return new WaitForSeconds(1);
 	}

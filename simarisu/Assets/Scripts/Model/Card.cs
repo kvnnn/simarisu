@@ -15,26 +15,26 @@ using System.Collections.Generic;
 	range 			: text
 */
 
-public class Chip
+public class Card
 {
 #region Static
-	public static Chip GetChip(int id)
+	public static Card GetCard(int id)
 	{
-		return GetChip(id.ToString());
+		return GetCard(id.ToString());
 	}
 
-	public static Chip GetChip(string id)
+	public static Card GetCard(string id)
 	{
-		string query = string.Format("select * from chip where id = {0}", id);
+		string query = string.Format("select * from card where id = {0}", id);
 		DataTable table = Database.instance.Execute(query);
-		return new Chip(table.Rows[0]);
+		return new Card(table.Rows[0]);
 	}
 #endregion
 
-#region ChipData
+#region CardData
 	public DataRow rawData {get; private set;}
 	public int id {get; private set;}
-	public string chipName {get; private set;}
+	public string name {get; private set;}
 	public string description {get; private set;}
 	public string sprite {get; private set;}
 	public string effect {get; private set;}
@@ -58,12 +58,12 @@ public class Chip
 	private string positionStr;
 	private string rangeStr;
 
-	public Chip(DataRow rawData)
+	public Card(DataRow rawData)
 	{
 		this.rawData = rawData;
 
 		id = (int)rawData["id"];
-		chipName = rawData["name"].ToString();
+		name = rawData["name"].ToString();
 		description = rawData["description"].ToString();
 		sprite = rawData["sprite"].ToString();
 		effect = rawData["effect"].ToString();

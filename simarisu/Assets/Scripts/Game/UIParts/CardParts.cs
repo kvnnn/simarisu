@@ -3,37 +3,37 @@ using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 
-public class ChipParts : BaseUIParts
+public class CardParts : BaseUIParts
 {
-	private Chip chip;
-	public bool hasChip
+	private Card card;
+	public bool hasCard
 	{
-		get {return chip != null;}
+		get {return card != null;}
 	}
 
 	[SerializeField]
 	private Text text;
 
-	public void SetChip(Chip chip)
+	public void SetCard(Card card)
 	{
-		this.chip = chip;
+		this.card = card;
 	}
 
-	public Chip GetChip()
+	public Card GetCard()
 	{
-		return chip;
+		return card;
 	}
 
-	public void RemoveChip()
+	public void RemoveCard()
 	{
-		chip = null;
+		card = null;
 	}
 
 	public void UpdateParts()
 	{
-		if (hasChip) {
+		if (hasCard) {
 			gameObject.SetActive(true);
-			text.text = chip.chipName;
+			text.text = card.name;
 		} else {
 			gameObject.SetActive(false);
 			text.text = "";

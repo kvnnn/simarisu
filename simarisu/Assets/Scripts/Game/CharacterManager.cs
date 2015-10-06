@@ -48,46 +48,46 @@ public class CharacterManager : GameMonoBehaviour
 #endregion
 
 #region CharacterAction
-	public void UserCharacterAction(Chip chip)
+	public void UserCharacterAction(Card card)
 	{
-		ActionCharacter(userCharacter, chip);
+		ActionCharacter(userCharacter, card);
 	}
 
 	public void MonsterActions()
 	{
 		foreach (MonsterCharacter monster in monsters)
 		{
-			Chip chip = monster.SelectChip();
-			ActionCharacter(monster, chip);
+			Card card = monster.SelectCard();
+			ActionCharacter(monster, card);
 		}
 	}
 
-	public void ActionCharacter(BaseCharacter character, Chip chip)
+	public void ActionCharacter(BaseCharacter character, Card card)
 	{
-		if (chip == null) {return;}
-		switch (chip.type)
+		if (card == null) {return;}
+		switch (card.type)
 		{
-			case Chip.Type.Move:
-				// Vector2 movePosition = character.position + chip.position;
+			case Card.Type.Move:
+				// Vector2 movePosition = character.position + card.position;
 				// if (IsMovable(movePosition))
 				// {
 				// 	character.MoveTo(movePosition, stageManager.GetCellPosition(movePosition));
 				// }
 			break;
-			case Chip.Type.Attack:
-				// foreach (BaseCharacter target in GetCharacterInRange(character.position, chip.position, chip.range, character.directionInt))
+			case Card.Type.Attack:
+				// foreach (BaseCharacter target in GetCharacterInRange(character.position, card.position, card.range, character.directionInt))
 				// {
 				// 	if (target == character) {continue;}
-				// 	target.Damage(CalculateDamage(character, chip));
+				// 	target.Damage(CalculateDamage(character, card));
 				// 	if (target is MonsterCharacter && target.isDead)
 				// 	{
 				// 		DestroyMonster(target as MonsterCharacter);
 				// 	}
 				// }
 			break;
-			case Chip.Type.Cure:
+			case Card.Type.Cure:
 			break;
-			case Chip.Type.Other:
+			case Card.Type.Other:
 			break;
 		}
 	}
@@ -120,9 +120,9 @@ public class CharacterManager : GameMonoBehaviour
 		return targetCharacters;
 	}
 
-	public int CalculateDamage(BaseCharacter character, Chip chip)
+	public int CalculateDamage(BaseCharacter character, Card card)
 	{
-		int damage = chip.damage;
+		int damage = card.damage;
 		if (damage == 0)
 		{
 			damage = character.damage;

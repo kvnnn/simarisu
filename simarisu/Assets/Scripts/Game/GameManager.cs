@@ -10,7 +10,7 @@ public class GameManager : GameMonoBehaviour
 	[SerializeField]
 	private CharacterManager characterManager;
 	[SerializeField]
-	private ChipManager chipManager;
+	private CardManager cardManager;
 	[SerializeField]
 	private LineManager lineManager;
 
@@ -36,7 +36,7 @@ public class GameManager : GameMonoBehaviour
 
 		stageManager.Init();
 		characterManager.Init();
-		chipManager.Init();
+		cardManager.Init();
 		lineManager.Init();
 
 		PrepareGame();
@@ -63,12 +63,12 @@ public class GameManager : GameMonoBehaviour
 
 	private void BeforeBattleStart()
 	{
-		// chipManager.ResetChipSelectFocus();
+		// cardManager.ResetCardSelectFocus();
 	}
 
 	private void AfterBattleStart()
 	{
-		chipManager.UpdateParts();
+		cardManager.UpdateParts();
 
 		if (IsGameFinish())
 		{
@@ -87,21 +87,21 @@ public class GameManager : GameMonoBehaviour
 	{
 		gameStatus = GameStatus.Battle;
 		int turn = 0;
-		List<Chip> selectedChips = chipManager.GetSelectedChips();
-		foreach (Chip chip in selectedChips)
+		List<Card> selectedCards = cardManager.GetSelectedCards();
+		foreach (Card card in selectedCards)
 		{
 			turn++;
 			totalTurnCount++;
-			yield return StartCoroutine(ExecuteTurnCoroutine(chip, turn));
+			yield return StartCoroutine(ExecuteTurnCoroutine(card, turn));
 			if (IsGameFinish()) {break;}
 		}
 
 		callback();
 	}
 
-	private IEnumerator ExecuteTurnCoroutine(Chip chip, int turn)
+	private IEnumerator ExecuteTurnCoroutine(Card card, int turn)
 	{
-		characterManager.UserCharacterAction(chip);
+		characterManager.UserCharacterAction(card);
 
 		yield return new WaitForSeconds(1);
 		if (IsGameFinish()) {yield break;}
@@ -189,10 +189,10 @@ public class GameManager : GameMonoBehaviour
 #endregion
 
 #region UIParts
-	public void InitUI(ChipListParts chipListParts, ButtonParts startBattleButtonParts)
+	public void InitUI(CardListParts cardListParts, ButtonParts startBattleButtonParts)
 	{
 		startBattleButtonParts.buttonClick += StartBattleButtonClick;
-		chipManager.SetUIParts(chipListParts, startBattleButtonParts);
+		cardManager.SetUIParts(cardListParts, startBattleButtonParts);
 	}
 #endregion
 

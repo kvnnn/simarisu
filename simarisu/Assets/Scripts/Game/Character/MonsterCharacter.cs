@@ -13,11 +13,11 @@ public class MonsterCharacter : BaseCharacter
 		base.Init(monster.hp, monster.damage);
 	}
 
-	public Chip SelectChip()
+	public Card SelectCard()
 	{
-		List<Chip> chips = monster.chips;
+		List<Card> cards = monster.card;
 
 		// return null; //For Debug
-		return chips[Random.Range(0, chips.Count - 1)];
+		return cards[Random.Range(0, cards.Count - 1)];
 	}
 }

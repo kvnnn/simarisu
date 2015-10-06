@@ -10,7 +10,7 @@ GameObject:
   - 4: {fileID: 422092}
   - 114: {fileID: 11470526}
   m_Layer: 0
-  m_Name: ChipManager
+  m_Name: CardManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -256,7 +256,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stageManager: {fileID: 11449518}
   characterManager: {fileID: 11433254}
-  chipManager: {fileID: 11470526}
+  cardManager: {fileID: 11470526}
   lineManager: {fileID: 11474354}
 --- !u!114 &11425948
 MonoBehaviour:
@@ -292,7 +292,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameManager: {fileID: 11411804}
   uiBaseTransform: {fileID: 22445406}
-  chipListPartsPrefab: {fileID: 151678, guid: d2b8dfa0966894ef1affefb910aaf813, type: 2}
+  cardListPartsPrefab: {fileID: 151678, guid: d2b8dfa0966894ef1affefb910aaf813, type: 2}
   startBattleButtonPartsPrefab: {fileID: 146516, guid: 0d9d644889ea0468b9a494e6c5644665,
     type: 2}
 --- !u!114 &11433254
@@ -659,6 +659,18 @@ Prefab:
       propertyPath: lineManager
       value: 
       objectReference: {fileID: 11474354}
+    - target: {fileID: 0}
+      propertyPath: cardListPartsPrefab
+      value: 
+      objectReference: {fileID: 151678, guid: d2b8dfa0966894ef1affefb910aaf813, type: 2}
+    - target: {fileID: 0}
+      propertyPath: m_Name
+      value: CardManager
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: cardManager
+      value: 
+      objectReference: {fileID: 11470526}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 136164}

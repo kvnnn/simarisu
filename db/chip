@@ -1,7 +1,0 @@
-drop table if exists chip;
-create table chip(id integer, name text, description text, sprite text, effect text, rarity integer, type integer, damage integer, position text, range text);
-insert into chip values(0, 'move_right', 'idou', '1', '', 1, 1, 0, '1:0', '');
-insert into chip values(1, 'move_left', 'idou', '2', '', 1, 1, 0, '-1:0', '');
-insert into chip values(2, 'move_up', 'idou', '3', '', 1, 1, 0, '0:-1', '');
-insert into chip values(3, 'move_down', 'idou', '4', '', 1, 1, 0, '0:1', '');
-insert into chip values(4, 'attack', 'kougeki', '5', '', 1, 2, 0, '1:0', '0:0');

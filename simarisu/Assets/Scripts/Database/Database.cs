@@ -9,7 +9,7 @@ public class Database : SingletonMonoBehaviour<Database>
 	protected override void Awake()
 	{
 		base.Awake();
-		db = new SqliteDatabase("chipmunk.db");
+		db = new SqliteDatabase("database.db");
 	}
 
 	public DataTable Execute(string query)

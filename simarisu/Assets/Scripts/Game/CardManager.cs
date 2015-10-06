@@ -1,4 +1,5 @@
 using UnityEngine;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -6,6 +7,9 @@ public class CardManager : GameMonoBehaviour
 {
 	private CardListParts cardListParts;
 	private ButtonParts startBattleButtonParts;
+
+	private CardParts[] selectedCardIndex = new CardParts[MAX_COUNT];
+	private const int MAX_COUNT = 3;
 
 	private List<Card> originalCardDeck = new List<Card>();
 	private List<Card> currentCardDeck = new List<Card>();
@@ -33,16 +37,46 @@ public class CardManager : GameMonoBehaviour
 
 	public void UpdateParts()
 	{
+		selectedCardIndex = new CardParts[MAX_COUNT];
+
 		UpdateCardParts();
 		UpdateStartBattleButton();
 	}
 
-#region CardParts
 	private void UpdateCardParts()
 	{
 		cardListParts.SetCards(SelectCardsFromDeck());
 	}
-#endregion
+
+	private void SetCard(CardParts cardParts)
+	{
+		int index = NextIndex();
+		selectedCardIndex[index] = cardParts;
+		cardParts.Selected(index);
+	}
+
+	private void UnsetCard(CardParts cardParts)
+	{
+		cardParts.Deselected();
+		selectedCardIndex[Array.IndexOf(selectedCardIndex, cardParts)] = null;
+	}
+
+	private int NextIndex()
+	{
+		int index = 0;
+		foreach (CardParts card in selectedCardIndex)
+		{
+			if (card == null) {break;}
+			index++;
+		}
+
+		return index;
+	}
+
+	private bool IsCardSet()
+	{
+		return NextIndex() == MAX_COUNT;
+	}
 
 #region Deck
 	private List<Card> SelectCardsFromDeck()
@@ -73,9 +107,17 @@ public class CardManager : GameMonoBehaviour
 #endregion
 
 #region Event
-	private void CardPartsClick(int cardIndex, Card card)
+	private void CardPartsClick(CardParts parts)
 	{
-		UpdateStartBattleButton();
+		if (parts.isSelected)
+		{
+			UnsetCard(parts);
+		}
+		else if (!IsCardSet())
+		{
+			SetCard(parts);
+			UpdateStartBattleButton();
+		}
 	}
 #endregion
 }

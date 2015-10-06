@@ -113,7 +113,7 @@ GameObject:
   - 114: {fileID: 11449518}
   - 114: {fileID: 11474680}
   m_Layer: 5
-  m_Name: StageManager
+  m_Name: Background
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -254,7 +254,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77845b46dea8b48c1a29488ca682dc15, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stageManager: {fileID: 11449518}
+  background: {fileID: 11449518}
   characterManager: {fileID: 11433254}
   cardManager: {fileID: 11470526}
   lineManager: {fileID: 11474354}
@@ -351,7 +351,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8b7f8ee3be8e4b4a9bfc6ba835c2260, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stageImage: {fileID: 11494116}
+  image: {fileID: 11494116}
 --- !u!114 &11470526
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -578,8 +578,8 @@ RectTransform:
   m_RootOrder: 0
   m_AnchorMin: {x: .5, y: .5}
   m_AnchorMax: {x: .5, y: .5}
-  m_AnchoredPosition: {x: 0, y: 35}
-  m_SizeDelta: {x: 410, y: 475}
+  m_AnchoredPosition: {x: 0, y: 41}
+  m_SizeDelta: {x: 410, y: 485}
   m_Pivot: {x: .5, y: .5}
 --- !u!224 &22442060
 RectTransform:

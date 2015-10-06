@@ -6,13 +6,16 @@ using System.Linq;
 public class GameManager : GameMonoBehaviour
 {
 	[SerializeField]
-	private StageManager stageManager;
+	private Background background;
 	[SerializeField]
 	private CharacterManager characterManager;
 	[SerializeField]
 	private CardManager cardManager;
 	[SerializeField]
 	private LineManager lineManager;
+
+	private bool isDrawing = false;
+	private bool forceEndDrawing = false;
 
 	private int point;
 	private int totalTurnCount;
@@ -34,7 +37,7 @@ public class GameManager : GameMonoBehaviour
 	{
 		ResetGameStatus();
 
-		stageManager.Init();
+		background.Init(BackgroundOnExit);
 		characterManager.Init();
 		cardManager.Init();
 		lineManager.Init();
@@ -63,7 +66,7 @@ public class GameManager : GameMonoBehaviour
 
 	private void BeforeBattleStart()
 	{
-		// cardManager.ResetCardSelectFocus();
+
 	}
 
 	private void AfterBattleStart()
@@ -86,30 +89,31 @@ public class GameManager : GameMonoBehaviour
 	private IEnumerator BattleCoroutine(System.Action callback)
 	{
 		gameStatus = GameStatus.Battle;
-		int turn = 0;
 		List<Card> selectedCards = cardManager.GetSelectedCards();
 		foreach (Card card in selectedCards)
 		{
-			turn++;
-			totalTurnCount++;
-			yield return StartCoroutine(ExecuteTurnCoroutine(card, turn));
-			if (IsGameFinish()) {break;}
+			UnityEngine.Debug.LogError(card.name);
+			// totalTurnCount++;
+			// yield return StartCoroutine(ExecuteTurnCoroutine(card, turn));
+			// if (IsGameFinish()) {break;}
+
+			yield return null;
 		}
 
 		callback();
 	}
 
-	private IEnumerator ExecuteTurnCoroutine(Card card, int turn)
-	{
-		characterManager.UserCharacterAction(card);
+	// private IEnumerator ExecuteTurnCoroutine(Card card, int turn)
+	// {
+	// 	// characterManager.UserCharacterAction(card);
 
-		yield return new WaitForSeconds(1);
-		if (IsGameFinish()) {yield break;}
+	// 	// yield return new WaitForSeconds(1);
+	// 	// if (IsGameFinish()) {yield break;}
 
-		characterManager.MonsterActions();
+	// 	// characterManager.MonsterActions();
 
-		yield return new WaitForSeconds(1);
-	}
+	// 	// yield return new WaitForSeconds(1);
+	// }
 
 	public void Win()
 	{
@@ -206,23 +210,42 @@ public class GameManager : GameMonoBehaviour
 #endregion
 
 #region Event
-	public void StartBattleButtonClick(ButtonParts button)
+	private void StartBattleButtonClick(ButtonParts button)
 	{
 		StartBattle();
 	}
 
-	public void CharacterOnBeginDrag(Vector3 position)
+	private void BackgroundOnExit()
 	{
+		forceEndDrawing = true;
+	}
+
+	private void CharacterOnBeginDrag(Vector3 position)
+	{
+		forceEndDrawing = false;
+		isDrawing = true;
 		lineManager.StartDrawing(GetWorldPoint(position));
 	}
 
-	public void CharacterOnDrag(Vector3 position)
+	private void CharacterOnDrag(Vector3 position)
 	{
-		lineManager.AddPoint(GetWorldPoint(position));
+		if (!isDrawing) {return;}
+
+		if (!forceEndDrawing)
+		{
+			lineManager.AddPoint(GetWorldPoint(position));
+		}
+		else
+		{
+			CharacterOnEndDrag(position);
+		}
 	}
 
-	public void CharacterOnEndDrag(Vector3 position)
+	private void CharacterOnEndDrag(Vector3 position)
 	{
+		if (!isDrawing) {return;}
+
+		isDrawing = false;
 		lineManager.EndDrawing(GetWorldPoint(position));
 	}
 #endregion

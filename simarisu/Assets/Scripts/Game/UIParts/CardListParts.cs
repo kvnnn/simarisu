@@ -7,7 +7,7 @@ public class CardListParts : BaseUIParts
 	[SerializeField]
 	private List<CardParts> cardPartsLists;
 
-	public System.Action<int, Card> cardPartsClick;
+	public System.Action<CardParts> cardPartsClick;
 
 	public void SetCards(List<Card> cards)
 	{
@@ -49,7 +49,7 @@ public class CardListParts : BaseUIParts
 #region Event
 	public void CardClick(CardParts parts)
 	{
-		cardPartsClick(cardPartsLists.IndexOf(parts), parts.GetCard());
+		cardPartsClick(parts);
 	}
 #endregion
 }

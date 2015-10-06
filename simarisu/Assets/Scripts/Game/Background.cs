@@ -4,18 +4,22 @@ using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 
-public class StageManager : GameMonoBehaviour, IPointerExitHandler
+public class Background : GameMonoBehaviour, IPointerExitHandler
 {
 	[SerializeField]
-	private Image stageImage;
+	private Image image;
 
-	public void Init()
+	private System.Action onExit;
+
+	public void Init(System.Action onExit)
 	{
+		this.onExit = onExit;
 	}
 
 #region Event
 	public void OnPointerExit(PointerEventData eventData)
 	{
+		onExit();
 		// Debug.Log(eventData.position);
 	}
 #endregion

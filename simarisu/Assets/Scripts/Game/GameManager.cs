@@ -77,7 +77,7 @@ public class GameManager : GameMonoBehaviour
 
 	private void BeforeBattleStart()
 	{
-		chipManager.ResetChipSelectFocus();
+		// chipManager.ResetChipSelectFocus();
 	}
 
 	private void AfterBattleStart()
@@ -115,7 +115,6 @@ public class GameManager : GameMonoBehaviour
 
 	private IEnumerator ExecuteTurnCoroutine(Chip chip, int turn)
 	{
-		chipManager.FocusSelectParts(turn - 1);
 		characterManager.UserCharacterAction(chip);
 
 		yield return new WaitForSeconds(1);
@@ -204,10 +203,10 @@ public class GameManager : GameMonoBehaviour
 #endregion
 
 #region UIParts
-	public void InitUI(ChipListParts chipListParts, ChipSelectParts chipSelectParts, ButtonParts startBattleButtonParts)
+	public void InitUI(ChipListParts chipListParts, ButtonParts startBattleButtonParts)
 	{
 		startBattleButtonParts.buttonClick += StartBattleButtonClick;
-		chipManager.SetUIParts(chipListParts, chipSelectParts, startBattleButtonParts);
+		chipManager.SetUIParts(chipListParts, startBattleButtonParts);
 	}
 #endregion
 

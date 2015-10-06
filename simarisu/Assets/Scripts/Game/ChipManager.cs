@@ -5,7 +5,6 @@ using System.Collections.Generic;
 public class ChipManager : GameMonoBehaviour
 {
 	private ChipListParts chipListParts;
-	private ChipSelectParts chipSelectParts;
 	private ButtonParts startBattleButtonParts;
 
 	private List<Chip> originalChipDeck = new List<Chip>();
@@ -19,20 +18,14 @@ public class ChipManager : GameMonoBehaviour
 	{
 		List<Chip> chipList = new List<Chip>();
 
-		foreach (int index in chipSelectParts.GetSelectedChipIndexList())
-		{
-			chipList.Add(chipListParts.GetChip(index));
-		}
-
 		return chipList;
 	}
 
-	public void SetUIParts(ChipListParts chipListParts, ChipSelectParts chipSelectParts, ButtonParts startBattleButtonParts)
+	public void SetUIParts(ChipListParts chipListParts, ButtonParts startBattleButtonParts)
 	{
 		this.chipListParts = chipListParts;
 		chipListParts.chipPartsClick += ChipPartsClick;
 
-		this.chipSelectParts = chipSelectParts;
 		this.startBattleButtonParts = startBattleButtonParts;
 
 		UpdateParts();
@@ -41,29 +34,10 @@ public class ChipManager : GameMonoBehaviour
 	public void UpdateParts()
 	{
 		UpdateChipParts();
-		ResetChipSelectParts();
 		UpdateStartBattleButton();
 	}
 
-#region ChipSelectParts
-	private void ResetChipSelectParts()
-	{
-		ResetChipSelectFocus();
-		chipSelectParts.ResetAllParts();
-	}
-
-	public void ResetChipSelectFocus()
-	{
-		chipSelectParts.ResetFocus();
-	}
-#endregion
-
 #region ChipParts
-	public void FocusSelectParts(int index)
-	{
-		chipSelectParts.FocusTo(index);
-	}
-
 	private void UpdateChipParts()
 	{
 		chipListParts.SetChips(SelectChipsFromDeck());
@@ -93,14 +67,13 @@ public class ChipManager : GameMonoBehaviour
 #region Button
 	private void UpdateStartBattleButton()
 	{
-		startBattleButtonParts.isEnabled = chipSelectParts.isSetComplete;
+		startBattleButtonParts.isEnabled = false;
 	}
 #endregion
 
 #region Event
 	private void ChipPartsClick(int chipIndex, Chip chip)
 	{
-		chipSelectParts.SetChipToFocusSelectParts(chipIndex, chip);
 		UpdateStartBattleButton();
 	}
 #endregion

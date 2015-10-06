@@ -54,6 +54,7 @@ public class CardManager : GameMonoBehaviour
 			Card.GetCard(2),
 			Card.GetCard(3),
 			Card.GetCard(4),
+			Card.GetCard(4),
 		};
 		return cards;
 	}

@@ -184,7 +184,7 @@ public class CharacterManager : GameMonoBehaviour
 
 	private Sprite GetSprite(string spriteId)
 	{
-		string path = string.Format("Image/Character/{0}", spriteId);
+		string path = string.Format("Characters/Images/{0}", spriteId);
 		return Resources.Load<Sprite>(path);
 	}
 

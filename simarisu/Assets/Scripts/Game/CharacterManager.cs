@@ -141,10 +141,6 @@ public class CharacterManager : GameMonoBehaviour
 		T character = characterGameObject.AddComponent<T>();
 		character.SetSprite(GetSprite(spriteId));
 
-		GameObject hpLabelGo = Instantiate(hpLabelPrefab);
-		hpLabelGo.transform.SetParent(transform);
-		character.SetHpLabel(hpLabelGo.GetComponent<HpLabelParts>());
-
 		return character;
 	}
 

@@ -65,8 +65,8 @@ public class GameManager : GameMonoBehaviour
 
 	public void StartGame()
 	{
-		characterManager.AddUserCharacter();
 		characterManager.AddMonster(PickMonster());
+		characterManager.AddUserCharacter();
 	}
 
 	private void StartBattle()

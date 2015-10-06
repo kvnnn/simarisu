@@ -30,6 +30,8 @@ public class BaseCharacter : GameMonoBehaviour
 		this.maxHp = maxHp;
 		this.hp = maxHp;
 		this.damage = damage;
+
+		SetHpLabel();
 	}
 
 	public void MoveTo(Vector2 position)
@@ -59,9 +61,12 @@ public class BaseCharacter : GameMonoBehaviour
 #endregion
 
 #region HpText
-	public void SetHpLabel(HpLabelParts label)
+	public void SetHpLabel()
 	{
-		hpLabel = label;
+		if (hpLabel == null)
+		{
+			hpLabel = transform.GetComponentInChildren<HpLabelParts>();
+		}
 		hpLabel.SetHp(maxHp);
 	}
 

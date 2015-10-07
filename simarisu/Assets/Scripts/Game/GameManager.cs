@@ -110,7 +110,6 @@ public class GameManager : GameMonoBehaviour
 		characterManager.MoveUserCharacter(moveRoutes.ToArray(), ()=>{isMoveDone = true;});
 
 		while (!isMoveDone) {
-			UnityEngine.Debug.LogError("idoutyuu");
 			yield return null;
 		}
 

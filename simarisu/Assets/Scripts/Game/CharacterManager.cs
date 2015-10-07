@@ -8,8 +8,13 @@ public class CharacterManager : GameMonoBehaviour
 {
 	[SerializeField]
 	private GameObject characterPrefab;
+
 	[SerializeField]
-	private GameObject hpLabelPrefab;
+	private Canvas canvas;
+	public Camera canvasCamera
+	{
+		get {return canvas.worldCamera;}
+	}
 
 	private UserCharacter userCharacter;
 	private List<MonsterCharacter> monsters = new List<MonsterCharacter>();
@@ -48,6 +53,11 @@ public class CharacterManager : GameMonoBehaviour
 #endregion
 
 #region CharacterAction
+	public void MoveUserCharacter(Vector3[] route, System.Action callback)
+	{
+		LeanTween.moveSplineLocal(userCharacter.gameObject, route, 3f).setOnComplete(()=> {callback();});
+	}
+
 	public void UserCharacterAction(Card card)
 	{
 		ActionCharacter(userCharacter, card);
@@ -92,16 +102,6 @@ public class CharacterManager : GameMonoBehaviour
 		}
 	}
 
-	public bool IsMovable(Vector2 movePosition)
-	{
-		foreach (BaseCharacter character in allCharacters)
-		{
-			// if (movePosition == character.position) {return false;}
-		}
-
-		return true;
-	}
-
 	public List<BaseCharacter> GetCharacterInRange(Vector2 currentPosition, Vector2 attackPosition, Vector2 range, int direction)
 	{
 		List<BaseCharacter> targetCharacters = new List<BaseCharacter>();
@@ -144,7 +144,7 @@ public class CharacterManager : GameMonoBehaviour
 		return character;
 	}
 
-	public void AddUserCharacter(System.Action<Vector3> onBeginDrag, System.Action<Vector3> onDrag, System.Action<Vector3> onEndDrag)
+	public void AddUserCharacter(System.Action<Vector3, float> onBeginDrag, System.Action<Vector3> onDrag, System.Action<Vector3> onEndDrag)
 	{
 		userCharacter = AddUserCharacter(User.GetUser());
 		userCharacter.onBeginDrag = onBeginDrag;
@@ -170,8 +170,6 @@ public class CharacterManager : GameMonoBehaviour
 		int index = 0;
 		foreach (Monster monster in monsterList)
 		{
-			Vector2 defaultPos = CustomVector.GetFromString(positionList[index]);
-
 			MonsterCharacter mc = AddMonster(monster);
 			mc.MoveTo(Vector2.zero);
 			monsters.Add(mc);

@@ -18,7 +18,7 @@ public class GameManager : GameMonoBehaviour
 	private bool forceEndDrawing = false;
 
 	private int point;
-	private int totalTurnCount;
+	private int turn;
 	private int stageCount;
 	private int stageIndex;
 	private Stage currentStage;
@@ -61,7 +61,7 @@ public class GameManager : GameMonoBehaviour
 	private void StartBattle()
 	{
 		BeforeBattleStart();
-		StartCoroutine(BattleCoroutine(AfterBattleStart));
+		StartCoroutine(BattleCoroutine(AfterBattle));
 	}
 
 	private void BeforeBattleStart()
@@ -69,7 +69,7 @@ public class GameManager : GameMonoBehaviour
 
 	}
 
-	private void AfterBattleStart()
+	private void AfterBattle()
 	{
 		cardManager.UpdateParts();
 
@@ -89,31 +89,38 @@ public class GameManager : GameMonoBehaviour
 	private IEnumerator BattleCoroutine(System.Action callback)
 	{
 		gameStatus = GameStatus.Battle;
-		List<Card> selectedCards = cardManager.GetSelectedCards();
-		foreach (Card card in selectedCards)
+		yield return StartCoroutine(UserCharacterBattleCoroutine());
+		if (IsGameFinish())
 		{
-			UnityEngine.Debug.LogError(card.name);
-			// totalTurnCount++;
-			// yield return StartCoroutine(ExecuteTurnCoroutine(card, turn));
-			// if (IsGameFinish()) {break;}
-
-			yield return null;
+			callback();
+			yield break;
 		}
+		yield return new WaitForSeconds(0.5f);
+
+		yield return StartCoroutine(MonsterBattleCoroutine());
 
 		callback();
 	}
 
-	// private IEnumerator ExecuteTurnCoroutine(Card card, int turn)
-	// {
-	// 	// characterManager.UserCharacterAction(card);
+	private IEnumerator UserCharacterBattleCoroutine()
+	{
+		List<Card> selectedCards = cardManager.GetSelectedCards();
+		List<Vector3> moveRoutes = lineManager.movePointList.ConvertAll(x => (Vector3)(GetCanvasPosition(x)));
+		bool isMoveDone = false;
+		characterManager.MoveUserCharacter(moveRoutes.ToArray(), ()=>{isMoveDone = true;});
 
-	// 	// yield return new WaitForSeconds(1);
-	// 	// if (IsGameFinish()) {yield break;}
+		while (!isMoveDone) {
+			UnityEngine.Debug.LogError("idoutyuu");
+			yield return null;
+		}
 
-	// 	// characterManager.MonsterActions();
+		yield return null;
+	}
 
-	// 	// yield return new WaitForSeconds(1);
-	// }
+	private IEnumerator MonsterBattleCoroutine()
+	{
+		yield return null;
+	}
 
 	public void Win()
 	{
@@ -134,7 +141,7 @@ public class GameManager : GameMonoBehaviour
 	private void ResetGameStatus()
 	{
 		point = 0;
-		totalTurnCount = 0;
+		turn = 0;
 		stageCount = 1;
 		stageIndex = 0;
 	}
@@ -207,6 +214,14 @@ public class GameManager : GameMonoBehaviour
 		position.z = 0;
 		return position;
 	}
+
+	private Vector2 GetCanvasPosition(Vector3 position)
+	{
+		Vector2 screenPosition = Camera.main.WorldToScreenPoint(position);
+		Vector2 uiPosition = Vector2.zero;
+		RectTransformUtility.ScreenPointToLocalPointInRectangle(characterManager.transform as RectTransform, screenPosition, characterManager.canvasCamera, out uiPosition);
+		return uiPosition;
+	}
 #endregion
 
 #region Event
@@ -220,22 +235,18 @@ public class GameManager : GameMonoBehaviour
 		forceEndDrawing = true;
 	}
 
-	private void CharacterOnBeginDrag(Vector3 position)
+	private void CharacterOnBeginDrag(Vector3 position, float maxDrawing)
 	{
 		forceEndDrawing = false;
 		isDrawing = true;
-		lineManager.StartDrawing(GetWorldPoint(position));
+		lineManager.StartDrawing(GetWorldPoint(position), maxDrawing);
 	}
 
 	private void CharacterOnDrag(Vector3 position)
 	{
 		if (!isDrawing) {return;}
 
-		if (!forceEndDrawing)
-		{
-			lineManager.AddPoint(GetWorldPoint(position));
-		}
-		else
+		if (!lineManager.AddPoint(GetWorldPoint(position)) || forceEndDrawing)
 		{
 			CharacterOnEndDrag(position);
 		}

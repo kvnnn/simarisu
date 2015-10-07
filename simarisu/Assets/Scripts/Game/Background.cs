@@ -20,7 +20,6 @@ public class Background : GameMonoBehaviour, IPointerExitHandler
 	public void OnPointerExit(PointerEventData eventData)
 	{
 		onExit();
-		// Debug.Log(eventData.position);
 	}
 #endregion
 }

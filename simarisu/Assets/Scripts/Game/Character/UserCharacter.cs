@@ -7,8 +7,10 @@ using System.Collections.Generic;
 public class UserCharacter : BaseCharacter, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
 	private User user;
+	private float maxDrawing = DEFAULT_MAX_DRAWING;
+	public const float DEFAULT_MAX_DRAWING = 10f;
 
-	public System.Action<Vector3> onBeginDrag;
+	public System.Action<Vector3, float> onBeginDrag;
 	public System.Action<Vector3> onDrag;
 	public System.Action<Vector3> onEndDrag;
 
@@ -23,7 +25,7 @@ public class UserCharacter : BaseCharacter, IBeginDragHandler, IDragHandler, IEn
 #region Event
 	public void OnBeginDrag(PointerEventData eventData)
 	{
-		onBeginDrag(eventData.position);
+		onBeginDrag(eventData.position, maxDrawing);
 	}
 
 	public void OnDrag(PointerEventData eventData)

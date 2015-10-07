@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class LineManager : GameMonoBehaviour
 {
 	private float leftDrawing = 0f;
-	private List<Vector3> pointList = new List<Vector3>();
+	public List<Vector3> movePointList {get; private set;}
 
 	private LineRenderer _line;
 	private LineRenderer line
@@ -40,7 +40,7 @@ public class LineManager : GameMonoBehaviour
 	private void ResetPoints(float maxDrawing)
 	{
 		leftDrawing = maxDrawing;
-		pointList = new List<Vector3>();
+		movePointList = new List<Vector3>();
 		line.SetVertexCount(0);
 	}
 
@@ -54,16 +54,15 @@ public class LineManager : GameMonoBehaviour
 
 	public bool AddPoint(Vector3 position)
 	{
-		if (pointList.Count > 0)
+		if (movePointList.Count > 0)
 		{
-			float distance = Vector2.Distance(pointList[pointList.Count - 1], position);
-			UnityEngine.Debug.LogError(leftDrawing - distance);
+			float distance = Vector2.Distance(movePointList[movePointList.Count - 1], position);
 			if (leftDrawing - distance < 0) {return false;}
 			leftDrawing -= distance;
 		}
 
-		pointList.Add(position);
-		int index = pointList.Count;
+		movePointList.Add(position);
+		int index = movePointList.Count;
 
 		line.SetVertexCount(index);
 		line.SetPosition(index - 1, position);

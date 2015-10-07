@@ -89,18 +89,34 @@ public class GameManager : GameMonoBehaviour
 	private IEnumerator BattleCoroutine(System.Action callback)
 	{
 		gameStatus = GameStatus.Battle;
-		List<Card> selectedCards = cardManager.GetSelectedCards();
-		foreach (Card card in selectedCards)
+		yield return StartCoroutine(UserCharacterBattleCoroutine());
+		if (IsGameFinish())
 		{
-			UnityEngine.Debug.LogError(card.name);
-			// totalTurnCount++;
-			// yield return StartCoroutine(ExecuteTurnCoroutine(card, turn));
-			// if (IsGameFinish()) {break;}
-
-			yield return null;
+			callback();
+			yield break;
 		}
+		yield return new WaitForSeconds(0.5f);
+
+		yield return StartCoroutine(MonsterBattleCoroutine());
 
 		callback();
+	}
+
+	private IEnumerator UserCharacterBattleCoroutine()
+	{
+		List<Card> selectedCards = cardManager.GetSelectedCards();
+		foreach (Vector3 position in lineManager.movePointList)
+		{
+			characterManager.MoveUserCharacter(GetCanvasPosition(position));
+			yield return new WaitForSeconds(0.1f);
+		}
+
+		yield return null;
+	}
+
+	private IEnumerator MonsterBattleCoroutine()
+	{
+		yield return null;
 	}
 
 	public void Win()
@@ -194,6 +210,14 @@ public class GameManager : GameMonoBehaviour
 		position = Camera.main.ScreenToWorldPoint(position);
 		position.z = 0;
 		return position;
+	}
+
+	private Vector2 GetCanvasPosition(Vector3 position)
+	{
+		Vector2 screenPosition = Camera.main.WorldToScreenPoint(position);
+		Vector2 uiPosition = Vector2.zero;
+		RectTransformUtility.ScreenPointToLocalPointInRectangle(characterManager.transform as RectTransform, screenPosition, characterManager.canvasCamera, out uiPosition);
+		return uiPosition;
 	}
 #endregion
 

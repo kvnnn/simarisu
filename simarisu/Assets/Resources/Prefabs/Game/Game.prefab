@@ -308,6 +308,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterPrefab: {fileID: 196486, guid: bdad3ee2ba4b048c6b9cb197d40e7bb0, type: 2}
   hpLabelPrefab: {fileID: 0}
+  canvas: {fileID: 22393852}
 --- !u!114 &11437600
 MonoBehaviour:
   m_ObjectHideFlags: 1

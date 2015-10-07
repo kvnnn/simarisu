@@ -8,8 +8,13 @@ public class CharacterManager : GameMonoBehaviour
 {
 	[SerializeField]
 	private GameObject characterPrefab;
+
 	[SerializeField]
-	private GameObject hpLabelPrefab;
+	private Canvas canvas;
+	public Camera canvasCamera
+	{
+		get {return canvas.worldCamera;}
+	}
 
 	private UserCharacter userCharacter;
 	private List<MonsterCharacter> monsters = new List<MonsterCharacter>();
@@ -48,6 +53,11 @@ public class CharacterManager : GameMonoBehaviour
 #endregion
 
 #region CharacterAction
+	public void MoveUserCharacter(Vector2 position)
+	{
+		userCharacter.MoveTo(position);
+	}
+
 	public void UserCharacterAction(Card card)
 	{
 		ActionCharacter(userCharacter, card);
@@ -90,16 +100,6 @@ public class CharacterManager : GameMonoBehaviour
 			case Card.Type.Other:
 			break;
 		}
-	}
-
-	public bool IsMovable(Vector2 movePosition)
-	{
-		foreach (BaseCharacter character in allCharacters)
-		{
-			// if (movePosition == character.position) {return false;}
-		}
-
-		return true;
 	}
 
 	public List<BaseCharacter> GetCharacterInRange(Vector2 currentPosition, Vector2 attackPosition, Vector2 range, int direction)
@@ -170,8 +170,6 @@ public class CharacterManager : GameMonoBehaviour
 		int index = 0;
 		foreach (Monster monster in monsterList)
 		{
-			Vector2 defaultPos = CustomVector.GetFromString(positionList[index]);
-
 			MonsterCharacter mc = AddMonster(monster);
 			mc.MoveTo(Vector2.zero);
 			monsters.Add(mc);

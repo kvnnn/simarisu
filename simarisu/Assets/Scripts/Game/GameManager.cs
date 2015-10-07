@@ -18,7 +18,7 @@ public class GameManager : GameMonoBehaviour
 	private bool forceEndDrawing = false;
 
 	private int point;
-	private int totalTurnCount;
+	private int turn;
 	private int stageCount;
 	private int stageIndex;
 	private Stage currentStage;
@@ -61,7 +61,7 @@ public class GameManager : GameMonoBehaviour
 	private void StartBattle()
 	{
 		BeforeBattleStart();
-		StartCoroutine(BattleCoroutine(AfterBattleStart));
+		StartCoroutine(BattleCoroutine(AfterBattle));
 	}
 
 	private void BeforeBattleStart()
@@ -69,7 +69,7 @@ public class GameManager : GameMonoBehaviour
 
 	}
 
-	private void AfterBattleStart()
+	private void AfterBattle()
 	{
 		cardManager.UpdateParts();
 
@@ -103,18 +103,6 @@ public class GameManager : GameMonoBehaviour
 		callback();
 	}
 
-	// private IEnumerator ExecuteTurnCoroutine(Card card, int turn)
-	// {
-	// 	characterManager.UserCharacterAction(card);
-
-	// 	yield return new WaitForSeconds(1);
-	// 	if (IsGameFinish()) {yield break;}
-
-	// 	characterManager.MonsterActions();
-
-	// 	yield return new WaitForSeconds(1);
-	// }
-
 	public void Win()
 	{
 		stageCount++;
@@ -134,7 +122,7 @@ public class GameManager : GameMonoBehaviour
 	private void ResetGameStatus()
 	{
 		point = 0;
-		totalTurnCount = 0;
+		turn = 0;
 		stageCount = 1;
 		stageIndex = 0;
 	}
@@ -220,22 +208,18 @@ public class GameManager : GameMonoBehaviour
 		forceEndDrawing = true;
 	}
 
-	private void CharacterOnBeginDrag(Vector3 position)
+	private void CharacterOnBeginDrag(Vector3 position, float maxDrawing)
 	{
 		forceEndDrawing = false;
 		isDrawing = true;
-		lineManager.StartDrawing(GetWorldPoint(position));
+		lineManager.StartDrawing(GetWorldPoint(position), maxDrawing);
 	}
 
 	private void CharacterOnDrag(Vector3 position)
 	{
 		if (!isDrawing) {return;}
 
-		if (!forceEndDrawing)
-		{
-			lineManager.AddPoint(GetWorldPoint(position));
-		}
-		else
+		if (!lineManager.AddPoint(GetWorldPoint(position)) || forceEndDrawing)
 		{
 			CharacterOnEndDrag(position);
 		}

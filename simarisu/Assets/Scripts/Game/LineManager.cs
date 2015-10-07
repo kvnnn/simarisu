@@ -4,7 +4,8 @@ using System.Collections.Generic;
 
 public class LineManager : GameMonoBehaviour
 {
-	private int index = 0;
+	private float leftDrawing = 0f;
+	private List<Vector3> pointList = new List<Vector3>();
 
 	private LineRenderer _line;
 	private LineRenderer line
@@ -21,8 +22,8 @@ public class LineManager : GameMonoBehaviour
 
 	public void Init()
 	{
-		index = 0;
 		line.sortingLayerName = "Line";
+		ResetPoints(UserCharacter.DEFAULT_MAX_DRAWING);
 		Hide();
 	}
 
@@ -36,23 +37,41 @@ public class LineManager : GameMonoBehaviour
 		line.enabled = false;
 	}
 
-	public void StartDrawing(Vector3 position)
+	private void ResetPoints(float maxDrawing)
 	{
-		index = 0;
+		leftDrawing = maxDrawing;
+		pointList = new List<Vector3>();
 		line.SetVertexCount(0);
+	}
+
+	public bool StartDrawing(Vector3 position, float maxDrawing)
+	{
+		ResetPoints(maxDrawing);
+
 		Show();
-		AddPoint(position);
+		return AddPoint(position);
 	}
 
-	public void AddPoint(Vector3 position)
+	public bool AddPoint(Vector3 position)
 	{
-		index++;
-		line.SetVertexCount(index + 1);
-		line.SetPosition(index, position);
+		if (pointList.Count > 0)
+		{
+			float distance = Vector2.Distance(pointList[pointList.Count - 1], position);
+			UnityEngine.Debug.LogError(leftDrawing - distance);
+			if (leftDrawing - distance < 0) {return false;}
+			leftDrawing -= distance;
+		}
+
+		pointList.Add(position);
+		int index = pointList.Count;
+
+		line.SetVertexCount(index);
+		line.SetPosition(index - 1, position);
+		return true;
 	}
 
-	public void EndDrawing(Vector3 position)
+	public bool EndDrawing(Vector3 position)
 	{
-		AddPoint(position);
+		return AddPoint(position);
 	}
 }

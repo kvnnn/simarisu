@@ -37,7 +37,6 @@ public class BaseCharacter : GameMonoBehaviour
 	public void MoveTo(Vector2 position)
 	{
 		rectTransform.anchoredPosition = position;
-		UpdateHpLabel();
 	}
 
 	public void SetSprite(Sprite sprite)
@@ -73,7 +72,6 @@ public class BaseCharacter : GameMonoBehaviour
 	private void UpdateHpLabel()
 	{
 		hpLabel.SetHp(hp);
-		hpLabel.MoveTo(rectTransform.anchoredPosition);
 	}
 #endregion
 

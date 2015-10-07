@@ -53,9 +53,9 @@ public class CharacterManager : GameMonoBehaviour
 #endregion
 
 #region CharacterAction
-	public void MoveUserCharacter(Vector2 position)
+	public void MoveUserCharacter(Vector3[] route, System.Action callback)
 	{
-		userCharacter.MoveTo(position);
+		LeanTween.moveSplineLocal(userCharacter.gameObject, route, 3f).setOnComplete(()=> {callback();});
 	}
 
 	public void UserCharacterAction(Card card)

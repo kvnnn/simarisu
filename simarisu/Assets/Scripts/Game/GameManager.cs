@@ -105,10 +105,13 @@ public class GameManager : GameMonoBehaviour
 	private IEnumerator UserCharacterBattleCoroutine()
 	{
 		List<Card> selectedCards = cardManager.GetSelectedCards();
-		foreach (Vector3 position in lineManager.movePointList)
-		{
-			characterManager.MoveUserCharacter(GetCanvasPosition(position));
-			yield return new WaitForSeconds(0.1f);
+		List<Vector3> moveRoutes = lineManager.movePointList.ConvertAll(x => (Vector3)(GetCanvasPosition(x)));
+		bool isMoveDone = false;
+		characterManager.MoveUserCharacter(moveRoutes.ToArray(), ()=>{isMoveDone = true;});
+
+		while (!isMoveDone) {
+			UnityEngine.Debug.LogError("idoutyuu");
+			yield return null;
 		}
 
 		yield return null;

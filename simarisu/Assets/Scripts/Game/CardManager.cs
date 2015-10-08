@@ -16,6 +16,8 @@ public class CardManager : GameMonoBehaviour
 
 	private bool isTouchLock = true;
 
+	private readonly string[] SELECTED_CARD_ORDER_TEXTS = new string[]{"移動前", "移動中", "移動後"};
+
 	public void Init()
 	{
 	}
@@ -58,7 +60,7 @@ public class CardManager : GameMonoBehaviour
 	{
 		int index = NextIndex();
 		selectedCardParts[index] = cardParts;
-		cardParts.Selected(index);
+		cardParts.Selected(SELECTED_CARD_ORDER_TEXTS[index]);
 	}
 
 	private void UnsetCard(CardParts cardParts)

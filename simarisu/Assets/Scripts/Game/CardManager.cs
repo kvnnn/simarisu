@@ -14,6 +14,8 @@ public class CardManager : GameMonoBehaviour
 	private List<Card> originalCardDeck = new List<Card>();
 	private List<Card> currentCardDeck = new List<Card>();
 
+	private bool isTouchLock = true;
+
 	public void Init()
 	{
 	}
@@ -82,6 +84,12 @@ public class CardManager : GameMonoBehaviour
 		return NextIndex() == MAX_COUNT;
 	}
 
+	public void EnableTouchEvent(bool enable)
+	{
+		isTouchLock = enable;
+		EnableStartBattleButton(enable);
+	}
+
 #region Deck
 	private List<Card> SelectCardsFromDeck()
 	{
@@ -108,11 +116,18 @@ public class CardManager : GameMonoBehaviour
 	{
 		startBattleButtonParts.isEnabled = IsAllCardSet();
 	}
+
+	private void EnableStartBattleButton(bool enable)
+	{
+		startBattleButtonParts.isEnabled = enable;
+	}
 #endregion
 
 #region Event
 	private void CardPartsClick(CardParts parts)
 	{
+		if (!isTouchLock) {return;}
+
 		if (parts.isSelected)
 		{
 			UnsetCard(parts);

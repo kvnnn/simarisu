@@ -23,7 +23,6 @@ public class LineManager : GameMonoBehaviour
 	public void Init()
 	{
 		line.sortingLayerName = "Line";
-		ResetPoints(UserCharacter.DEFAULT_MAX_DRAWING);
 		Hide();
 	}
 
@@ -34,6 +33,7 @@ public class LineManager : GameMonoBehaviour
 
 	public void Hide()
 	{
+		ResetPoints(UserCharacter.DEFAULT_MAX_DRAWING);
 		line.enabled = false;
 	}
 

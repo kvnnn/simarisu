@@ -25,9 +25,10 @@ public class GameManager : GameMonoBehaviour
 
 	private const int MAX_MONSTER = 3;
 
-	private GameStatus gameStatus;
+	private GameStatus gameStatus = GameStatus.Standby;
 	private enum GameStatus
 	{
+		Standby,
 		Battle,
 		Lose,
 		Win,
@@ -66,11 +67,14 @@ public class GameManager : GameMonoBehaviour
 
 	private void BeforeBattleStart()
 	{
-
+		gameStatus = GameStatus.Battle;
+		cardManager.EnableTouchEvent(false);
 	}
 
 	private void AfterBattle()
 	{
+		gameStatus = GameStatus.Standby;
+		cardManager.EnableTouchEvent(true);
 		cardManager.UpdateParts();
 
 		if (IsGameFinish())
@@ -90,7 +94,6 @@ public class GameManager : GameMonoBehaviour
 
 	private IEnumerator BattleCoroutine(System.Action callback)
 	{
-		gameStatus = GameStatus.Battle;
 		yield return StartCoroutine(UserCharacterBattleCoroutine());
 		if (IsGameFinish())
 		{
@@ -111,9 +114,12 @@ public class GameManager : GameMonoBehaviour
 		bool isMoveDone = false;
 		characterManager.MoveUserCharacter(moveRoutes.ToArray(), ()=>{isMoveDone = true;});
 
-		while (!isMoveDone) {
+		while (!isMoveDone)
+		{
 			yield return null;
 		}
+
+		lineManager.Hide();
 
 		yield return null;
 	}
@@ -142,6 +148,8 @@ public class GameManager : GameMonoBehaviour
 #region GameStatus
 	private void ResetGameStatus()
 	{
+		gameStatus = GameStatus.Standby;
+
 		point = 0;
 		turn = 0;
 		stageCount = 1;
@@ -158,12 +166,18 @@ public class GameManager : GameMonoBehaviour
 		{
 			gameStatus = GameStatus.Win;
 		}
-		else
-		{
-			gameStatus = GameStatus.Battle;
-		}
 
-		return gameStatus != GameStatus.Battle;
+		return gameStatus == GameStatus.Win || gameStatus == GameStatus.Lose;
+	}
+
+	private bool isStandby
+	{
+		get {return gameStatus == GameStatus.Standby;}
+	}
+
+	private bool isBattle
+	{
+		get {return gameStatus == GameStatus.Battle;}
 	}
 #endregion
 

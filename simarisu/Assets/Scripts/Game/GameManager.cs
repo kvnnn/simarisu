@@ -84,6 +84,8 @@ public class GameManager : GameMonoBehaviour
 				Lose();
 			}
 		}
+
+		turn++;
 	}
 
 	private IEnumerator BattleCoroutine(System.Action callback)
@@ -121,14 +123,15 @@ public class GameManager : GameMonoBehaviour
 		yield return null;
 	}
 
-	public void Win()
+	private void Win()
 	{
+		point++;
 		stageCount++;
 		PrepareGame();
 		StartGame();
 	}
 
-	public void Lose()
+	private void Lose()
 	{
 		ResetGameStatus();
 		PrepareGame();

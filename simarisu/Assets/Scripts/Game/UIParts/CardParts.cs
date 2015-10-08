@@ -54,10 +54,13 @@ public class CardParts : BaseUIParts
 
 	public void UpdateParts()
 	{
-		if (hasCard) {
+		if (hasCard)
+		{
 			gameObject.SetActive(true);
 			text.text = card.name;
-		} else {
+		}
+		else
+		{
 			gameObject.SetActive(false);
 			text.text = "";
 		}

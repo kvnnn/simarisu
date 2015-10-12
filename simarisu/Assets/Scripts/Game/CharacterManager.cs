@@ -9,37 +9,43 @@ public class CharacterManager : GameMonoBehaviour
 	[SerializeField]
 	private GameObject characterPrefab;
 
-	[SerializeField]
-	private Canvas canvas;
-	public Camera canvasCamera
-	{
-		get {return canvas.worldCamera;}
-	}
-
 	private UserCharacter userCharacter;
 	private List<MonsterCharacter> monsters = new List<MonsterCharacter>();
 	private List<BaseCharacter> allCharacters
 	{
 		get
 		{
-			List<BaseCharacter> list = monsters.ConvertAll(c => (BaseCharacter)c);;
+			List<BaseCharacter> list = monsters.ConvertAll(c => (BaseCharacter)c);
 			list.Add(userCharacter);
 			return list;
 		}
 	}
+
+	private int sortingOrder = 0;
 
 	private const string DEFAULT_USER_POSITION = "1,1";
 	private List<string> DEFAULT_MONSTER_POSITION = new List<string>(){"3,0","4,0","5,0","3,1","4,1","5,1","3,2","4,2","5,2"};
 
 	public void Init()
 	{
+		PrepareGame();
+	}
+
+	public void PrepareGame()
+	{
 		DestroyAll();
+		sortingOrder = 0;
 	}
 
 #region CharacterStatus
 	public bool UserCharacterDead()
 	{
 		return userCharacter.isDead;
+	}
+
+	public float UserCharacterMaxDrawing()
+	{
+		return userCharacter.maxDrawing;
 	}
 
 	public bool MonsterAllDead()
@@ -144,20 +150,17 @@ public class CharacterManager : GameMonoBehaviour
 		return character;
 	}
 
-	public void AddUserCharacter(System.Action<Vector3, float> onBeginDrag, System.Action<Vector3> onDrag, System.Action<Vector3> onEndDrag)
+	public void AddUserCharacter()
 	{
 		userCharacter = AddUserCharacter(User.GetUser());
-		userCharacter.onBeginDrag = onBeginDrag;
-		userCharacter.onDrag = onDrag;
-		userCharacter.onEndDrag = onEndDrag;
-
 		userCharacter.MoveTo(Vector2.zero);
 	}
 
 	private UserCharacter AddUserCharacter(User data)
 	{
 		UserCharacter character = AddCharacter<UserCharacter>(data.sprite);
-		character.Init(data);
+		character.Init(data, sortingOrder);
+		sortingOrder++;
 		return character;
 	}
 
@@ -180,7 +183,8 @@ public class CharacterManager : GameMonoBehaviour
 	private MonsterCharacter AddMonster(Monster data)
 	{
 		MonsterCharacter monster = AddCharacter<MonsterCharacter>(data.sprite);
-		monster.Init(data);
+		monster.Init(data, sortingOrder);
+		sortingOrder++;
 		return monster;
 	}
 

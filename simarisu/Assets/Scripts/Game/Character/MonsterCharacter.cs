@@ -7,10 +7,10 @@ public class MonsterCharacter : BaseCharacter
 {
 	private Monster monster;
 
-	public void Init(Monster monster)
+	public void Init(Monster monster, int order)
 	{
 		this.monster = monster;
-		base.Init(monster.hp, monster.damage);
+		base.Init(monster.hp, monster.damage, order);
 	}
 
 	public Card SelectCard()

@@ -38,7 +38,7 @@ public class GameManager : GameMonoBehaviour
 	{
 		ResetGameStatus();
 
-		background.Init(BackgroundOnExit);
+		SetBackground();
 		characterManager.Init();
 		cardManager.Init();
 		lineManager.Init();
@@ -46,17 +46,25 @@ public class GameManager : GameMonoBehaviour
 		PrepareGame();
 	}
 
+	private void SetBackground()
+	{
+		background.onExit += BackgroundOnExit;
+		background.onBeginDrag += BackgroundOnBeginDrag;
+		background.onDrag += BackgroundOnDrag;
+		background.onEndDrag += BackgroundOnEndDrag;
+	}
+
 #region Game
 	public void PrepareGame()
 	{
 		currentStage = CheckAndGetCurrentStage();
-		characterManager.DestroyAll();
+		characterManager.PrepareGame();
 	}
 
 	public void StartGame()
 	{
 		characterManager.AddMonster(PickMonster());
-		characterManager.AddUserCharacter(CharacterOnBeginDrag, CharacterOnDrag, CharacterOnEndDrag);
+		characterManager.AddUserCharacter();
 	}
 
 	private void StartBattle()
@@ -110,9 +118,11 @@ public class GameManager : GameMonoBehaviour
 	private IEnumerator UserCharacterBattleCoroutine()
 	{
 		List<Card> selectedCards = cardManager.GetSelectedCards();
-		List<Vector3> moveRoutes = lineManager.movePointList.ConvertAll(x => (Vector3)(GetCanvasPosition(x)));
 		bool isMoveDone = false;
-		characterManager.MoveUserCharacter(moveRoutes.ToArray(), ()=>{isMoveDone = true;});
+		characterManager.MoveUserCharacter(
+			lineManager.movePointList.ToArray(),
+			()=>{isMoveDone = true;}
+		);
 
 		while (!isMoveDone)
 		{
@@ -230,14 +240,6 @@ public class GameManager : GameMonoBehaviour
 		position.z = 0;
 		return position;
 	}
-
-	private Vector2 GetCanvasPosition(Vector3 position)
-	{
-		Vector2 screenPosition = Camera.main.WorldToScreenPoint(position);
-		Vector2 uiPosition = Vector2.zero;
-		RectTransformUtility.ScreenPointToLocalPointInRectangle(characterManager.transform as RectTransform, screenPosition, characterManager.canvasCamera, out uiPosition);
-		return uiPosition;
-	}
 #endregion
 
 #region Event
@@ -251,24 +253,24 @@ public class GameManager : GameMonoBehaviour
 		forceEndDrawing = true;
 	}
 
-	private void CharacterOnBeginDrag(Vector3 position, float maxDrawing)
+	private void BackgroundOnBeginDrag(Vector3 position)
 	{
 		forceEndDrawing = false;
 		isDrawing = true;
-		lineManager.StartDrawing(GetWorldPoint(position), maxDrawing);
+		lineManager.StartDrawing(GetWorldPoint(position), characterManager.UserCharacterMaxDrawing());
 	}
 
-	private void CharacterOnDrag(Vector3 position)
+	private void BackgroundOnDrag(Vector3 position)
 	{
 		if (!isDrawing) {return;}
 
 		if (!lineManager.AddPoint(GetWorldPoint(position)) || forceEndDrawing)
 		{
-			CharacterOnEndDrag(position);
+			BackgroundOnEndDrag(position);
 		}
 	}
 
-	private void CharacterOnEndDrag(Vector3 position)
+	private void BackgroundOnEndDrag(Vector3 position)
 	{
 		if (!isDrawing) {return;}
 

@@ -1,7 +1,3 @@
 drop table if exists card;
-create table card(id integer, name text, description text, sprite text, effect text, rarity integer, type integer, damage integer, position text, range text);
-insert into card values(0, 'move_right', 'idou', '1', '', 1, 1, 0, '1:0', '');
-insert into card values(1, 'move_left', 'idou', '2', '', 1, 1, 0, '-1:0', '');
-insert into card values(2, 'move_up', 'idou', '3', '', 1, 1, 0, '0:-1', '');
-insert into card values(3, 'move_down', 'idou', '4', '', 1, 1, 0, '0:1', '');
-insert into card values(4, 'attack', 'kougeki', '5', '', 1, 2, 0, '1:0', '0:0');
+create table card(id integer, name text, description text, sprite text, effect text, rarity integer, type integer, damage integer, range_type integer, range_size real);
+insert into card values(0, 'attack', 'normal attack', '1', '', 1, 1, 0, 0, 0.25);

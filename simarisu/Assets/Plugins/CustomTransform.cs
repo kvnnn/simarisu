@@ -10,4 +10,12 @@ public static class CustomTransform
 		position.y = y;
 		transform.anchoredPosition = position;
 	}
+
+	public static void ScaleTo(this Transform transform, float xy)
+	{
+		Vector3 localScale = transform.localScale;
+		localScale.x = xy;
+		localScale.y = xy;
+		transform.localScale = localScale;
+	}
 }

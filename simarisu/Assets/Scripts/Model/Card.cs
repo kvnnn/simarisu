@@ -9,10 +9,10 @@ using System.Collections.Generic;
 	sprite 			: text
 	effect 			: text
 	rarity 			: integer (1:C, 2:B, 3:A, 4:S)
-	type 				: integer (1:Move, 2:Attack, 3:Cure, 4:Other)
+	type 				: integer (1:Attack, 2:Support, 3:Other)
 	damage 			: integer
-	position 		: text
-	range 			: text
+	range_type 	: integer
+	range_size	: real
 */
 
 public class Card
@@ -49,14 +49,14 @@ public class Card
 	public Type type {get; private set;}
 	public enum Type
 	{
-		Move = 1,
-		Attack = 2,
-		Cure = 3,
-		Other = 4,
+		Attack = 1,
+		Support = 2,
+		Other = 3,
 	}
-	public virtual int damage {get; private set;}
-	private string positionStr;
-	private string rangeStr;
+	public int damage {get; private set;}
+
+	public int rangeType {get; private set;}
+	public double rangeSize {get; private set;}
 
 	public Card(DataRow rawData)
 	{
@@ -70,36 +70,9 @@ public class Card
 		rarity = (Rarity)rawData["rarity"];
 		type = (Type)rawData["type"];
 		damage = (int)rawData["damage"];
-		positionStr = rawData["position"].ToString();
-		rangeStr = rawData["range"].ToString();
-	}
 
-	private Vector2? _position = null;
-	public Vector2 position
-	{
-		get
-		{
-			if (_position == null)
-			{
-				string[] strArray = positionStr.Split(':');
-				_position = new Vector2(float.Parse(strArray[0]), float.Parse(strArray[1]));
-			}
-			return (Vector2)_position;
-		}
-	}
-
-	private Vector2? _range = null;
-	public Vector2 range
-	{
-		get
-		{
-			if (_range == null)
-			{
-				string[] strArray = rangeStr.Split(':');
-				_range = new Vector2(float.Parse(strArray[0]), float.Parse(strArray[1]));
-			}
-			return (Vector2)_range;
-		}
+		rangeType = (int)rawData["range_type"];
+		rangeSize = (double)rawData["range_size"];
 	}
 #endregion
 }

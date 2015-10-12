@@ -10,9 +10,9 @@ public class UserCharacter : BaseCharacter
 	public float maxDrawing {get; private set;}
 	public const float DEFAULT_MAX_DRAWING = 10f;
 
-	public void Init(User user, int order)
+	public void Init(User data, int order)
 	{
-		this.user = user;
+		this.user = data;
 		this.maxDrawing = DEFAULT_MAX_DRAWING;
 
 		base.Init(user.hp, user.damage, order);

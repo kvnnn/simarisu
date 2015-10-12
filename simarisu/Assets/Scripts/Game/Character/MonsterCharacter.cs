@@ -7,9 +7,9 @@ public class MonsterCharacter : BaseCharacter
 {
 	private Monster monster;
 
-	public void Init(Monster monster, int order)
+	public void Init(Monster data, int order)
 	{
-		this.monster = monster;
+		this.monster = data;
 		base.Init(monster.hp, monster.damage, order);
 	}
 

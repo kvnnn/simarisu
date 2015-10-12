@@ -117,7 +117,7 @@ public class GameManager : GameMonoBehaviour
 
 	private IEnumerator UserCharacterBattleCoroutine()
 	{
-		List<Card> selectedCards = cardManager.GetSelectedCards();
+		// List<Card> selectedCards = cardManager.GetSelectedCards();
 		bool isMoveDone = false;
 		characterManager.MoveUserCharacter(
 			lineManager.movePointList.ToArray(),

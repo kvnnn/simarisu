@@ -11,8 +11,8 @@ public class CardManager : GameMonoBehaviour
 	private CardParts[] selectedCardParts = new CardParts[MAX_COUNT];
 	private const int MAX_COUNT = 3;
 
-	private List<Card> originalCardDeck = new List<Card>();
-	private List<Card> currentCardDeck = new List<Card>();
+	// private List<Card> originalCardDeck = new List<Card>();
+	// private List<Card> currentCardDeck = new List<Card>();
 
 	private bool isTouchLock = true;
 

@@ -23,8 +23,8 @@ public class CharacterManager : GameMonoBehaviour
 
 	private int sortingOrder = 0;
 
-	private const string DEFAULT_USER_POSITION = "1,1";
-	private List<string> DEFAULT_MONSTER_POSITION = new List<string>(){"3,0","4,0","5,0","3,1","4,1","5,1","3,2","4,2","5,2"};
+	private readonly Vector2 DEFAULT_USER_POSITION = new Vector2(0,0);
+	private readonly List<Vector2> DEFAULT_MONSTER_POSITION = new List<Vector2>(){new Vector2(-2, 3), new Vector2(-2, 0), new Vector2(-2, -2), new Vector2(0, 3), new Vector2(0, -2), new Vector2(2, 3), new Vector2(2, 0), new Vector2(2, -2)};
 
 	public void Init()
 	{
@@ -153,7 +153,7 @@ public class CharacterManager : GameMonoBehaviour
 	public void AddUserCharacter()
 	{
 		userCharacter = AddUserCharacter(User.GetUser());
-		userCharacter.MoveTo(Vector2.zero);
+		userCharacter.MoveTo(DEFAULT_USER_POSITION);
 	}
 
 	private UserCharacter AddUserCharacter(User data)
@@ -168,13 +168,13 @@ public class CharacterManager : GameMonoBehaviour
 	{
 		int count = monsterList.Count;
 		System.Random random = new System.Random();
-		List<string> positionList = DEFAULT_MONSTER_POSITION.OrderBy(x => random.Next()).Take(count).ToList();
+		List<Vector2> positionList = DEFAULT_MONSTER_POSITION.OrderBy(x => random.Next()).Take(count).ToList();
 
 		int index = 0;
 		foreach (Monster monster in monsterList)
 		{
 			MonsterCharacter mc = AddMonster(monster);
-			mc.MoveTo(Vector2.zero);
+			mc.MoveTo(positionList[index]);
 			monsters.Add(mc);
 			index++;
 		}

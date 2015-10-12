@@ -6,6 +6,7 @@ using System.Collections.Generic;
 public class MonsterCharacter : BaseCharacter
 {
 	private Monster monster;
+	public System.Action<MonsterCharacter> onDead {private get; set;}
 
 	public void Init(Monster data, int order)
 	{
@@ -19,5 +20,10 @@ public class MonsterCharacter : BaseCharacter
 
 		// return null; //For Debug
 		return cards[Random.Range(0, cards.Count - 1)];
+	}
+
+	protected override void OnDead()
+	{
+		onDead(this);
 	}
 }

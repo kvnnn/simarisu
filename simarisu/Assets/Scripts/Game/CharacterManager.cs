@@ -52,6 +52,7 @@ public class CharacterManager : GameMonoBehaviour
 	{
 		foreach (MonsterCharacter monster in monsters)
 		{
+			if (monster == null) {continue;}
 			if (!monster.isDead) {return false;}
 		}
 		return true;
@@ -59,81 +60,52 @@ public class CharacterManager : GameMonoBehaviour
 #endregion
 
 #region CharacterAction
-	public void MoveUserCharacter(Vector3[] route, System.Action callback)
+	public void MoveUserCharacter(Card card, Vector3[] route, System.Action callback)
 	{
-		LeanTween.moveSplineLocal(userCharacter.gameObject, route, 3f).setOnComplete(()=> {callback();});
+		StartCoroutine(ActionCharacter(userCharacter, card, true));
+		LeanTween.moveSplineLocal(userCharacter.gameObject, route, 3f).setOnComplete(
+			()=> {
+				callback();
+				userCharacter.RemoveCard();
+			}
+		);
 	}
 
-	public void UserCharacterAction(Card card)
+	public IEnumerator UserCharacterAction(Card card)
 	{
-		ActionCharacter(userCharacter, card);
+		yield return StartCoroutine(ActionCharacter(userCharacter, card));
 	}
 
-	public void MonsterActions()
+	public IEnumerator MonsterActions()
 	{
 		foreach (MonsterCharacter monster in monsters)
 		{
+			if (monster == null) {continue;}
 			Card card = monster.SelectCard();
-			ActionCharacter(monster, card);
+			yield return StartCoroutine(ActionCharacter(monster, card));
 		}
 	}
 
-	public void ActionCharacter(BaseCharacter character, Card card)
+	public IEnumerator ActionCharacter(BaseCharacter character, Card card, bool isStartMoving = false)
 	{
-		if (card == null) {return;}
+		if (card == null) {yield break;}
 		switch (card.type)
 		{
-			case Card.Type.Move:
-				// Vector2 movePosition = character.position + card.position;
-				// if (IsMovable(movePosition))
-				// {
-				// 	character.MoveTo(movePosition, stageManager.GetCellPosition(movePosition));
-				// }
-			break;
 			case Card.Type.Attack:
-				// foreach (BaseCharacter target in GetCharacterInRange(character.position, card.position, card.range, character.directionInt))
-				// {
-				// 	if (target == character) {continue;}
-				// 	target.Damage(CalculateDamage(character, card));
-				// 	if (target is MonsterCharacter && target.isDead)
-				// 	{
-				// 		DestroyMonster(target as MonsterCharacter);
-				// 	}
-				// }
+				character.SetCard(card);
 			break;
-			case Card.Type.Cure:
+			case Card.Type.Support:
 			break;
 			case Card.Type.Other:
 			break;
 		}
-	}
 
-	public List<BaseCharacter> GetCharacterInRange(Vector2 currentPosition, Vector2 attackPosition, Vector2 range, int direction)
-	{
-		List<BaseCharacter> targetCharacters = new List<BaseCharacter>();
-		// Vector2 position = currentPosition + attackPosition.MultiplyX(direction);
-
-		// Ignore range for this time
-
-		// foreach (BaseCharacter character in allCharacters)
-		// {
-		// 	if (position == character.position)
-		// 	{
-		// 		targetCharacters.Add(character);
-		// 	}
-		// }
-
-		return targetCharacters;
-	}
-
-	public int CalculateDamage(BaseCharacter character, Card card)
-	{
-		int damage = card.damage;
-		if (damage == 0)
+		if (isStartMoving) {yield return null;}
+		else
 		{
-			damage = character.damage;
+			yield return new WaitForSeconds(0.5f);
+			character.RemoveCard();
 		}
-		return damage;
 	}
 #endregion
 
@@ -184,6 +156,7 @@ public class CharacterManager : GameMonoBehaviour
 	{
 		MonsterCharacter monster = AddCharacter<MonsterCharacter>(data.sprite);
 		monster.Init(data, sortingOrder);
+		monster.onDead = DestroyMonster;
 		sortingOrder++;
 		return monster;
 	}
@@ -211,6 +184,7 @@ public class CharacterManager : GameMonoBehaviour
 		if (monsters == null) {return;}
 		foreach (MonsterCharacter monster in monsters)
 		{
+			if (monster == null) {continue;}
 			monster.DestroyIfExist();
 		}
 		monsters = new List<MonsterCharacter>();

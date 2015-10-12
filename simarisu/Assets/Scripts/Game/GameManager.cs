@@ -117,9 +117,13 @@ public class GameManager : GameMonoBehaviour
 
 	private IEnumerator UserCharacterBattleCoroutine()
 	{
-		// List<Card> selectedCards = cardManager.GetSelectedCards();
+		List<Card> selectedCards = cardManager.GetSelectedCards();
 		bool isMoveDone = false;
+
+		yield return StartCoroutine(characterManager.UserCharacterAction(selectedCards[0]));
+
 		characterManager.MoveUserCharacter(
+			selectedCards[1],
 			lineManager.movePointList.ToArray(),
 			()=>{isMoveDone = true;}
 		);
@@ -128,6 +132,8 @@ public class GameManager : GameMonoBehaviour
 		{
 			yield return null;
 		}
+
+		yield return StartCoroutine(characterManager.UserCharacterAction(selectedCards[2]));
 
 		lineManager.Hide();
 

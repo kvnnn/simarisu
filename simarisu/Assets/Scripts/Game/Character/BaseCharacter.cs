@@ -1,12 +1,9 @@
 using UnityEngine;
-using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 
 public class BaseCharacter : GameMonoBehaviour
 {
-	private HpLabelParts hpLabel;
-
 	protected int maxHp;
 	protected int hp;
 	public int damage {get; private set;}
@@ -16,32 +13,28 @@ public class BaseCharacter : GameMonoBehaviour
 		get {return hp <= 0;}
 	}
 
-	private RectTransform rectTransform
+	private SpriteRenderer spriteRenderer
 	{
-		get {return (RectTransform)transform;}
-	}
-	private Image image
-	{
-		get {return gameObject.GetComponent<Image>();}
+		get {return gameObject.GetComponent<SpriteRenderer>();}
 	}
 
-	protected void Init(int maxHp, int damage)
+	protected void Init(int maxHp, int damage, int order)
 	{
 		this.maxHp = maxHp;
 		this.hp = maxHp;
 		this.damage = damage;
 
-		SetHpLabel();
+		spriteRenderer.sortingOrder = order;
 	}
 
 	public void MoveTo(Vector2 position)
 	{
-		rectTransform.anchoredPosition = position;
+		transform.position = position;
 	}
 
 	public void SetSprite(Sprite sprite)
 	{
-		image.sprite = sprite;
+		spriteRenderer.sprite = sprite;
 	}
 
 #region Damage/Cure
@@ -50,7 +43,6 @@ public class BaseCharacter : GameMonoBehaviour
 		hp -= damage;
 		hp = Mathf.Max(0, hp);
 		hp = Mathf.Min(maxHp, hp);
-		UpdateHpLabel();
 	}
 
 	public void Cure(int cure)
@@ -59,27 +51,10 @@ public class BaseCharacter : GameMonoBehaviour
 	}
 #endregion
 
-#region HpText
-	public void SetHpLabel()
-	{
-		if (hpLabel == null)
-		{
-			hpLabel = transform.GetComponentInChildren<HpLabelParts>();
-		}
-		hpLabel.SetHp(maxHp);
-	}
-
-	private void UpdateHpLabel()
-	{
-		hpLabel.SetHp(hp);
-	}
-#endregion
-
 	public void DestroyIfExist()
 	{
 		if (gameObject != null)
 		{
-			Destroy(hpLabel.gameObject);
 			Destroy(gameObject);
 		}
 	}

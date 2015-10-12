@@ -11,8 +11,12 @@ public class CardManager : GameMonoBehaviour
 	private CardParts[] selectedCardParts = new CardParts[MAX_COUNT];
 	private const int MAX_COUNT = 3;
 
-	private List<Card> originalCardDeck = new List<Card>();
-	private List<Card> currentCardDeck = new List<Card>();
+	// private List<Card> originalCardDeck = new List<Card>();
+	// private List<Card> currentCardDeck = new List<Card>();
+
+	private bool isTouchLock = true;
+
+	private readonly string[] SELECTED_CARD_ORDER_TEXTS = new string[]{"移動前", "移動中", "移動後"};
 
 	public void Init()
 	{
@@ -56,7 +60,7 @@ public class CardManager : GameMonoBehaviour
 	{
 		int index = NextIndex();
 		selectedCardParts[index] = cardParts;
-		cardParts.Selected(index);
+		cardParts.Selected(SELECTED_CARD_ORDER_TEXTS[index]);
 	}
 
 	private void UnsetCard(CardParts cardParts)
@@ -80,6 +84,12 @@ public class CardManager : GameMonoBehaviour
 	private bool IsAllCardSet()
 	{
 		return NextIndex() == MAX_COUNT;
+	}
+
+	public void EnableTouchEvent(bool enable)
+	{
+		isTouchLock = enable;
+		EnableStartBattleButton(enable);
 	}
 
 #region Deck
@@ -108,11 +118,18 @@ public class CardManager : GameMonoBehaviour
 	{
 		startBattleButtonParts.isEnabled = IsAllCardSet();
 	}
+
+	private void EnableStartBattleButton(bool enable)
+	{
+		startBattleButtonParts.isEnabled = enable;
+	}
 #endregion
 
 #region Event
 	private void CardPartsClick(CardParts parts)
 	{
+		if (!isTouchLock) {return;}
+
 		if (parts.isSelected)
 		{
 			UnsetCard(parts);

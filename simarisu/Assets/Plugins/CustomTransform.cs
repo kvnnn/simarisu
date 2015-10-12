@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public static class CustomRectTransform
+public static class CustomTransform
 {
 	public static void MoveLocalY(this RectTransform transform, float y)
 	{

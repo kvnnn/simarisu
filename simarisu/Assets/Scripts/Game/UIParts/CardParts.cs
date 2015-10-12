@@ -38,10 +38,10 @@ public class CardParts : BaseUIParts
 		card = null;
 	}
 
-	public void Selected(int num)
+	public void Selected(string text)
 	{
 		isSelected = true;
-		selectedText.text = num.ToString();
+		selectedText.text = text.ToString();
 		cardTransform.MoveLocalY(SELECTED_POSITION_Y);
 	}
 
@@ -54,10 +54,13 @@ public class CardParts : BaseUIParts
 
 	public void UpdateParts()
 	{
-		if (hasCard) {
+		if (hasCard)
+		{
 			gameObject.SetActive(true);
 			text.text = card.name;
-		} else {
+		}
+		else
+		{
 			gameObject.SetActive(false);
 			text.text = "";
 		}

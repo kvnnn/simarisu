@@ -32,6 +32,22 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!1 &110120
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 406980}
+  - 114: {fileID: 11432942}
+  m_Layer: 0
+  m_Name: CharacterManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!1 &110366
 GameObject:
   m_ObjectHideFlags: 0
@@ -57,7 +73,7 @@ GameObject:
   - 4: {fileID: 446178}
   - 114: {fileID: 11416200}
   m_Layer: 0
-  m_Name: CharacterManager
+  m_Name: StageManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -114,6 +130,18 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!4 &406980
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 110120}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 412044}
+  m_RootOrder: 3
 --- !u!4 &412044
 Transform:
   m_ObjectHideFlags: 1
@@ -127,8 +155,9 @@ Transform:
   - {fileID: 471658}
   - {fileID: 485210}
   - {fileID: 422092}
-  - {fileID: 446178}
+  - {fileID: 406980}
   - {fileID: 455060}
+  - {fileID: 446178}
   m_Father: {fileID: 0}
   m_RootOrder: 0
 --- !u!4 &422092
@@ -150,11 +179,11 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 128476}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 1.07500005, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 412044}
-  m_RootOrder: 3
+  m_RootOrder: 5
 --- !u!4 &455060
 Transform:
   m_ObjectHideFlags: 1
@@ -203,8 +232,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77845b46dea8b48c1a29488ca682dc15, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  background: {fileID: 0}
-  characterManager: {fileID: 11416200}
+  stageManager: {fileID: 11416200}
+  characterManager: {fileID: 11432942}
   cardManager: {fileID: 11470526}
   lineManager: {fileID: 11474354}
 --- !u!114 &11416200
@@ -215,10 +244,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 128476}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8b99a0aa4a4154406b00cd7492968902, type: 3}
+  m_Script: {fileID: 11500000, guid: f0ac04932d92c4266a0acd9a595bdbd4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  characterPrefab: {fileID: 124436, guid: bdad3ee2ba4b048c6b9cb197d40e7bb0, type: 2}
 --- !u!114 &11425948
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -256,6 +284,18 @@ MonoBehaviour:
   cardListPartsPrefab: {fileID: 151678, guid: d2b8dfa0966894ef1affefb910aaf813, type: 2}
   startBattleButtonPartsPrefab: {fileID: 146516, guid: 0d9d644889ea0468b9a494e6c5644665,
     type: 2}
+--- !u!114 &11432942
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 110120}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b99a0aa4a4154406b00cd7492968902, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  characterPrefab: {fileID: 124436, guid: bdad3ee2ba4b048c6b9cb197d40e7bb0, type: 2}
 --- !u!114 &11441198
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -422,6 +462,10 @@ Prefab:
       propertyPath: characterPrefab
       value: 
       objectReference: {fileID: 124436, guid: bdad3ee2ba4b048c6b9cb197d40e7bb0, type: 2}
+    - target: {fileID: 0}
+      propertyPath: m_LocalPosition.y
+      value: 1.07500005
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 136164}

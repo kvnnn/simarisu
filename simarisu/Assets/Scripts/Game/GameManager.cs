@@ -6,6 +6,8 @@ using System.Linq;
 public class GameManager : GameMonoBehaviour
 {
 	[SerializeField]
+	private StageManager stageManager;
+	[SerializeField]
 	private CharacterManager characterManager;
 	[SerializeField]
 	private CardManager cardManager;
@@ -33,6 +35,7 @@ public class GameManager : GameMonoBehaviour
 	{
 		ResetGameStatus();
 
+		stageManager.Init();
 		characterManager.Init();
 		cardManager.Init();
 		lineManager.Init();
@@ -44,6 +47,7 @@ public class GameManager : GameMonoBehaviour
 	public void PrepareGame()
 	{
 		currentStage = CheckAndGetCurrentStage();
+		stageManager.LoadStage(currentStage.stageId);
 		characterManager.PrepareGame();
 	}
 

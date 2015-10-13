@@ -6,24 +6,14 @@ using System.Linq;
 public class GameManager : GameMonoBehaviour
 {
 	[SerializeField]
-	private Background background;
+	private StageManager stageManager;
 	[SerializeField]
 	private CharacterManager characterManager;
 	[SerializeField]
 	private CardManager cardManager;
-	[SerializeField]
-	private LineManager lineManager;
-
-	private bool isDrawing = false;
-	private bool forceEndDrawing = false;
 
 	private int point;
 	private int turn;
-	private int stageCount;
-	private int stageIndex;
-	private Stage currentStage;
-
-	private const int MAX_MONSTER = 3;
 
 	private GameStatus gameStatus = GameStatus.Standby;
 	private enum GameStatus
@@ -38,33 +28,33 @@ public class GameManager : GameMonoBehaviour
 	{
 		ResetGameStatus();
 
-		SetBackground();
+		stageManager.Init(OnCellPointerEnter);
 		characterManager.Init();
 		cardManager.Init();
-		lineManager.Init();
 
 		PrepareGame();
 	}
 
-	private void SetBackground()
-	{
-		background.onExit += BackgroundOnExit;
-		background.onBeginDrag += BackgroundOnBeginDrag;
-		background.onDrag += BackgroundOnDrag;
-		background.onEndDrag += BackgroundOnEndDrag;
-	}
-
 #region Game
-	public void PrepareGame()
+	private void PrepareGame()
 	{
-		currentStage = CheckAndGetCurrentStage();
+		stageManager.LoadStage();
 		characterManager.PrepareGame();
 	}
 
 	public void StartGame()
 	{
-		characterManager.AddMonster(PickMonster());
-		characterManager.AddUserCharacter();
+		characterManager.AddUserCharacter(stageManager.GetDefaultUserCharacterCell());
+		characterManager.AddMonster(stageManager.PickMonster(), stageManager.GetAvailableCells(characterManager.GetCharacterCells()));
+
+		PrepareForNextTurn();
+	}
+
+	private void PrepareForNextTurn()
+	{
+		turn++;
+		stageManager.CreateRoute(characterManager.GetUserCharacterCell());
+		stageManager.ResetAllCellColor();
 	}
 
 	private void StartBattle()
@@ -97,7 +87,7 @@ public class GameManager : GameMonoBehaviour
 			}
 		}
 
-		turn++;
+		PrepareForNextTurn();
 	}
 
 	private IEnumerator BattleCoroutine(System.Action callback)
@@ -118,24 +108,26 @@ public class GameManager : GameMonoBehaviour
 	private IEnumerator UserCharacterBattleCoroutine()
 	{
 		List<Card> selectedCards = cardManager.GetSelectedCards();
-		bool isMoveDone = false;
 
 		yield return StartCoroutine(characterManager.UserCharacterAction(selectedCards[0]));
 
-		characterManager.MoveUserCharacter(
-			selectedCards[1],
-			lineManager.movePointList.ToArray(),
-			()=>{isMoveDone = true;}
-		);
-
-		while (!isMoveDone)
+		foreach (Vector3 route in stageManager.GetRoute())
 		{
-			yield return null;
+			bool isMoveDone = false;
+
+			yield return StartCoroutine(characterManager.MoveUserCharacter(
+				selectedCards[1],
+				route,
+				()=>{isMoveDone = true;}
+			));
+
+			while (!isMoveDone)
+			{
+				yield return null;
+			}
 		}
 
 		yield return StartCoroutine(characterManager.UserCharacterAction(selectedCards[2]));
-
-		lineManager.Hide();
 
 		yield return null;
 	}
@@ -148,7 +140,7 @@ public class GameManager : GameMonoBehaviour
 	private void Win()
 	{
 		point++;
-		stageCount++;
+		stageManager.NextStage();
 		PrepareGame();
 		StartGame();
 	}
@@ -168,8 +160,7 @@ public class GameManager : GameMonoBehaviour
 
 		point = 0;
 		turn = 0;
-		stageCount = 1;
-		stageIndex = 0;
+		stageManager.ResetStatus();
 	}
 
 	private bool IsGameFinish()
@@ -197,40 +188,6 @@ public class GameManager : GameMonoBehaviour
 	}
 #endregion
 
-#region Stage
-	private Stage CheckAndGetCurrentStage()
-	{
-		CheckStage();
-		return GetCurrentStage();
-	}
-
-	private Stage GetCurrentStage()
-	{
-		return Stage.GetAllStage()[stageIndex];
-	}
-
-	private void CheckStage()
-	{
-		Stage stageData = GetCurrentStage();
-		bool isProperStage = stageData.maxRange >= stageCount && stageCount >= stageData.minRange;
-
-		if (!isProperStage)
-		{
-			stageIndex++;
-			CheckStage();
-		}
-	}
-
-	private List<Monster> PickMonster()
-	{
-		List<Monster> monsterList = currentStage.monsters;
-		int numSelect = Random.Range(1, Mathf.Min(monsterList.Count, MAX_MONSTER));
-
-		System.Random random = new System.Random();
-		return monsterList.OrderBy(x => random.Next()).Take(numSelect).ToList();
-	}
-#endregion
-
 #region UIParts
 	public void InitUI(CardListParts cardListParts, ButtonParts startBattleButtonParts)
 	{
@@ -254,34 +211,18 @@ public class GameManager : GameMonoBehaviour
 		StartBattle();
 	}
 
-	private void BackgroundOnExit()
+	private void OnCellPointerEnter(StageCell cell)
 	{
-		forceEndDrawing = true;
-	}
+		if (!characterManager.IsCellAvilable(cell)) {return;}
 
-	private void BackgroundOnBeginDrag(Vector3 position)
-	{
-		forceEndDrawing = false;
-		isDrawing = true;
-		lineManager.StartDrawing(GetWorldPoint(position), characterManager.UserCharacterMaxDrawing());
-	}
-
-	private void BackgroundOnDrag(Vector3 position)
-	{
-		if (!isDrawing) {return;}
-
-		if (!lineManager.AddPoint(GetWorldPoint(position)) || forceEndDrawing)
+		if (stageManager.routeCount > characterManager.UserCharacterMaxDrawing())
 		{
-			BackgroundOnEndDrag(position);
+			stageManager.RemoveLastRouteIfCan(cell);
 		}
-	}
-
-	private void BackgroundOnEndDrag(Vector3 position)
-	{
-		if (!isDrawing) {return;}
-
-		isDrawing = false;
-		lineManager.EndDrawing(GetWorldPoint(position));
+		else
+		{
+			stageManager.AddRoute(cell);
+		}
 	}
 #endregion
 }

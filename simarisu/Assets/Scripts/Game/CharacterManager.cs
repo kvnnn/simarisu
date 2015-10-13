@@ -23,9 +23,6 @@ public class CharacterManager : GameMonoBehaviour
 
 	private int sortingOrder = 0;
 
-	private readonly Vector2 DEFAULT_USER_POSITION = new Vector2(0,0);
-	private readonly List<Vector2> DEFAULT_MONSTER_POSITION = new List<Vector2>(){new Vector2(-2, 3), new Vector2(-2, 0), new Vector2(-2, -2), new Vector2(0, 3), new Vector2(0, -2), new Vector2(2, 3), new Vector2(2, 0), new Vector2(2, -2)};
-
 	public void Init()
 	{
 		PrepareGame();
@@ -43,7 +40,7 @@ public class CharacterManager : GameMonoBehaviour
 		return userCharacter.isDead;
 	}
 
-	public float UserCharacterMaxDrawing()
+	public int UserCharacterMaxDrawing()
 	{
 		return userCharacter.maxDrawing;
 	}
@@ -59,14 +56,41 @@ public class CharacterManager : GameMonoBehaviour
 	}
 #endregion
 
-#region CharacterAction
-	public void MoveUserCharacter(Card card, Vector3[] route, System.Action callback)
+#region CharacterCell
+	public List<StageCell> GetCharacterCells()
 	{
-		StartCoroutine(ActionCharacter(userCharacter, card, true));
-		LeanTween.moveSplineLocal(userCharacter.gameObject, route, 3f).setOnComplete(
+		List<StageCell> cells = new List<StageCell>();
+		foreach (BaseCharacter character in allCharacters)
+		{
+			cells.Add(character.GetCurrentCell());
+		}
+
+		return cells;
+	}
+
+	public bool IsCellAvilable(StageCell cell)
+	{
+		foreach (BaseCharacter character in allCharacters)
+		{
+			if (character.GetCurrentCell() == cell) {return false;}
+		}
+		return true;
+	}
+
+	public StageCell GetUserCharacterCell()
+	{
+		return userCharacter.GetCurrentCell();
+	}
+#endregion
+
+#region CharacterAction
+	public IEnumerator MoveUserCharacter(Card card, Vector3 route, System.Action callback)
+	{
+		yield return StartCoroutine(ActionCharacter(userCharacter, card, true));
+
+		LeanTween.move(userCharacter.gameObject, route, 0.5f).setOnComplete(
 			()=> {
 				callback();
-				userCharacter.RemoveCard();
 			}
 		);
 	}
@@ -122,10 +146,10 @@ public class CharacterManager : GameMonoBehaviour
 		return character;
 	}
 
-	public void AddUserCharacter()
+	public void AddUserCharacter(StageCell cell)
 	{
 		userCharacter = AddUserCharacter(User.GetUser());
-		userCharacter.MoveTo(DEFAULT_USER_POSITION);
+		userCharacter.MoveTo(cell);
 	}
 
 	private UserCharacter AddUserCharacter(User data)
@@ -136,17 +160,17 @@ public class CharacterManager : GameMonoBehaviour
 		return character;
 	}
 
-	public void AddMonster(List<Monster> monsterList)
+	public void AddMonster(List<Monster> monsterList, List<StageCell> cells)
 	{
 		int count = monsterList.Count;
 		System.Random random = new System.Random();
-		List<Vector2> positionList = DEFAULT_MONSTER_POSITION.OrderBy(x => random.Next()).Take(count).ToList();
+		List<StageCell> cellList = cells.OrderBy(x => random.Next()).Take(count).ToList();
 
 		int index = 0;
 		foreach (Monster monster in monsterList)
 		{
 			MonsterCharacter mc = AddMonster(monster);
-			mc.MoveTo(positionList[index]);
+			mc.MoveTo(cellList[index]);
 			monsters.Add(mc);
 			index++;
 		}

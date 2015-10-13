@@ -7,6 +7,7 @@ using System.Collections.Generic;
 	range 			: text
 	monsters		: text
 	rate 				: real
+	stage_id		: integer
 */
 
 public class Stage
@@ -43,6 +44,7 @@ public class Stage
 #region StageData
 	public DataRow rawData {get; private set;}
 	public int id {get; private set;}
+	public int stageId {get; private set;}
 	public double rate {get; private set;}
 	private string monstersStr;
 	private string rangeStr;
@@ -54,6 +56,7 @@ public class Stage
 		this.rawData = rawData;
 
 		id = (int)rawData["id"];
+		stageId = (int)rawData["stage_id"];
 		rate = (double)rawData["rate"];
 		monstersStr = rawData["monsters"].ToString();
 

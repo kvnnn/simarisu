@@ -13,7 +13,7 @@ public static class CustomVector
 
 	public static Vector2 GetFromString(string str)
 	{
-		string[] strArray = str.Split(',');
+		string[] strArray = str.Split(':');
 		return new Vector2(Convert.ToInt32(strArray[0]), Convert.ToInt32(strArray[1]));
 	}
 }

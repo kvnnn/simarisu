@@ -195,7 +195,7 @@ public class GameManager : GameMonoBehaviour
 #region UIParts
 	public void InitUI(CardListParts cardListParts, ButtonParts startBattleButtonParts)
 	{
-		startBattleButtonParts.buttonClick += StartBattleButtonClick;
+		startBattleButtonParts.buttonClick = StartBattleButtonClick;
 		cardManager.SetUIParts(cardListParts, startBattleButtonParts);
 	}
 #endregion

@@ -49,7 +49,7 @@ public class StageManager : GameMonoBehaviour
 
 		foreach (StageCell cell in GetCells())
 		{
-			cell.onPointerEnter += onCellPointerEnter;
+			cell.onPointerEnter = onCellPointerEnter;
 		}
 	}
 

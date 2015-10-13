@@ -31,6 +31,9 @@ public class CharacterManager : GameMonoBehaviour
 
 	private int sortingOrder = 0;
 
+	private const float MOVE_SPEED = 0.25f;
+	private const float ATTACK_INTERVAL = 0.25f;
+
 	public void Init()
 	{
 		PrepareGame();
@@ -96,7 +99,7 @@ public class CharacterManager : GameMonoBehaviour
 	{
 		yield return StartCoroutine(ActionCharacter(userCharacter, card));
 
-		LeanTween.move(userCharacter.gameObject, cell.PositionInWorld(), 0.5f).setOnComplete(
+		LeanTween.move(userCharacter.gameObject, cell.PositionInWorld(), MOVE_SPEED).setOnComplete(
 			()=> {
 				userCharacter.MoveTo(cell, GetCanvasPosition, false);
 				callback();
@@ -149,7 +152,7 @@ public class CharacterManager : GameMonoBehaviour
 			break;
 		}
 
-		yield return new WaitForSeconds(0.5f);
+		yield return new WaitForSeconds(ATTACK_INTERVAL);
 	}
 
 	private int CalculateDamage(BaseCharacter character, Card card)

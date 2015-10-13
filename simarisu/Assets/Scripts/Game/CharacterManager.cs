@@ -94,7 +94,7 @@ public class CharacterManager : GameMonoBehaviour
 #region CharacterAction
 	public IEnumerator MoveUserCharacter(Card card, StageCell cell, System.Action callback)
 	{
-		yield return StartCoroutine(ActionCharacter(userCharacter, card, true));
+		yield return StartCoroutine(ActionCharacter(userCharacter, card));
 
 		LeanTween.move(userCharacter.gameObject, cell.PositionInWorld(), 0.5f).setOnComplete(
 			()=> {
@@ -119,13 +119,29 @@ public class CharacterManager : GameMonoBehaviour
 		}
 	}
 
-	public IEnumerator ActionCharacter(BaseCharacter character, Card card, bool isStartMoving = false)
+	public IEnumerator ActionCharacter(BaseCharacter character, Card card)
 	{
 		if (card == null) {yield break;}
+		bool isMonster = character is MonsterCharacter;
+
 		switch (card.type)
 		{
 			case Card.Type.Attack:
-				character.SetCard(card);
+				Vector2 currentPosition = character.Position();
+				List<BaseCharacter> characterList = allCharacters;
+				foreach (Vector2 range in card.ranges)
+				{
+					foreach (BaseCharacter target in characterList)
+					{
+						if (target == null || target.isDead) {continue;}
+						if ((isMonster && target is MonsterCharacter) || (!isMonster && target is UserCharacter)) {continue;}
+
+						if (target.Position() == currentPosition + range)
+						{
+							target.Damage(CalculateDamage(character, card));
+						}
+					}
+				}
 			break;
 			case Card.Type.Support:
 			break;
@@ -133,12 +149,12 @@ public class CharacterManager : GameMonoBehaviour
 			break;
 		}
 
-		if (isStartMoving) {yield return null;}
-		else
-		{
-			yield return new WaitForSeconds(0.5f);
-			character.RemoveCard();
-		}
+		yield return new WaitForSeconds(0.5f);
+	}
+
+	private int CalculateDamage(BaseCharacter character, Card card)
+	{
+		return character.damage + card.damage;
 	}
 #endregion
 

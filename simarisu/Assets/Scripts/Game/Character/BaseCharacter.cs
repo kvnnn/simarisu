@@ -7,16 +7,10 @@ public class BaseCharacter : GameMonoBehaviour
 {
 	protected int maxHp;
 	protected int hp;
-	protected int damage;
+	public int damage {get; private set;}
 
 	private StageCell cell;
 	private HpLabelParts hpLabel;
-
-	private Card card;
-	private int cardDamage
-	{
-		get {return card.damage + damage;}
-	}
 
 	public bool isDead
 	{
@@ -60,6 +54,11 @@ public class BaseCharacter : GameMonoBehaviour
 	{
 		return cell;
 	}
+
+	public Vector2 Position()
+	{
+		return cell.Position();
+	}
 #endregion
 
 #region Damage/Cure
@@ -79,18 +78,6 @@ public class BaseCharacter : GameMonoBehaviour
 	public void Cure(int cure)
 	{
 		Damage(cure * -1);
-	}
-#endregion
-
-#region Card and AttackRange
-	public void SetCard(Card card)
-	{
-		this.card = card;
-	}
-
-	public void RemoveCard()
-	{
-		card = null;
 	}
 #endregion
 

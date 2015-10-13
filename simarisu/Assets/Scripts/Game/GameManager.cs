@@ -6,16 +6,11 @@ using System.Linq;
 public class GameManager : GameMonoBehaviour
 {
 	[SerializeField]
-	private Background background;
-	[SerializeField]
 	private CharacterManager characterManager;
 	[SerializeField]
 	private CardManager cardManager;
 	[SerializeField]
 	private LineManager lineManager;
-
-	private bool isDrawing = false;
-	private bool forceEndDrawing = false;
 
 	private int point;
 	private int turn;
@@ -38,20 +33,11 @@ public class GameManager : GameMonoBehaviour
 	{
 		ResetGameStatus();
 
-		SetBackground();
 		characterManager.Init();
 		cardManager.Init();
 		lineManager.Init();
 
 		PrepareGame();
-	}
-
-	private void SetBackground()
-	{
-		background.onExit += BackgroundOnExit;
-		background.onBeginDrag += BackgroundOnBeginDrag;
-		background.onDrag += BackgroundOnDrag;
-		background.onEndDrag += BackgroundOnEndDrag;
 	}
 
 #region Game
@@ -252,36 +238,6 @@ public class GameManager : GameMonoBehaviour
 	private void StartBattleButtonClick(ButtonParts button)
 	{
 		StartBattle();
-	}
-
-	private void BackgroundOnExit()
-	{
-		forceEndDrawing = true;
-	}
-
-	private void BackgroundOnBeginDrag(Vector3 position)
-	{
-		forceEndDrawing = false;
-		isDrawing = true;
-		lineManager.StartDrawing(GetWorldPoint(position), characterManager.UserCharacterMaxDrawing());
-	}
-
-	private void BackgroundOnDrag(Vector3 position)
-	{
-		if (!isDrawing) {return;}
-
-		if (!lineManager.AddPoint(GetWorldPoint(position)) || forceEndDrawing)
-		{
-			BackgroundOnEndDrag(position);
-		}
-	}
-
-	private void BackgroundOnEndDrag(Vector3 position)
-	{
-		if (!isDrawing) {return;}
-
-		isDrawing = false;
-		lineManager.EndDrawing(GetWorldPoint(position));
 	}
 #endregion
 }

@@ -11,8 +11,6 @@ public class GameManager : GameMonoBehaviour
 	private CharacterManager characterManager;
 	[SerializeField]
 	private CardManager cardManager;
-	[SerializeField]
-	private LineManager lineManager;
 
 	private int point;
 	private int turn;
@@ -38,7 +36,6 @@ public class GameManager : GameMonoBehaviour
 		stageManager.Init();
 		characterManager.Init();
 		cardManager.Init();
-		lineManager.Init();
 
 		PrepareGame();
 	}
@@ -112,11 +109,11 @@ public class GameManager : GameMonoBehaviour
 
 		yield return StartCoroutine(characterManager.UserCharacterAction(selectedCards[0]));
 
-		characterManager.MoveUserCharacter(
-			selectedCards[1],
-			lineManager.movePointList.ToArray(),
-			()=>{isMoveDone = true;}
-		);
+		// characterManager.MoveUserCharacter(
+		// 	selectedCards[1],
+		// 	lineManager.movePointList.ToArray(),
+		// 	()=>{isMoveDone = true;}
+		// );
 
 		while (!isMoveDone)
 		{
@@ -124,8 +121,6 @@ public class GameManager : GameMonoBehaviour
 		}
 
 		yield return StartCoroutine(characterManager.UserCharacterAction(selectedCards[2]));
-
-		lineManager.Hide();
 
 		yield return null;
 	}

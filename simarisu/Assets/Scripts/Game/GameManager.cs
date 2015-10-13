@@ -111,6 +111,8 @@ public class GameManager : GameMonoBehaviour
 
 		yield return StartCoroutine(characterManager.UserCharacterAction(selectedCards[0]));
 
+		characterManager.HideUserCharacterHpLabel();
+
 		foreach (StageCell cell in stageManager.GetRoute())
 		{
 			bool isMoveDone = false;
@@ -126,6 +128,8 @@ public class GameManager : GameMonoBehaviour
 				yield return null;
 			}
 		}
+
+		characterManager.ShowUserCharacterHpLabel();
 
 		yield return StartCoroutine(characterManager.UserCharacterAction(selectedCards[2]));
 
@@ -193,15 +197,6 @@ public class GameManager : GameMonoBehaviour
 	{
 		startBattleButtonParts.buttonClick += StartBattleButtonClick;
 		cardManager.SetUIParts(cardListParts, startBattleButtonParts);
-	}
-#endregion
-
-#region Convert Position
-	public Vector3 GetWorldPoint(Vector3 position)
-	{
-		position = Camera.main.ScreenToWorldPoint(position);
-		position.z = 0;
-		return position;
 	}
 #endregion
 

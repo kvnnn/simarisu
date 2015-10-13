@@ -98,9 +98,9 @@ public class CardManager : GameMonoBehaviour
 		// For Debug
 		List<Card> cards = new List<Card>(){
 			Card.GetCard(0),
-			Card.GetCard(0),
-			Card.GetCard(0),
-			Card.GetCard(0),
+			Card.GetCard(1),
+			Card.GetCard(2),
+			Card.GetCard(3),
 			Card.GetCard(0),
 			Card.GetCard(0),
 		};

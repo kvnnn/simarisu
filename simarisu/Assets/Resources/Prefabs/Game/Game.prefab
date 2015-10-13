@@ -205,7 +205,6 @@ MonoBehaviour:
   stageManager: {fileID: 11416200}
   characterManager: {fileID: 11432942}
   cardManager: {fileID: 11470526}
-  lineManager: {fileID: 0}
 --- !u!114 &11416200
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -266,6 +265,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characterPrefab: {fileID: 124436, guid: bdad3ee2ba4b048c6b9cb197d40e7bb0, type: 2}
+  hpLabelPrefab: {fileID: 142780, guid: 214f83cf08f7e4470bbd6e71a7a2e685, type: 2}
+  baseHpLabelTransform: {fileID: 22445406}
 --- !u!114 &11441198
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -361,7 +362,7 @@ Prefab:
     - target: {fileID: 0}
       propertyPath: hpLabelPrefab
       value: 
-      objectReference: {fileID: 169550, guid: 342a6cd8245c648f8bbed8a26d086850, type: 2}
+      objectReference: {fileID: 142780, guid: 214f83cf08f7e4470bbd6e71a7a2e685, type: 2}
     - target: {fileID: 0}
       propertyPath: stagePrefab
       value: 

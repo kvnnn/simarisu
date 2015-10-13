@@ -8,6 +8,14 @@ public class CharacterManager : GameMonoBehaviour
 {
 	[SerializeField]
 	private GameObject characterPrefab;
+	[SerializeField]
+	private GameObject hpLabelPrefab;
+	[SerializeField]
+	private Transform baseHpLabelTransform;
+	private Camera canvasCamera
+	{
+		get {return baseHpLabelTransform.GetComponent<Canvas>().worldCamera;}
+	}
 
 	private UserCharacter userCharacter;
 	private List<MonsterCharacter> monsters = new List<MonsterCharacter>();
@@ -22,6 +30,9 @@ public class CharacterManager : GameMonoBehaviour
 	}
 
 	private int sortingOrder = 0;
+
+	private const float MOVE_SPEED = 0.25f;
+	private const float ATTACK_INTERVAL = 0.25f;
 
 	public void Init()
 	{
@@ -84,12 +95,13 @@ public class CharacterManager : GameMonoBehaviour
 #endregion
 
 #region CharacterAction
-	public IEnumerator MoveUserCharacter(Card card, Vector3 route, System.Action callback)
+	public IEnumerator MoveUserCharacter(Card card, StageCell cell, System.Action callback)
 	{
-		yield return StartCoroutine(ActionCharacter(userCharacter, card, true));
+		yield return StartCoroutine(ActionCharacter(userCharacter, card));
 
-		LeanTween.move(userCharacter.gameObject, route, 0.5f).setOnComplete(
+		LeanTween.move(userCharacter.gameObject, cell.PositionInWorld(), MOVE_SPEED).setOnComplete(
 			()=> {
+				userCharacter.MoveTo(cell, GetCanvasPosition, false);
 				callback();
 			}
 		);
@@ -110,13 +122,29 @@ public class CharacterManager : GameMonoBehaviour
 		}
 	}
 
-	public IEnumerator ActionCharacter(BaseCharacter character, Card card, bool isStartMoving = false)
+	public IEnumerator ActionCharacter(BaseCharacter character, Card card)
 	{
 		if (card == null) {yield break;}
+		bool isMonster = character is MonsterCharacter;
+
 		switch (card.type)
 		{
 			case Card.Type.Attack:
-				character.SetCard(card);
+				Vector2 currentPosition = character.Position();
+				List<BaseCharacter> characterList = allCharacters;
+				foreach (Vector2 range in card.ranges)
+				{
+					foreach (BaseCharacter target in characterList)
+					{
+						if (target == null || target.isDead) {continue;}
+						if ((isMonster && target is MonsterCharacter) || (!isMonster && target is UserCharacter)) {continue;}
+
+						if (target.Position() == currentPosition + range)
+						{
+							target.Damage(CalculateDamage(character, card));
+						}
+					}
+				}
 			break;
 			case Card.Type.Support:
 			break;
@@ -124,16 +152,16 @@ public class CharacterManager : GameMonoBehaviour
 			break;
 		}
 
-		if (isStartMoving) {yield return null;}
-		else
-		{
-			yield return new WaitForSeconds(0.5f);
-			character.RemoveCard();
-		}
+		yield return new WaitForSeconds(ATTACK_INTERVAL);
+	}
+
+	private int CalculateDamage(BaseCharacter character, Card card)
+	{
+		return character.damage + card.damage;
 	}
 #endregion
 
-#region Add/Delete Character
+#region AddCharacter
 	private T AddCharacter<T>(string spriteId)
 		where T : BaseCharacter
 	{
@@ -143,13 +171,18 @@ public class CharacterManager : GameMonoBehaviour
 		T character = characterGameObject.AddComponent<T>();
 		character.SetSprite(GetSprite(spriteId));
 
+		GameObject hpLabelGameObject = Instantiate(hpLabelPrefab);
+		hpLabelGameObject.transform.SetParent(baseHpLabelTransform);
+		HpLabelParts hpLabel = hpLabelGameObject.GetComponent<HpLabelParts>();
+		character.SetHpLabel(hpLabel);
+
 		return character;
 	}
 
 	public void AddUserCharacter(StageCell cell)
 	{
 		userCharacter = AddUserCharacter(User.GetUser());
-		userCharacter.MoveTo(cell);
+		userCharacter.MoveTo(cell, GetCanvasPosition);
 	}
 
 	private UserCharacter AddUserCharacter(User data)
@@ -170,7 +203,7 @@ public class CharacterManager : GameMonoBehaviour
 		foreach (Monster monster in monsterList)
 		{
 			MonsterCharacter mc = AddMonster(monster);
-			mc.MoveTo(cellList[index]);
+			mc.MoveTo(cellList[index], GetCanvasPosition);
 			monsters.Add(mc);
 			index++;
 		}
@@ -190,7 +223,9 @@ public class CharacterManager : GameMonoBehaviour
 		string path = string.Format("Characters/Images/{0}", spriteId);
 		return Resources.Load<Sprite>(path);
 	}
+#endregion
 
+#region DestoryCharacter
 	public void DestroyAll()
 	{
 		DestroyUser();
@@ -218,6 +253,26 @@ public class CharacterManager : GameMonoBehaviour
 	{
 		monsters.Remove(monster);
 		monster.DestroyIfExist();
+	}
+#endregion
+
+	public void ShowUserCharacterHpLabel()
+	{
+		userCharacter.ShowHpLabel();
+	}
+
+	public void HideUserCharacterHpLabel()
+	{
+		userCharacter.HideHpLabel();
+	}
+
+#region CanvasPosition
+	private Vector2 GetCanvasPosition(Vector3 position)
+	{
+		Vector2 screenPosition = Camera.main.WorldToScreenPoint(position);
+		Vector2 uiPosition = Vector2.zero;
+		RectTransformUtility.ScreenPointToLocalPointInRectangle(baseHpLabelTransform as RectTransform, screenPosition, canvasCamera, out uiPosition);
+		return uiPosition;
 	}
 #endregion
 }

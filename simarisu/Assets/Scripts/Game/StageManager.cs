@@ -49,20 +49,14 @@ public class StageManager : GameMonoBehaviour
 
 		foreach (StageCell cell in GetCells())
 		{
-			cell.onPointerEnter += onCellPointerEnter;
+			cell.onPointerEnter = onCellPointerEnter;
 		}
 	}
 
 #region Route
-	public Vector3[] GetRoute()
+	public List<StageCell> GetRoute()
 	{
-		List<Vector3> vector3Route = new List<Vector3>();
-		foreach (StageCell cell in route.Skip(1))
-		{
-			vector3Route.Add(cell.PositionInWorld());
-		}
-
-		return vector3Route.ToArray();
+		return route;
 	}
 
 	public void CreateRoute(StageCell startCell)
@@ -84,7 +78,7 @@ public class StageManager : GameMonoBehaviour
 			if (Mathf.Abs(diffPosition.x) <= 1 && Mathf.Abs(diffPosition.y) <= 1)
 			{
 				route.Add(cell);
-				cell.SetColor();
+				cell.SetSelectColor();
 
 				if (routeCount != 1)
 				{
@@ -100,7 +94,7 @@ public class StageManager : GameMonoBehaviour
 		if (lastCell != cell) {return;}
 
 		route.Remove(cell);
-		cell.UnsetColor();
+		cell.UnsetSelectColor();
 	}
 
 	private bool IsUsedForRoute(StageCell cell)
@@ -124,7 +118,7 @@ public class StageManager : GameMonoBehaviour
 		return cells;
 	}
 
-	private StageCell GetCell(Vector2 position)
+	public StageCell GetCell(Vector2 position)
 	{
 		string positionStr = position.x + ":" + position.y;
 		return GetCell(positionStr);
@@ -133,7 +127,11 @@ public class StageManager : GameMonoBehaviour
 	private StageCell GetCell(string position)
 	{
 		Transform cellTransform = stageTransform.Find(position);
-		StageCell cell = cellTransform.gameObject.GetComponent<StageCell>();
+		StageCell cell = null;
+		if (cellTransform != null)
+		{
+			cell = cellTransform.gameObject.GetComponent<StageCell>();
+		}
 		return cell;
 	}
 
@@ -155,7 +153,15 @@ public class StageManager : GameMonoBehaviour
 	{
 		foreach (StageCell cell in GetCells())
 		{
-			cell.UnsetColor();
+			cell.UnsetSelectColor();
+		}
+	}
+
+	public void ResetAllRangeCellColor()
+	{
+		foreach (StageCell cell in GetCells())
+		{
+			cell.UnsetRangeColor();
 		}
 	}
 

@@ -55,8 +55,7 @@ public class Card
 	}
 	public int damage {get; private set;}
 
-	public int rangeType {get; private set;}
-	public double rangeSize {get; private set;}
+	private string rangeStr;
 
 	public Card(DataRow rawData)
 	{
@@ -71,8 +70,25 @@ public class Card
 		type = (Type)rawData["type"];
 		damage = (int)rawData["damage"];
 
-		rangeType = (int)rawData["range_type"];
-		rangeSize = (double)rawData["range_size"];
+		rangeStr = rawData["range"].ToString();
+	}
+
+	private List<Vector2> _ranges;
+	public List<Vector2> ranges
+	{
+		get
+		{
+			if (_ranges == null)
+			{
+				_ranges = new List<Vector2>();
+				string[] strArray = rangeStr.Split(',');
+				foreach (string str in strArray)
+				{
+					_ranges.Add(CustomVector.GetFromString(str));
+				}
+			}
+			return _ranges;
+		}
 	}
 #endregion
 }

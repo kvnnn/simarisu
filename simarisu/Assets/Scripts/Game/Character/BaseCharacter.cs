@@ -7,15 +7,10 @@ public class BaseCharacter : GameMonoBehaviour
 {
 	protected int maxHp;
 	protected int hp;
-	protected int damage;
+	public int damage {get; private set;}
 
 	private StageCell cell;
-
-	private Card card;
-	private int cardDamage
-	{
-		get {return card.damage + damage;}
-	}
+	private HpLabelParts hpLabel;
 
 	public bool isDead
 	{
@@ -33,6 +28,7 @@ public class BaseCharacter : GameMonoBehaviour
 		this.hp = maxHp;
 		this.damage = damage;
 
+		UpdateHpLabel();
 		spriteRenderer.sortingOrder = order;
 	}
 
@@ -42,15 +38,26 @@ public class BaseCharacter : GameMonoBehaviour
 	}
 
 #region Cell
-	public void MoveTo(StageCell stageCell)
+	public void MoveTo(StageCell stageCell, System.Func<Vector3, Vector2> convertToCanvasPosition, bool movePosition = true)
 	{
 		this.cell = stageCell;
-		transform.position = cell.PositionInWorld();
+
+		hpLabel.MoveTo(convertToCanvasPosition(cell.PositionInWorld()));
+
+		if (movePosition)
+		{
+			transform.position = cell.PositionInWorld();
+		}
 	}
 
 	public StageCell GetCurrentCell()
 	{
 		return cell;
+	}
+
+	public Vector2 Position()
+	{
+		return cell.Position();
 	}
 #endregion
 
@@ -60,6 +67,8 @@ public class BaseCharacter : GameMonoBehaviour
 		hp -= damage;
 		hp = Mathf.Max(0, hp);
 		hp = Mathf.Min(maxHp, hp);
+
+		hpLabel.SetHp(hp);
 
 		if (isDead) {OnDead();}
 	}
@@ -72,15 +81,25 @@ public class BaseCharacter : GameMonoBehaviour
 	}
 #endregion
 
-#region Card and AttackRange
-	public void SetCard(Card card)
+#region HpLabel
+	public void SetHpLabel(HpLabelParts hpLabel)
 	{
-		this.card = card;
+		this.hpLabel = hpLabel;
 	}
 
-	public void RemoveCard()
+	private void UpdateHpLabel()
 	{
-		card = null;
+		hpLabel.SetHp(hp);
+	}
+
+	public void ShowHpLabel()
+	{
+		hpLabel.Show();
+	}
+
+	public void HideHpLabel()
+	{
+		hpLabel.Hide();
 	}
 #endregion
 
@@ -88,6 +107,7 @@ public class BaseCharacter : GameMonoBehaviour
 	{
 		if (gameObject != null)
 		{
+			Destroy(hpLabel.gameObject);
 			Destroy(gameObject);
 		}
 	}

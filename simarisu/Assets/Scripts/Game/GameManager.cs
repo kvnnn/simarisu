@@ -14,11 +14,6 @@ public class GameManager : GameMonoBehaviour
 
 	private int point;
 	private int turn;
-	private int stageCount;
-	private int stageIndex;
-	private Stage currentStage;
-
-	private const int MAX_MONSTER = 3;
 
 	private GameStatus gameStatus = GameStatus.Standby;
 	private enum GameStatus
@@ -43,15 +38,14 @@ public class GameManager : GameMonoBehaviour
 #region Game
 	public void PrepareGame()
 	{
-		currentStage = CheckAndGetCurrentStage();
-		stageManager.LoadStage(currentStage.stageId);
+		stageManager.LoadStage();
 		characterManager.PrepareGame();
 	}
 
 	public void StartGame()
 	{
 		characterManager.AddUserCharacter(stageManager.GetDefaultUserCharacterCell());
-		characterManager.AddMonster(PickMonster(), stageManager.GetAvailableCells(characterManager.GetCharacterCells()));
+		characterManager.AddMonster(stageManager.PickMonster(), stageManager.GetAvailableCells(characterManager.GetCharacterCells()));
 	}
 
 	private void StartBattle()
@@ -133,7 +127,7 @@ public class GameManager : GameMonoBehaviour
 	private void Win()
 	{
 		point++;
-		stageCount++;
+		stageManager.NextStage();
 		PrepareGame();
 		StartGame();
 	}
@@ -153,8 +147,7 @@ public class GameManager : GameMonoBehaviour
 
 		point = 0;
 		turn = 0;
-		stageCount = 1;
-		stageIndex = 0;
+		stageManager.ResetStatus();
 	}
 
 	private bool IsGameFinish()
@@ -179,40 +172,6 @@ public class GameManager : GameMonoBehaviour
 	private bool isBattle
 	{
 		get {return gameStatus == GameStatus.Battle;}
-	}
-#endregion
-
-#region Stage
-	private Stage CheckAndGetCurrentStage()
-	{
-		CheckStage();
-		return GetCurrentStage();
-	}
-
-	private Stage GetCurrentStage()
-	{
-		return Stage.GetAllStage()[stageIndex];
-	}
-
-	private void CheckStage()
-	{
-		Stage stageData = GetCurrentStage();
-		bool isProperStage = stageData.maxRange >= stageCount && stageCount >= stageData.minRange;
-
-		if (!isProperStage)
-		{
-			stageIndex++;
-			CheckStage();
-		}
-	}
-
-	private List<Monster> PickMonster()
-	{
-		List<Monster> monsterList = currentStage.monsters;
-		int numSelect = Random.Range(1, Mathf.Min(monsterList.Count, MAX_MONSTER));
-
-		System.Random random = new System.Random();
-		return monsterList.OrderBy(x => random.Next()).Take(numSelect).ToList();
 	}
 #endregion
 

@@ -5,12 +5,19 @@ using System.Linq;
 
 public class StageManager : GameMonoBehaviour
 {
+	private Stage currentStage
+	{
+		get {return GetCurrentStage();}
+	}
+	private int stageCount;
+	private int stageIndex;
+
 	private int stageId;
 	private Transform stageTransform;
 	private List<StageCell> cells;
 
+	private const int MAX_MONSTER = 3;
 	private const string STAGE_RESOURCE_PATH = "Prefabs/Stages/";
-
 	private readonly Vector2 DEFAULT_USER_POSITION = new Vector2(5,2);
 
 	public void Init()
@@ -20,10 +27,10 @@ public class StageManager : GameMonoBehaviour
 		stageTransform = null;
 	}
 
-	public void LoadStage(int stageId)
+	public void LoadStage()
 	{
-		if (stageTransform != null && this.stageId == stageId) {return;}
-		this.stageId = stageId;
+		if (stageTransform != null && this.stageId == currentStage.stageId) {return;}
+		this.stageId = currentStage.stageId;
 
 		GameObject stageGameObject = Instantiate(Resources.Load<GameObject>(STAGE_RESOURCE_PATH + stageId));
 		stageTransform = stageGameObject.transform;
@@ -77,7 +84,6 @@ public class StageManager : GameMonoBehaviour
 	{
 		return GetCell(DEFAULT_USER_POSITION);
 	}
-#endregion
 
 	private void DestoryIfExist()
 	{
@@ -86,4 +92,50 @@ public class StageManager : GameMonoBehaviour
 			Destroy(stageTransform.gameObject);
 		}
 	}
+#endregion
+
+#region StageData
+	public void ResetStatus()
+	{
+		stageCount = 1;
+		stageIndex = 0;
+	}
+
+	public void NextStage()
+	{
+		stageCount++;
+	}
+
+	private Stage CheckAndGetCurrentStage()
+	{
+		CheckStage();
+		return GetCurrentStage();
+	}
+
+	private Stage GetCurrentStage()
+	{
+		return Stage.GetAllStage()[stageIndex];
+	}
+
+	private void CheckStage()
+	{
+		Stage stageData = GetCurrentStage();
+		bool isProperStage = stageData.maxRange >= stageCount && stageCount >= stageData.minRange;
+
+		if (!isProperStage)
+		{
+			stageIndex++;
+			CheckStage();
+		}
+	}
+
+	public List<Monster> PickMonster()
+	{
+		List<Monster> monsterList = currentStage.monsters;
+		int numSelect = Random.Range(1, Mathf.Min(monsterList.Count, MAX_MONSTER));
+
+		System.Random random = new System.Random();
+		return monsterList.OrderBy(x => random.Next()).Take(numSelect).ToList();
+	}
+#endregion
 }

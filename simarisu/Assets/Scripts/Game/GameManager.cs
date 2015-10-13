@@ -50,8 +50,8 @@ public class GameManager : GameMonoBehaviour
 
 	public void StartGame()
 	{
-		characterManager.AddMonster(PickMonster());
-		characterManager.AddUserCharacter();
+		characterManager.AddUserCharacter(stageManager.GetDefaultUserCharacterCell());
+		characterManager.AddMonster(PickMonster(), stageManager.GetAvailableCells(characterManager.GetCharacterCells()));
 	}
 
 	private void StartBattle()

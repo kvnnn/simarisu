@@ -9,6 +9,8 @@ public class BaseCharacter : GameMonoBehaviour
 	protected int hp;
 	protected int damage;
 
+	private StageCell cell;
+
 	private Card card;
 	private int cardDamage
 	{
@@ -34,15 +36,23 @@ public class BaseCharacter : GameMonoBehaviour
 		spriteRenderer.sortingOrder = order;
 	}
 
-	public void MoveTo(Vector2 position)
-	{
-		transform.position = position;
-	}
-
 	public void SetSprite(Sprite sprite)
 	{
 		spriteRenderer.sprite = sprite;
 	}
+
+#region Cell
+	public void MoveTo(StageCell stageCell)
+	{
+		this.cell = stageCell;
+		transform.position = cell.PositionInWorld();
+	}
+
+	public StageCell GetCurrentCell()
+	{
+		return cell;
+	}
+#endregion
 
 #region Damage/Cure
 	public void Damage(int damage)

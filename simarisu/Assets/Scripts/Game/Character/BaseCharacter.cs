@@ -42,10 +42,14 @@ public class BaseCharacter : GameMonoBehaviour
 	}
 
 #region Cell
-	public void MoveTo(StageCell stageCell)
+	public void MoveTo(StageCell stageCell, bool movePosition = true)
 	{
 		this.cell = stageCell;
-		transform.position = cell.PositionInWorld();
+
+		if (movePosition)
+		{
+			transform.position = cell.PositionInWorld();
+		}
 	}
 
 	public StageCell GetCurrentCell()

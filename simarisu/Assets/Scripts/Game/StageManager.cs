@@ -54,15 +54,9 @@ public class StageManager : GameMonoBehaviour
 	}
 
 #region Route
-	public Vector3[] GetRoute()
+	public List<StageCell> GetRoute()
 	{
-		List<Vector3> vector3Route = new List<Vector3>();
-		foreach (StageCell cell in route.Skip(1))
-		{
-			vector3Route.Add(cell.PositionInWorld());
-		}
-
-		return vector3Route.ToArray();
+		return route;
 	}
 
 	public void CreateRoute(StageCell startCell)

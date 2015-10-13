@@ -84,12 +84,13 @@ public class CharacterManager : GameMonoBehaviour
 #endregion
 
 #region CharacterAction
-	public IEnumerator MoveUserCharacter(Card card, Vector3 route, System.Action callback)
+	public IEnumerator MoveUserCharacter(Card card, StageCell cell, System.Action callback)
 	{
 		yield return StartCoroutine(ActionCharacter(userCharacter, card, true));
 
-		LeanTween.move(userCharacter.gameObject, route, 0.5f).setOnComplete(
+		LeanTween.move(userCharacter.gameObject, cell.PositionInWorld(), 0.5f).setOnComplete(
 			()=> {
+				userCharacter.MoveTo(cell, false);
 				callback();
 			}
 		);

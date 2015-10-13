@@ -111,13 +111,13 @@ public class GameManager : GameMonoBehaviour
 
 		yield return StartCoroutine(characterManager.UserCharacterAction(selectedCards[0]));
 
-		foreach (Vector3 route in stageManager.GetRoute())
+		foreach (StageCell cell in stageManager.GetRoute())
 		{
 			bool isMoveDone = false;
 
 			yield return StartCoroutine(characterManager.MoveUserCharacter(
 				selectedCards[1],
-				route,
+				cell,
 				()=>{isMoveDone = true;}
 			));
 
@@ -213,6 +213,7 @@ public class GameManager : GameMonoBehaviour
 
 	private void OnCellPointerEnter(StageCell cell)
 	{
+		if (!isStandby) {return;}
 		if (!characterManager.IsCellAvilable(cell)) {return;}
 
 		if (stageManager.routeCount > characterManager.UserCharacterMaxDrawing())

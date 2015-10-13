@@ -7,8 +7,8 @@ using System.Collections.Generic;
 public class UserCharacter : BaseCharacter
 {
 	private User user;
-	public float maxDrawing {get; private set;}
-	public const float DEFAULT_MAX_DRAWING = 10f;
+	public int maxDrawing {get; private set;}
+	public const int DEFAULT_MAX_DRAWING = 5;
 
 	public void Init(User data, int order)
 	{

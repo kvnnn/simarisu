@@ -28,7 +28,7 @@ public class GameManager : GameMonoBehaviour
 	{
 		ResetGameStatus();
 
-		stageManager.Init();
+		stageManager.Init(OnCellPointerEnter);
 		characterManager.Init();
 		cardManager.Init();
 
@@ -36,7 +36,7 @@ public class GameManager : GameMonoBehaviour
 	}
 
 #region Game
-	public void PrepareGame()
+	private void PrepareGame()
 	{
 		stageManager.LoadStage();
 		characterManager.PrepareGame();
@@ -46,6 +46,15 @@ public class GameManager : GameMonoBehaviour
 	{
 		characterManager.AddUserCharacter(stageManager.GetDefaultUserCharacterCell());
 		characterManager.AddMonster(stageManager.PickMonster(), stageManager.GetAvailableCells(characterManager.GetCharacterCells()));
+
+		PrepareForNextTurn();
+	}
+
+	private void PrepareForNextTurn()
+	{
+		turn++;
+		stageManager.CreateRoute(characterManager.GetUserCharacterCell());
+		stageManager.ResetAllCellColor();
 	}
 
 	private void StartBattle()
@@ -78,7 +87,7 @@ public class GameManager : GameMonoBehaviour
 			}
 		}
 
-		turn++;
+		PrepareForNextTurn();
 	}
 
 	private IEnumerator BattleCoroutine(System.Action callback)
@@ -99,19 +108,23 @@ public class GameManager : GameMonoBehaviour
 	private IEnumerator UserCharacterBattleCoroutine()
 	{
 		List<Card> selectedCards = cardManager.GetSelectedCards();
-		bool isMoveDone = false;
 
 		yield return StartCoroutine(characterManager.UserCharacterAction(selectedCards[0]));
 
-		// characterManager.MoveUserCharacter(
-		// 	selectedCards[1],
-		// 	lineManager.movePointList.ToArray(),
-		// 	()=>{isMoveDone = true;}
-		// );
-
-		while (!isMoveDone)
+		foreach (Vector3 route in stageManager.GetRoute())
 		{
-			yield return null;
+			bool isMoveDone = false;
+
+			yield return StartCoroutine(characterManager.MoveUserCharacter(
+				selectedCards[1],
+				route,
+				()=>{isMoveDone = true;}
+			));
+
+			while (!isMoveDone)
+			{
+				yield return null;
+			}
 		}
 
 		yield return StartCoroutine(characterManager.UserCharacterAction(selectedCards[2]));
@@ -196,6 +209,20 @@ public class GameManager : GameMonoBehaviour
 	private void StartBattleButtonClick(ButtonParts button)
 	{
 		StartBattle();
+	}
+
+	private void OnCellPointerEnter(StageCell cell)
+	{
+		if (!characterManager.IsCellAvilable(cell)) {return;}
+
+		if (stageManager.routeCount > characterManager.UserCharacterMaxDrawing())
+		{
+			stageManager.RemoveLastRouteIfCan(cell);
+		}
+		else
+		{
+			stageManager.AddRoute(cell);
+		}
 	}
 #endregion
 }

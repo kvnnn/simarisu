@@ -16,13 +16,23 @@ public class StageManager : GameMonoBehaviour
 	private Transform stageTransform;
 	private List<StageCell> cells;
 
+	private List<StageCell> route;
+	public int routeCount
+	{
+		get {return route.Count - 1;}
+	}
+
+	public System.Action<StageCell> onCellPointerEnter;
+
 	private const int MAX_MONSTER = 3;
 	private const string STAGE_RESOURCE_PATH = "Prefabs/Stages/";
 	private readonly Vector2 DEFAULT_USER_POSITION = new Vector2(5,2);
 
-	public void Init()
+	public void Init(System.Action<StageCell> onCellPointerEnter)
 	{
 		DestoryIfExist();
+
+		this.onCellPointerEnter = onCellPointerEnter;
 		cells = null;
 		stageTransform = null;
 	}
@@ -36,7 +46,68 @@ public class StageManager : GameMonoBehaviour
 		stageTransform = stageGameObject.transform;
 		stageTransform.SetParent(transform);
 		stageTransform.localPosition = Vector3.zero;
+
+		foreach (StageCell cell in GetCells())
+		{
+			cell.onPointerEnter += onCellPointerEnter;
+		}
 	}
+
+#region Route
+	public Vector3[] GetRoute()
+	{
+		List<Vector3> vector3Route = new List<Vector3>();
+		foreach (StageCell cell in route.Skip(1))
+		{
+			vector3Route.Add(cell.PositionInWorld());
+		}
+
+		return vector3Route.ToArray();
+	}
+
+	public void CreateRoute(StageCell startCell)
+	{
+		route = new List<StageCell>();
+		route.Add(startCell);
+	}
+
+	public void AddRoute(StageCell cell)
+	{
+		if (IsUsedForRoute(cell))
+		{
+			RemoveLastRouteIfCan(cell);
+		}
+		else
+		{
+			StageCell lastCell = route.Last();
+			Vector2 diffPosition = cell.Position() - lastCell.Position();
+			if (Mathf.Abs(diffPosition.x) <= 1 && Mathf.Abs(diffPosition.y) <= 1)
+			{
+				route.Add(cell);
+				cell.SetColor();
+
+				if (routeCount != 1)
+				{
+					lastCell.SetArrow(diffPosition);
+				}
+			}
+		}
+	}
+
+	public void RemoveLastRouteIfCan(StageCell cell)
+	{
+		StageCell lastCell = route.Last();
+		if (lastCell != cell) {return;}
+
+		route.Remove(cell);
+		cell.UnsetColor();
+	}
+
+	private bool IsUsedForRoute(StageCell cell)
+	{
+		return route.Contains(cell);
+	}
+#endregion
 
 #region Cell
 	private List<StageCell> GetCells()
@@ -44,7 +115,7 @@ public class StageManager : GameMonoBehaviour
 		if (cells == null)
 		{
 			cells = new List<StageCell>();
-			foreach (StageCell cell in gameObject.GetComponentsInChildren<StageCell>())
+			foreach (StageCell cell in gameObject.GetComponentsInChildren<StageCell>(true))
 			{
 				cells.Add(cell);
 			}
@@ -78,6 +149,14 @@ public class StageManager : GameMonoBehaviour
 		}
 
 		return availableCells;
+	}
+
+	public void ResetAllCellColor()
+	{
+		foreach (StageCell cell in GetCells())
+		{
+			cell.UnsetColor();
+		}
 	}
 
 	public StageCell GetDefaultUserCharacterCell()

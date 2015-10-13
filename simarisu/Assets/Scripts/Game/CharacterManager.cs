@@ -23,8 +23,6 @@ public class CharacterManager : GameMonoBehaviour
 
 	private int sortingOrder = 0;
 
-
-
 	public void Init()
 	{
 		PrepareGame();
@@ -42,7 +40,7 @@ public class CharacterManager : GameMonoBehaviour
 		return userCharacter.isDead;
 	}
 
-	public float UserCharacterMaxDrawing()
+	public int UserCharacterMaxDrawing()
 	{
 		return userCharacter.maxDrawing;
 	}
@@ -56,7 +54,9 @@ public class CharacterManager : GameMonoBehaviour
 		}
 		return true;
 	}
+#endregion
 
+#region CharacterCell
 	public List<StageCell> GetCharacterCells()
 	{
 		List<StageCell> cells = new List<StageCell>();
@@ -67,16 +67,30 @@ public class CharacterManager : GameMonoBehaviour
 
 		return cells;
 	}
+
+	public bool IsCellAvilable(StageCell cell)
+	{
+		foreach (BaseCharacter character in allCharacters)
+		{
+			if (character.GetCurrentCell() == cell) {return false;}
+		}
+		return true;
+	}
+
+	public StageCell GetUserCharacterCell()
+	{
+		return userCharacter.GetCurrentCell();
+	}
 #endregion
 
 #region CharacterAction
-	public void MoveUserCharacter(Card card, Vector3[] route, System.Action callback)
+	public IEnumerator MoveUserCharacter(Card card, Vector3 route, System.Action callback)
 	{
-		StartCoroutine(ActionCharacter(userCharacter, card, true));
-		LeanTween.moveSplineLocal(userCharacter.gameObject, route, 3f).setOnComplete(
+		yield return StartCoroutine(ActionCharacter(userCharacter, card, true));
+
+		LeanTween.move(userCharacter.gameObject, route, 0.5f).setOnComplete(
 			()=> {
 				callback();
-				userCharacter.RemoveCard();
 			}
 		);
 	}

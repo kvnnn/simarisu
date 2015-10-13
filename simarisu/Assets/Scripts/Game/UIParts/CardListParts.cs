@@ -7,7 +7,11 @@ public class CardListParts : BaseUIParts
 	[SerializeField]
 	private List<CardParts> cardPartsLists;
 
+	private CardParts pushDownCardParts;
+
 	public System.Action<CardParts> cardPartsClick;
+	public System.Action<Card> cardPartsPushDown;
+	public System.Action cardPartsPushUp;
 
 	public void SetCards(List<Card> cards)
 	{
@@ -50,6 +54,20 @@ public class CardListParts : BaseUIParts
 	public void CardClick(CardParts parts)
 	{
 		cardPartsClick(parts);
+	}
+
+	public void CardOnPushDown(CardParts parts)
+	{
+		pushDownCardParts = parts;
+		cardPartsPushDown(parts.GetCard());
+	}
+
+	public void CardOnPushUp(CardParts parts)
+	{
+		if (pushDownCardParts == null) {return;}
+
+		pushDownCardParts = null;
+		cardPartsPushUp();
 	}
 #endregion
 }

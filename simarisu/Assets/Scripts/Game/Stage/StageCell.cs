@@ -10,6 +10,9 @@ public class StageCell : GameMonoBehaviour, IPointerEnterHandler
 	private bool isAvailable = true;
 	private Vector2? position = null;
 
+	private Color beforeColor;
+	private bool wasArrowShown;
+
 	private SpriteRenderer spriteRenderer
 	{
 		get {return gameObject.GetComponent<SpriteRenderer>();}
@@ -23,6 +26,7 @@ public class StageCell : GameMonoBehaviour, IPointerEnterHandler
 	public System.Action<StageCell> onPointerEnter;
 
 	private static readonly Color SELECTED_COLOR = new Color(255f/255f, 150f/255f, 150f/255f, 1f);
+	private static readonly Color RANGE_COLOR = new Color(50f/255f, 255f/255f, 50/255f, 1f);
 	private static readonly Vector3[][] ARROW_ROTATE_LIST = new Vector3[][]
 	{
 		new Vector3[]{new Vector3(0f,0f,0f), new Vector3(0f,0f,45f), new Vector3(0f,0f,90f)},
@@ -56,15 +60,32 @@ public class StageCell : GameMonoBehaviour, IPointerEnterHandler
 		arrowTransform.localEulerAngles = ARROW_ROTATE_LIST[(int)direction.x][(int)direction.y];
 	}
 
-	public void SetColor()
+	public void SetSelectColor()
 	{
 		spriteRenderer.color = SELECTED_COLOR;
 	}
 
-	public void UnsetColor()
+	public void UnsetSelectColor()
 	{
 		spriteRenderer.color = Color.white;
 		arrowTransform.gameObject.SetActive(false);
+	}
+
+	public void SetRangeColor()
+	{
+		beforeColor = spriteRenderer.color;
+		wasArrowShown = arrowTransform.gameObject.activeInHierarchy;
+
+		spriteRenderer.color = RANGE_COLOR;
+		arrowTransform.gameObject.SetActive(false);
+	}
+
+	public void UnsetRangeColor()
+	{
+		if (spriteRenderer.color != RANGE_COLOR) {return;}
+
+		spriteRenderer.color = beforeColor;
+		arrowTransform.gameObject.SetActive(wasArrowShown);
 	}
 
 	public void OnPointerEnter(PointerEventData eventData)

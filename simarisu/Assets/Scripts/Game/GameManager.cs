@@ -30,7 +30,7 @@ public class GameManager : GameMonoBehaviour
 
 		stageManager.Init(OnCellPointerEnter);
 		characterManager.Init();
-		cardManager.Init();
+		cardManager.Init(CardPartsPushDown, CardPartsPushUp);
 
 		PrepareGame();
 	}
@@ -219,6 +219,25 @@ public class GameManager : GameMonoBehaviour
 		{
 			stageManager.AddRoute(cell);
 		}
+	}
+
+	private void CardPartsPushDown(Card card)
+	{
+		Vector2 characterPosition = characterManager.GetUserCharacterCell().Position();
+		foreach (Vector2 range in card.ranges)
+		{
+			Vector2 position = range + characterPosition;
+			StageCell cell = stageManager.GetCell(position);
+			if (cell != null)
+			{
+				cell.SetRangeColor();
+			}
+		}
+	}
+
+	private void CardPartsPushUp()
+	{
+		stageManager.ResetAllRangeCellColor();
 	}
 #endregion
 }

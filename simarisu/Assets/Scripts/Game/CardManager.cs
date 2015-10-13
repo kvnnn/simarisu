@@ -11,6 +11,9 @@ public class CardManager : GameMonoBehaviour
 	private CardParts[] selectedCardParts = new CardParts[MAX_COUNT];
 	private const int MAX_COUNT = 3;
 
+	public System.Action<Card> cardPartsPushDown;
+	public System.Action cardPartsPushUp;
+
 	// private List<Card> originalCardDeck = new List<Card>();
 	// private List<Card> currentCardDeck = new List<Card>();
 
@@ -18,8 +21,10 @@ public class CardManager : GameMonoBehaviour
 
 	private readonly string[] SELECTED_CARD_ORDER_TEXTS = new string[]{"移動前", "移動中", "移動後"};
 
-	public void Init()
+	public void Init(System.Action<Card> cardPartsPushDown, System.Action cardPartsPushUp)
 	{
+		this.cardPartsPushDown = cardPartsPushDown;
+		this.cardPartsPushUp = cardPartsPushUp;
 	}
 
 	public List<Card> GetSelectedCards()
@@ -36,7 +41,9 @@ public class CardManager : GameMonoBehaviour
 	public void SetUIParts(CardListParts cardListParts, ButtonParts startBattleButtonParts)
 	{
 		this.cardListParts = cardListParts;
-		cardListParts.cardPartsClick += CardPartsClick;
+		cardListParts.cardPartsClick = CardPartsClick;
+		cardListParts.cardPartsPushDown = cardPartsPushDown;
+		cardListParts.cardPartsPushUp = cardPartsPushUp;
 
 		this.startBattleButtonParts = startBattleButtonParts;
 

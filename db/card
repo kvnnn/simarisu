@@ -1,6 +1,12 @@
 drop table if exists card;
-create table card(id integer, name text, description text, sprite text, effect text, rarity integer, type integer, damage integer, range string);
-insert into card values(0, '通常攻撃', 	'左右上下に攻撃', 			'1', '', 1, 1, 0, "1:0,-1:0,0:1,0:-1");
-insert into card values(1, '斜め斬り', 	'左右上下の斜めに攻撃', '1', '', 1, 1, 0, "1:1,-1:-1,-1:1,1:-1");
-insert into card values(2, '回転斬り', 	'周り1マスを攻撃', 			'1', '', 2, 1, 1, "1:0,-1:0,0:1,0:-1,1:1,-1:-1,-1:1,1:-1");
-insert into card values(3, '弓攻撃', 		'1マス先を攻撃', 				'1', '', 2, 1, 1, "2:0,-2:0,0:2,0:-2,2:2,-2:-2,-2:2,2:-2");
+create table card(id integer primary key, name text, description text, sprite text, effect text, rarity integer, type integer, damage integer, range string);
+insert into card(name, description, sprite, effect, rarity, type, damage, range)
+	values('通常攻撃','左右上下に攻撃', 			'', '', 1, 1, 0, "1:0,-1:0,0:1,0:-1");
+insert into card(name, description, sprite, effect, rarity, type, damage, range)
+	values('斜め斬り', 	'左右上下の斜めに攻撃', '', '', 1, 1, 0, "1:1,-1:-1,-1:1,1:-1");
+insert into card(name, description, sprite, effect, rarity, type, damage, range)
+	values('回転斬り', 	'周り1マスを攻撃', 			'', '', 2, 1, 1, "1:0,-1:0,0:1,0:-1,1:1,-1:-1,-1:1,1:-1");
+insert into card(name, description, sprite, effect, rarity, type, damage, range)
+	values('弓攻撃', 		'1マス先を攻撃', 				'', '', 2, 1, 1, "2:0,-2:0,0:2,0:-2,2:2,-2:-2,-2:2,2:-2");
+insert into card(name, description, sprite, effect, rarity, type, damage, range)
+	values('弱回復', 		'自分を少し回復', 			'', '', 2, 2, 2, "");

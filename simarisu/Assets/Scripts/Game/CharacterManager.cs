@@ -146,6 +146,9 @@ public class CharacterManager : GameMonoBehaviour
 					}
 				}
 			break;
+			case Card.Type.Cure:
+				character.Cure(CalculateCure(character, card));
+			break;
 			case Card.Type.Support:
 			break;
 			case Card.Type.Other:
@@ -158,6 +161,11 @@ public class CharacterManager : GameMonoBehaviour
 	private int CalculateDamage(BaseCharacter character, Card card)
 	{
 		return character.damage + card.damage;
+	}
+
+	private int CalculateCure(BaseCharacter character, Card card)
+	{
+		return character.cure + card.damage;
 	}
 #endregion
 

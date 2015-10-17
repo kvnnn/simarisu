@@ -8,6 +8,7 @@ public class BaseCharacter : GameMonoBehaviour
 	protected int maxHp;
 	protected int hp;
 	public int damage {get; private set;}
+	public int cure {get; private set;}
 
 	private StageCell cell;
 	private HpLabelParts hpLabel;
@@ -22,11 +23,12 @@ public class BaseCharacter : GameMonoBehaviour
 		get {return gameObject.GetComponent<SpriteRenderer>();}
 	}
 
-	protected void Init(int maxHp, int damage, int order)
+	protected void Init(int maxHp, int damage, int cure, int order)
 	{
 		this.maxHp = maxHp;
 		this.hp = maxHp;
 		this.damage = damage;
+		this.cure = cure;
 
 		UpdateHpLabel();
 		spriteRenderer.sortingOrder = order;

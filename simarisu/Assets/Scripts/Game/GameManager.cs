@@ -223,16 +223,20 @@ public class GameManager : GameMonoBehaviour
 
 	private void CardPartsPushDown(Card card)
 	{
-		Vector2 characterPosition = characterManager.GetUserCharacterCell().Position();
-		foreach (Vector2 range in card.ranges)
+		if (card.isAttack || card.isCure)
 		{
-			Vector2 position = range + characterPosition;
-			StageCell cell = stageManager.GetCell(position);
-			if (cell != null)
+			Vector2 characterPosition = characterManager.GetUserCharacterCell().Position();
+			foreach (Vector2 range in card.ranges)
 			{
-				cell.SetRangeColor();
+				Vector2 position = range + characterPosition;
+				StageCell cell = stageManager.GetCell(position);
+				if (cell != null)
+				{
+					cell.SetRangeColor();
+				}
 			}
 		}
+
 	}
 
 	private void CardPartsPushUp()

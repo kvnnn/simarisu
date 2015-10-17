@@ -98,6 +98,10 @@ public class Card
 
 		damage = (int)rawData["damage"];
 		rangeStr = rawData["range"].ToString();
+		if (rangeStr == "")
+		{
+			rangeStr = "0:0";
+		}
 	}
 
 	private List<Vector2> _ranges;
@@ -116,6 +120,15 @@ public class Card
 			}
 			return _ranges;
 		}
+	}
+
+	public bool isAttack
+	{
+		get {return type == Type.Attack;}
+	}
+	public bool isCure
+	{
+		get {return type == Type.Cure;}
 	}
 #endregion
 }

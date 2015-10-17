@@ -15,7 +15,7 @@ public class UserCharacter : BaseCharacter
 		this.user = data;
 		this.maxDrawing = DEFAULT_MAX_DRAWING;
 
-		base.Init(user.hp, user.damage, order);
+		base.Init(user.hp, user.damage, user.cure, order);
 
 		// base.Init(user.hp, 100); // For Debug
 	}

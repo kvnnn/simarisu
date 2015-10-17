@@ -1,4 +1,4 @@
 drop table if exists user;
-create table user(id integer primary key, sprite text, point integer, hp integer, damage integer);
-insert into user(sprite, point, hp, damage)
-	values('0', 0, 10, 2);
+create table user(id integer primary key, sprite text, point integer, hp integer, damage integer, cure integer);
+insert into user(sprite, point, hp, damage, cure)
+	values('0', 0, 10, 0, 0);

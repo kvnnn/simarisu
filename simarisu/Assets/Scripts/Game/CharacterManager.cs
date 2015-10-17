@@ -51,9 +51,9 @@ public class CharacterManager : GameMonoBehaviour
 		return userCharacter.isDead;
 	}
 
-	public int UserCharacterMaxDrawing()
+	public int GetUserCharacterMove()
 	{
-		return userCharacter.maxDrawing;
+		return userCharacter.GetMove();
 	}
 
 	public bool MonsterAllDead()

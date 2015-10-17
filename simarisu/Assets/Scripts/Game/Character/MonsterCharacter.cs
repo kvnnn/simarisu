@@ -11,7 +11,7 @@ public class MonsterCharacter : BaseCharacter
 	public void Init(Monster data, int order)
 	{
 		this.monster = data;
-		base.Init(monster.hp, monster.damage, monster.cure, order);
+		base.Init(monster.hp, monster.damage, monster.cure, monster.move, order);
 	}
 
 	public Card SelectCard()

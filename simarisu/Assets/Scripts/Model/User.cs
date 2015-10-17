@@ -9,6 +9,7 @@ using System.Collections.Generic;
 	hp					: integer
 	damage			: integer
 	cure				: integer
+	move				: integer
 */
 
 public class User
@@ -35,6 +36,7 @@ public class User
 	public int hp {get; private set;}
 	public int damage {get; private set;}
 	public int cure {get; private set;}
+	public int move {get; private set;}
 
 	public User(DataRow rawData)
 	{
@@ -46,6 +48,7 @@ public class User
 		hp = (int)rawData["hp"];
 		damage = (int)rawData["damage"];
 		cure = (int)rawData["cure"];
+		move = (int)rawData["move"];
 	}
 #endregion
 }

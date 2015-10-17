@@ -211,7 +211,7 @@ public class GameManager : GameMonoBehaviour
 		if (!isStandby) {return;}
 		if (!characterManager.IsCellAvilable(cell)) {return;}
 
-		if (stageManager.routeCount > characterManager.UserCharacterMaxDrawing())
+		if (stageManager.routeCount >= characterManager.GetUserCharacterMove())
 		{
 			stageManager.RemoveLastRouteIfCan(cell);
 		}

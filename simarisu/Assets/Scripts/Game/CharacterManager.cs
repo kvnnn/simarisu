@@ -174,6 +174,7 @@ public class CharacterManager : GameMonoBehaviour
 				character.AddDamageUp(card.value);
 			break;
 			case Card.SpecialEffect.MoveUp:
+				character.AddMoveUp(card.value);
 			break;
 		}
 	}

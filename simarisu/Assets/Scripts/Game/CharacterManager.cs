@@ -142,12 +142,20 @@ public class CharacterManager : GameMonoBehaviour
 						if (target.Position() == currentPosition + range)
 						{
 							target.Damage(CalculateDamage(character, card));
+							if (card.hasSpecialEffect)
+							{
+								InvokeSpecialEffect(target, card);
+							}
 						}
 					}
 				}
 			break;
 			case Card.Type.Cure:
 				character.Cure(CalculateCure(character, card));
+				if (card.hasSpecialEffect)
+				{
+					InvokeSpecialEffect(character, card);
+				}
 			break;
 			case Card.Type.Support:
 			break;
@@ -158,14 +166,26 @@ public class CharacterManager : GameMonoBehaviour
 		yield return new WaitForSeconds(ATTACK_INTERVAL);
 	}
 
+	private void InvokeSpecialEffect(BaseCharacter character, Card card)
+	{
+		switch (card.specialEffect)
+		{
+			case Card.SpecialEffect.AttackUp:
+				character.AddDamageUp(card.value);
+			break;
+			case Card.SpecialEffect.MoveUp:
+			break;
+		}
+	}
+
 	private int CalculateDamage(BaseCharacter character, Card card)
 	{
-		return character.damage + card.damage;
+		return character.GetDamage() + card.value;
 	}
 
 	private int CalculateCure(BaseCharacter character, Card card)
 	{
-		return character.cure + card.damage;
+		return character.cure + card.value;
 	}
 #endregion
 

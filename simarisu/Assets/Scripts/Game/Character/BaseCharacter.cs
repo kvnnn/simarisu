@@ -7,7 +7,8 @@ public class BaseCharacter : GameMonoBehaviour
 {
 	protected int maxHp;
 	protected int hp;
-	public int damage {get; private set;}
+	private int damage;
+	private int damageUp = 0;
 	public int cure {get; private set;}
 
 	private StageCell cell;
@@ -64,6 +65,21 @@ public class BaseCharacter : GameMonoBehaviour
 #endregion
 
 #region Damage/Cure
+	public int GetDamage()
+	{
+		return damage + damageUp;
+	}
+
+	public void AddDamageUp(int damageUp)
+	{
+		this.damageUp += damageUp;
+	}
+
+	private void ResetDamageUp()
+	{
+		damageUp = 0;
+	}
+
 	public void Damage(int damage)
 	{
 		hp -= damage;
@@ -75,12 +91,12 @@ public class BaseCharacter : GameMonoBehaviour
 		if (isDead) {OnDead();}
 	}
 
-	protected virtual void OnDead() {}
-
 	public void Cure(int cure)
 	{
 		Damage(cure * -1);
 	}
+
+	protected virtual void OnDead() {}
 #endregion
 
 #region HpLabel

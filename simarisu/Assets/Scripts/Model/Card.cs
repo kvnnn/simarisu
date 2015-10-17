@@ -20,7 +20,7 @@ using System.Collections.Generic;
 		Support = 4,
 		Other = 5,
 	specialEffect		: integer
-		Null = 0,
+		None = 0,
 		AttackUp = 1,
 		MoveUp = 2,
 		HpUp = 3,
@@ -72,13 +72,13 @@ public class Card
 	public SpecialEffect specialEffect {get; private set;}
 	public enum SpecialEffect
 	{
-		Null = 0,
+		None = 0,
 		AttackUp = 1,
 		MoveUp = 2,
 		HpUp = 3,
 	}
 
-	public int damage {get; private set;}
+	public int value {get; private set;}
 
 	private string rangeStr;
 
@@ -96,7 +96,7 @@ public class Card
 		type = (Type)rawData["type"];
 		specialEffect = (SpecialEffect)rawData["specialEffect"];
 
-		damage = (int)rawData["damage"];
+		value = (int)rawData["value"];
 		rangeStr = rawData["range"].ToString();
 		if (rangeStr == "")
 		{
@@ -129,6 +129,10 @@ public class Card
 	public bool isCure
 	{
 		get {return type == Type.Cure;}
+	}
+	public bool hasSpecialEffect
+	{
+		get {return specialEffect == SpecialEffect.None;}
 	}
 #endregion
 }

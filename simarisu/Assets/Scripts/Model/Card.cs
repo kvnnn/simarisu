@@ -24,7 +24,8 @@ using System.Collections.Generic;
 		AttackUp = 1,
 		MoveUp = 2,
 		HpUp = 3,
-	damage 					: integer
+	value 					: integer
+	effect_value 		: integer
 	range 					: string
 */
 
@@ -79,6 +80,7 @@ public class Card
 	}
 
 	public int value {get; private set;}
+	public int effectValue {get; private set;}
 
 	private string rangeStr;
 
@@ -97,6 +99,8 @@ public class Card
 		specialEffect = (SpecialEffect)rawData["specialEffect"];
 
 		value = (int)rawData["value"];
+		effectValue = (int)rawData["effect_value"];
+
 		rangeStr = rawData["range"].ToString();
 		if (rangeStr == "")
 		{

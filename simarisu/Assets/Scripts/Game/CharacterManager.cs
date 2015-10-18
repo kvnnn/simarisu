@@ -171,10 +171,10 @@ public class CharacterManager : GameMonoBehaviour
 		switch (card.specialEffect)
 		{
 			case Card.SpecialEffect.AttackUp:
-				character.AddDamageUp(card.value);
+				character.AddDamageUp(card.effectValue);
 			break;
 			case Card.SpecialEffect.MoveUp:
-				character.AddMoveUp(card.value);
+				character.AddMoveUp(card.effectValue);
 			break;
 		}
 	}

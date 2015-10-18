@@ -9,4 +9,12 @@ insert into card(name, description, sprite, effect, rarity, type, specialEffect,
 insert into card(name, description, sprite, effect, rarity, type, specialEffect, value, effect_value, range)
 	values('弓攻撃', '1マス先を攻撃', '', '', 2, 1, 0, 1, 0, "2:0,-2:0,0:2,0:-2,2:2,-2:-2,-2:2,2:-2");
 insert into card(name, description, sprite, effect, rarity, type, specialEffect, value, effect_value, range)
-	values('弱回復', '自分を少し回復', '', '', 2, 2, 0, 2, 0, "");
+	values('弱回復', '自分の体力を少し回復', '', '', 2, 2, 0, 2, 0, "");
+insert into card(name, description, sprite, effect, rarity, type, specialEffect, value, effect_value, range)
+	values('ダメージアップ', '次の攻撃スキルのダメージアップ', '', '', 2, 2, 1, 0, 2, "");
+insert into card(name, description, sprite, effect, rarity, type, specialEffect, value, effect_value, range)
+	values('移動力アップ', '次のターンの移動力アップ', '', '', 2, 2, 2, 0, 2, "");
+insert into card(name, description, sprite, effect, rarity, type, specialEffect, value, effect_value, range)
+	values('攻撃力ダウン', '1ターン相手の攻撃力ダウン', '', '', 2, 1, 1, 0, -2, "1:0,-1:0,0:1,0:-1");
+insert into card(name, description, sprite, effect, rarity, type, specialEffect, value, effect_value, range)
+	values('移動力ダウン', '1ターン相手の攻撃力ダウン', '', '', 2, 1, 2, 0, -2, "1:0,-1:0,0:1,0:-1");

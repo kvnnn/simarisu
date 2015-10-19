@@ -19,13 +19,14 @@ using System.Collections.Generic;
 		Equipment = 3,
 		Support = 4,
 		Other = 5,
-	specialEffect		: integer
+	sp_effect				: integer
 		None = 0,
 		AttackUp = 1,
 		MoveUp = 2,
 		HpUp = 3,
-	value 					: integer
+		CureUp = 4,
 	effect_value 		: integer
+	value 					: integer
 	range 					: string
 */
 
@@ -77,6 +78,7 @@ public class Card
 		AttackUp = 1,
 		MoveUp = 2,
 		HpUp = 3,
+		CureUp = 4,
 	}
 
 	public int value {get; private set;}
@@ -96,10 +98,10 @@ public class Card
 		rarity = (Rarity)rawData["rarity"];
 
 		type = (Type)rawData["type"];
-		specialEffect = (SpecialEffect)rawData["specialEffect"];
+		specialEffect = (SpecialEffect)rawData["sp_effect"];
+		effectValue = (int)rawData["effect_value"];
 
 		value = (int)rawData["value"];
-		effectValue = (int)rawData["effect_value"];
 
 		rangeStr = rawData["range"].ToString();
 		if (rangeStr == "")

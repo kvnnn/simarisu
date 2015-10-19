@@ -1,20 +1,104 @@
 drop table if exists card;
-create table card(id integer primary key, name text, description text, sprite text, effect text, rarity integer, type integer, specialEffect integer, value integer, effect_value integer, range string);
-insert into card(name, description, sprite, effect, rarity, type, specialEffect, value, effect_value, range)
-	values('通常攻撃', '左右上下に攻撃', '', '', 1, 1, 0, 2, 0, "1:0,-1:0,0:1,0:-1");
-insert into card(name, description, sprite, effect, rarity, type, specialEffect, value, effect_value, range)
-	values('斜め斬り', '左右上下の斜めに攻撃', '', '', 1, 1, 0, 2, 0, "1:1,-1:-1,-1:1,1:-1");
-insert into card(name, description, sprite, effect, rarity, type, specialEffect, value, effect_value, range)
-	values('回転斬り', '周り1マスを攻撃', '', '', 2, 1, 0, 1, 0, "1:0,-1:0,0:1,0:-1,1:1,-1:-1,-1:1,1:-1");
-insert into card(name, description, sprite, effect, rarity, type, specialEffect, value, effect_value, range)
-	values('弓攻撃', '1マス先を攻撃', '', '', 2, 1, 0, 1, 0, "2:0,-2:0,0:2,0:-2,2:2,-2:-2,-2:2,2:-2");
-insert into card(name, description, sprite, effect, rarity, type, specialEffect, value, effect_value, range)
-	values('弱回復', '自分の体力を少し回復', '', '', 2, 2, 0, 2, 0, "");
-insert into card(name, description, sprite, effect, rarity, type, specialEffect, value, effect_value, range)
-	values('ダメージアップ', '次の攻撃スキルのダメージアップ', '', '', 2, 2, 1, 0, 2, "");
-insert into card(name, description, sprite, effect, rarity, type, specialEffect, value, effect_value, range)
-	values('移動力アップ', '次のターンの移動力アップ', '', '', 2, 2, 2, 0, 2, "");
-insert into card(name, description, sprite, effect, rarity, type, specialEffect, value, effect_value, range)
-	values('攻撃力ダウン', '1ターン相手の攻撃力ダウン', '', '', 2, 1, 1, 0, -2, "1:0,-1:0,0:1,0:-1");
-insert into card(name, description, sprite, effect, rarity, type, specialEffect, value, effect_value, range)
-	values('移動力ダウン', '1ターン相手の攻撃力ダウン', '', '', 2, 1, 2, 0, -2, "1:0,-1:0,0:1,0:-1");
+create table card(
+	id integer primary key,
+	name text,
+	description text,
+	sprite text,
+	effect text,
+	rarity integer,
+	type integer,
+	sp_effect integer,
+	effect_value integer,
+	value integer,
+	range string
+);
+insert into card(
+	name, description, sprite, effect, rarity,
+	type, sp_effect, effect_value,
+	value, range
+)
+	values(
+		'通常攻撃', '左右上下に攻撃', '', '', 1,
+		1, 0, 0,
+		1, "1:0,-1:0,0:1,0:-1"
+	);
+insert into card(
+	name, description, sprite, effect, rarity,
+	type, sp_effect, effect_value,
+	value, range
+)
+	values(
+		'斜め斬り', '左右上下の斜めに攻撃', '', '', 1,
+		1, 0, 0,
+		1, "1:1,-1:-1,-1:1,1:-1"
+	);
+insert into card(
+	name, description, sprite, effect, rarity,
+	type, sp_effect, effect_value,
+	value, range
+)
+	values(
+		'回転斬り', '周り1マスを攻撃', '', '', 2,
+		1, 0, 0,
+		0, "1:0,-1:0,0:1,0:-1,1:1,-1:-1,-1:1,1:-1"
+	);
+insert into card(
+	name, description, sprite, effect, rarity,
+	type, sp_effect, effect_value,
+	value, range
+)
+	values(
+		'弓攻撃', '1マス先を攻撃', '', '', 2,
+		1, 0, 0,
+		0, "2:0,-2:0,0:2,0:-2,2:2,-2:-2,-2:2,2:-2"
+	);
+insert into card(
+	name, description, sprite, effect, rarity,
+	type, sp_effect, effect_value,
+	value, range
+)
+	values(
+		'弱回復', '自分の体力を少し回復', '', '', 2,
+		2, 0, 0,
+		2, ""
+	);
+insert into card(
+	name, description, sprite, effect, rarity,
+	type, sp_effect, effect_value,
+	value, range
+)
+	values(
+		'ダメージアップ', '次の攻撃スキルのダメージアップ', '', '', 2,
+		2, 1, 2,
+		0, ""
+	);
+insert into card(
+	name, description, sprite, effect, rarity,
+	type, sp_effect, effect_value,
+	value, range
+)
+	values(
+		'移動力アップ', '次のターンの移動力アップ', '', '', 2,
+		2, 2, 2,
+		0, ""
+	);
+insert into card(
+	name, description, sprite, effect, rarity,
+	type, sp_effect, effect_value,
+	value, range
+)
+	values(
+		'攻撃力ダウン', '次のターンの相手攻撃力ダウン', '', '', 2,
+		1, 1, -2,
+		0, "1:0,-1:0,0:1,0:-1"
+	);
+insert into card(
+	name, description, sprite, effect, rarity,
+	type, sp_effect, effect_value,
+	value, range
+)
+	values(
+		'移動力ダウン', '次のターンの相手移動力ダウン', '', '', 2,
+		1, 2, -2,
+		0, "1:0,-1:0,0:1,0:-1"
+	);

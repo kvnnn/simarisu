@@ -1,6 +1,10 @@
 drop table if exists monster;
-create table monster(id integer, name text, description text, sprite text, card text, hp integer, damage integer);
-insert into monster values(0, 'monster1', 'm1', '1', '0', 5, 1);
-insert into monster values(1, 'monster2', 'm2', '2', '1', 6, 2);
-insert into monster values(2, 'monster3', 'm3', '3', '3', 7, 2);
-insert into monster values(3, 'monster4', 'm4', '4', '2', 10, 3);
+create table monster(id integer primary key, name text, description text, sprite text, card text, hp integer, damage integer, cure integer, move integer);
+insert into monster(name, description, sprite, card, hp, damage, cure, move)
+	values('monster1', 'm1', '1', '0', 5, 1, 1, 2);
+insert into monster(name, description, sprite, card, hp, damage, cure, move)
+	values('monster2', 'm2', '2', '1', 6, 2, 1, 2);
+insert into monster(name, description, sprite, card, hp, damage, cure, move)
+	values('monster3', 'm3', '3', '3', 7, 2, 1, 3);
+insert into monster(name, description, sprite, card, hp, damage, cure, move)
+	values('monster4', 'm4', '4', '2', 10, 3, 1, 3);

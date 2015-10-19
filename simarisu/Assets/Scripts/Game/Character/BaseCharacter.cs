@@ -7,7 +7,11 @@ public class BaseCharacter : GameMonoBehaviour
 {
 	protected int maxHp;
 	protected int hp;
-	public int damage {get; private set;}
+	private int damage;
+	private int damageUp = 0;
+	public int cure {get; private set;}
+	private int move;
+	private int moveUp = 0;
 
 	private StageCell cell;
 	private HpLabelParts hpLabel;
@@ -22,11 +26,15 @@ public class BaseCharacter : GameMonoBehaviour
 		get {return gameObject.GetComponent<SpriteRenderer>();}
 	}
 
-	protected void Init(int maxHp, int damage, int order)
+	protected void Init(int maxHp, int damage, int cure, int move, int order)
 	{
 		this.maxHp = maxHp;
 		this.hp = maxHp;
 		this.damage = damage;
+		this.cure = cure;
+		this.move = move;
+
+		ResetStatusUp();
 
 		UpdateHpLabel();
 		spriteRenderer.sortingOrder = order;
@@ -61,7 +69,17 @@ public class BaseCharacter : GameMonoBehaviour
 	}
 #endregion
 
-#region Damage/Cure
+#region Damage Cure Move
+	public int GetDamage()
+	{
+		return damage + damageUp;
+	}
+
+	public void AddDamageUp(int damageUp)
+	{
+		this.damageUp += damageUp;
+	}
+
 	public void Damage(int damage)
 	{
 		hp -= damage;
@@ -73,12 +91,28 @@ public class BaseCharacter : GameMonoBehaviour
 		if (isDead) {OnDead();}
 	}
 
-	protected virtual void OnDead() {}
-
 	public void Cure(int cure)
 	{
 		Damage(cure * -1);
 	}
+
+	public int GetMove()
+	{
+		return move + moveUp;
+	}
+
+	public void AddMoveUp(int moveUp)
+	{
+		this.moveUp += moveUp;
+	}
+
+	private void ResetStatusUp()
+	{
+		damageUp = 0;
+		moveUp = 0;
+	}
+
+	protected virtual void OnDead() {}
 #endregion
 
 #region HpLabel

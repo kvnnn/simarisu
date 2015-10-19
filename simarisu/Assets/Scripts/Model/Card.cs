@@ -3,16 +3,30 @@ using System.Collections;
 using System.Collections.Generic;
 
 /*
-	id 					: integer
-	name 				: text
-	description	: text
-	sprite 			: text
-	effect 			: text
-	rarity 			: integer (1:C, 2:B, 3:A, 4:S)
-	type 				: integer (1:Attack, 2:Support, 3:Other)
-	damage 			: integer
-	range_type 	: integer
-	range_size	: real
+	id 							: integer
+	name 						: text
+	description			: text
+	sprite 					: text
+	effect 					: text
+	rarity 					: integer
+		S = 4,
+		A = 3,
+		B = 2,
+		C = 1,
+	type 						: integer
+		Attack = 1,
+		Cure = 2,
+		Equipment = 3,
+		Support = 4,
+		Other = 5,
+	specialEffect		: integer
+		None = 0,
+		AttackUp = 1,
+		MoveUp = 2,
+		HpUp = 3,
+	value 					: integer
+	effect_value 		: integer
+	range 					: string
 */
 
 public class Card
@@ -38,6 +52,7 @@ public class Card
 	public string description {get; private set;}
 	public string sprite {get; private set;}
 	public string effect {get; private set;}
+
 	public Rarity rarity {get; private set;}
 	public enum Rarity
 	{
@@ -50,10 +65,22 @@ public class Card
 	public enum Type
 	{
 		Attack = 1,
-		Support = 2,
-		Other = 3,
+		Cure = 2,
+		Equipment = 3,
+		Support = 4,
+		Other = 5,
 	}
-	public int damage {get; private set;}
+	public SpecialEffect specialEffect {get; private set;}
+	public enum SpecialEffect
+	{
+		None = 0,
+		AttackUp = 1,
+		MoveUp = 2,
+		HpUp = 3,
+	}
+
+	public int value {get; private set;}
+	public int effectValue {get; private set;}
 
 	private string rangeStr;
 
@@ -67,10 +94,18 @@ public class Card
 		sprite = rawData["sprite"].ToString();
 		effect = rawData["effect"].ToString();
 		rarity = (Rarity)rawData["rarity"];
+
 		type = (Type)rawData["type"];
-		damage = (int)rawData["damage"];
+		specialEffect = (SpecialEffect)rawData["specialEffect"];
+
+		value = (int)rawData["value"];
+		effectValue = (int)rawData["effect_value"];
 
 		rangeStr = rawData["range"].ToString();
+		if (rangeStr == "")
+		{
+			rangeStr = "0:0";
+		}
 	}
 
 	private List<Vector2> _ranges;
@@ -89,6 +124,19 @@ public class Card
 			}
 			return _ranges;
 		}
+	}
+
+	public bool isAttack
+	{
+		get {return type == Type.Attack;}
+	}
+	public bool isCure
+	{
+		get {return type == Type.Cure;}
+	}
+	public bool hasSpecialEffect
+	{
+		get {return specialEffect == SpecialEffect.None;}
 	}
 #endregion
 }

@@ -10,6 +10,8 @@ using System.Collections.Generic;
 	card				: text
 	hp					: integer
 	damage			: integer
+	cure				: integer
+	move				: integer
 */
 
 public class Monster
@@ -37,6 +39,8 @@ public class Monster
 	private string cardStr;
 	public int hp {get; private set;}
 	public int damage {get; private set;}
+	public int cure {get; private set;}
+	public int move {get; private set;}
 
 	public Monster(DataRow rawData)
 	{
@@ -49,6 +53,8 @@ public class Monster
 		cardStr = rawData["card"].ToString();
 		hp = (int)rawData["hp"];
 		damage = (int)rawData["damage"];
+		cure = (int)rawData["cure"];
+		move = (int)rawData["move"];
 	}
 
 	private List<Card> _card;

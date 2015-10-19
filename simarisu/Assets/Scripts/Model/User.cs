@@ -8,12 +8,14 @@ using System.Collections.Generic;
 	point				: integer
 	hp					: integer
 	damage			: integer
+	cure				: integer
+	move				: integer
 */
 
 public class User
 {
 #region Static
-	private const int USER_ID = 0;
+	private const int USER_ID = 1;
 	private static User user;
 	public static User GetUser()
 	{
@@ -33,6 +35,8 @@ public class User
 	public int point {get; private set;}
 	public int hp {get; private set;}
 	public int damage {get; private set;}
+	public int cure {get; private set;}
+	public int move {get; private set;}
 
 	public User(DataRow rawData)
 	{
@@ -43,6 +47,8 @@ public class User
 		point = (int)rawData["point"];
 		hp = (int)rawData["hp"];
 		damage = (int)rawData["damage"];
+		cure = (int)rawData["cure"];
+		move = (int)rawData["move"];
 	}
 #endregion
 }

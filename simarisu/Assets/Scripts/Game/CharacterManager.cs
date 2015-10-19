@@ -51,9 +51,9 @@ public class CharacterManager : GameMonoBehaviour
 		return userCharacter.isDead;
 	}
 
-	public int UserCharacterMaxDrawing()
+	public int GetUserCharacterMove()
 	{
-		return userCharacter.maxDrawing;
+		return userCharacter.GetMove();
 	}
 
 	public bool MonsterAllDead()
@@ -142,8 +142,19 @@ public class CharacterManager : GameMonoBehaviour
 						if (target.Position() == currentPosition + range)
 						{
 							target.Damage(CalculateDamage(character, card));
+							if (card.hasSpecialEffect)
+							{
+								InvokeSpecialEffect(target, card);
+							}
 						}
 					}
+				}
+			break;
+			case Card.Type.Cure:
+				character.Cure(CalculateCure(character, card));
+				if (card.hasSpecialEffect)
+				{
+					InvokeSpecialEffect(character, card);
 				}
 			break;
 			case Card.Type.Support:
@@ -155,9 +166,27 @@ public class CharacterManager : GameMonoBehaviour
 		yield return new WaitForSeconds(ATTACK_INTERVAL);
 	}
 
+	private void InvokeSpecialEffect(BaseCharacter character, Card card)
+	{
+		switch (card.specialEffect)
+		{
+			case Card.SpecialEffect.AttackUp:
+				character.AddDamageUp(card.effectValue);
+			break;
+			case Card.SpecialEffect.MoveUp:
+				character.AddMoveUp(card.effectValue);
+			break;
+		}
+	}
+
 	private int CalculateDamage(BaseCharacter character, Card card)
 	{
-		return character.damage + card.damage;
+		return character.GetDamage() + card.value;
+	}
+
+	private int CalculateCure(BaseCharacter character, Card card)
+	{
+		return character.cure + card.value;
 	}
 #endregion
 

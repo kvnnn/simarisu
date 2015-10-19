@@ -144,7 +144,7 @@ public class CharacterManager : GameMonoBehaviour
 							target.Damage(CalculateDamage(character, card));
 							if (card.hasSpecialEffect)
 							{
-								InvokeSpecialEffect(target, card);
+								ActivateSpecialEffect(target, card);
 							}
 						}
 					}
@@ -154,7 +154,7 @@ public class CharacterManager : GameMonoBehaviour
 				character.Cure(CalculateCure(character, card));
 				if (card.hasSpecialEffect)
 				{
-					InvokeSpecialEffect(character, card);
+					ActivateSpecialEffect(character, card);
 				}
 			break;
 			case Card.Type.Support:
@@ -166,7 +166,7 @@ public class CharacterManager : GameMonoBehaviour
 		yield return new WaitForSeconds(ATTACK_INTERVAL);
 	}
 
-	private void InvokeSpecialEffect(BaseCharacter character, Card card)
+	private void ActivateSpecialEffect(BaseCharacter character, Card card)
 	{
 		switch (card.specialEffect)
 		{

@@ -95,9 +95,9 @@ public class CharacterManager : GameMonoBehaviour
 #endregion
 
 #region CharacterAction
-	public IEnumerator MoveUserCharacter(Card card, StageCell cell, System.Action callback)
+	public IEnumerator MoveUserCharacter(Card card, StageCell cell, bool resetStatus, System.Action callback)
 	{
-		yield return StartCoroutine(ActionCharacter(userCharacter, card));
+		yield return StartCoroutine(UserCharacterAction(card, resetStatus));
 
 		LeanTween.move(userCharacter.gameObject, cell.PositionInWorld(), MOVE_SPEED).setOnComplete(
 			()=> {
@@ -105,56 +105,39 @@ public class CharacterManager : GameMonoBehaviour
 				callback();
 			}
 		);
+
+		userCharacter.ResetMoveUp();
 	}
 
-	public IEnumerator UserCharacterAction(Card card)
+	public IEnumerator UserCharacterAction(Card card, bool resetStatus = true)
 	{
-		yield return StartCoroutine(ActionCharacter(userCharacter, card));
+		yield return StartCoroutine(ActionCharacter(userCharacter, card, resetStatus));
 	}
 
-	public IEnumerator MonsterActions()
+	public IEnumerator MonsterActions(bool resetStatus)
 	{
 		foreach (MonsterCharacter monster in monsters)
 		{
 			if (monster == null) {continue;}
 			Card card = monster.SelectCard();
-			yield return StartCoroutine(ActionCharacter(monster, card));
+			yield return StartCoroutine(ActionCharacter(monster, card, resetStatus));
 		}
 	}
 
-	public IEnumerator ActionCharacter(BaseCharacter character, Card card)
+	public IEnumerator ActionCharacter(BaseCharacter character, Card card, bool resetStatus)
 	{
 		if (card == null) {yield break;}
-		bool isMonster = character is MonsterCharacter;
 
 		switch (card.type)
 		{
 			case Card.Type.Attack:
-				Vector2 currentPosition = character.Position();
-				List<BaseCharacter> characterList = allCharacters;
-				foreach (Vector2 range in card.ranges)
-				{
-					foreach (BaseCharacter target in characterList)
-					{
-						if (target == null || target.isDead) {continue;}
-						if ((isMonster && target is MonsterCharacter) || (!isMonster && target is UserCharacter)) {continue;}
-
-						if (target.Position() == currentPosition + range)
-						{
-							target.Damage(CalculateDamage(character, card));
-							if (card.hasSpecialEffect)
-							{
-								InvokeSpecialEffect(target, card);
-							}
-						}
-					}
-				}
+				Attack(character, card, resetStatus);
 			break;
 			case Card.Type.Cure:
 				character.Cure(CalculateCure(character, card));
 				if (card.hasSpecialEffect)
 				{
-					InvokeSpecialEffect(character, card);
+					ActivateSpecialEffect(character, card);
 				}
 			break;
 			case Card.Type.Support:
@@ -166,7 +149,38 @@ public class CharacterManager : GameMonoBehaviour
 		yield return new WaitForSeconds(ATTACK_INTERVAL);
 	}
 
-	private void InvokeSpecialEffect(BaseCharacter character, Card card)
+	private void Attack(BaseCharacter character, Card card, bool resetStatus)
+	{
+		character.GetDamage();
+		bool isMonster = character is MonsterCharacter;
+
+		Vector2 currentPosition = character.Position();
+		List<BaseCharacter> characterList = allCharacters;
+		foreach (Vector2 range in card.ranges)
+		{
+			foreach (BaseCharacter target in characterList)
+			{
+				if (target == null || target.isDead) {continue;}
+				if ((isMonster && target is MonsterCharacter) || (!isMonster && target is UserCharacter)) {continue;}
+
+				if (target.Position() == currentPosition + range)
+				{
+					target.Damage(CalculateDamage(character, card));
+					if (card.hasSpecialEffect)
+					{
+						ActivateSpecialEffect(target, card);
+					}
+				}
+			}
+		}
+
+		if (resetStatus)
+		{
+			character.ResetDamageUp();
+		}
+	}
+
+	private void ActivateSpecialEffect(BaseCharacter character, Card card)
 	{
 		switch (card.specialEffect)
 		{
@@ -186,7 +200,7 @@ public class CharacterManager : GameMonoBehaviour
 
 	private int CalculateCure(BaseCharacter character, Card card)
 	{
-		return character.cure + card.value;
+		return character.GetCure() + card.value;
 	}
 #endregion
 
@@ -228,13 +242,11 @@ public class CharacterManager : GameMonoBehaviour
 		System.Random random = new System.Random();
 		List<StageCell> cellList = cells.OrderBy(x => random.Next()).Take(count).ToList();
 
-		int index = 0;
-		foreach (Monster monster in monsterList)
+		foreach (var monster in monsterList.Select((x,i) => new {Value = x, Index = i}))
 		{
-			MonsterCharacter mc = AddMonster(monster);
-			mc.MoveTo(cellList[index], GetCanvasPosition);
+			MonsterCharacter mc = AddMonster(monster.Value);
+			mc.MoveTo(cellList[monster.Index], GetCanvasPosition);
 			monsters.Add(mc);
-			index++;
 		}
 	}
 

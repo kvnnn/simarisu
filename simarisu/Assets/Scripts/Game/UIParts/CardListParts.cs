@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 public class CardListParts : BaseUIParts
 {
@@ -17,13 +18,10 @@ public class CardListParts : BaseUIParts
 	{
 		RemoveAllCard();
 
-		int index = 0;
-		foreach (Card card in cards)
+		foreach (var card in cards.Select((x,i) => new {Value = x, Index = i}))
 		{
-			CardParts cardParts = cardPartsLists[index];
-			cardParts.SetCard(card);
-
-			index++;
+			CardParts cardParts = cardPartsLists[card.Index];
+			cardParts.SetCard(card.Value);
 		}
 
 		UpdateAllCard();

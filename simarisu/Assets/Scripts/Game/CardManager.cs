@@ -109,7 +109,7 @@ public class CardManager : GameMonoBehaviour
 			Card.GetCard(3),
 			Card.GetCard(4),
 			Card.GetCard(5),
-			Card.GetCard(1),
+			Card.GetCard(6),
 		};
 		return cards;
 	}

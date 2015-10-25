@@ -5,6 +5,9 @@ using System.Collections.Generic;
 
 public class CardManager : GameMonoBehaviour
 {
+	private List<Card> currentCardDeck = new List<Card>();
+	private List<Card> trashedCards = new List<Card>();
+
 	private CardListParts cardListParts;
 	private ButtonParts startBattleButtonParts;
 
@@ -14,15 +17,14 @@ public class CardManager : GameMonoBehaviour
 	public System.Action<Card> cardPartsPushDown;
 	public System.Action cardPartsPushUp;
 
-	// private List<Card> originalCardDeck = new List<Card>();
-	// private List<Card> currentCardDeck = new List<Card>();
-
 	private bool isTouchLock = true;
 
 	private readonly string[] SELECTED_CARD_ORDER_TEXTS = new string[]{"移動前", "移動中", "移動後"};
 
 	public void Init(System.Action<Card> cardPartsPushDown, System.Action cardPartsPushUp)
 	{
+		SetDeck();
+
 		this.cardPartsPushDown = cardPartsPushDown;
 		this.cardPartsPushUp = cardPartsPushUp;
 	}
@@ -100,16 +102,23 @@ public class CardManager : GameMonoBehaviour
 	}
 
 #region Deck
+	private void SetDeck()
+	{
+		Deck deck = Deck.GetDeck();
+		currentCardDeck = deck.cards;
+		trashedCards = new List<Card>();
+	}
+
 	private List<Card> SelectCardsFromDeck()
 	{
 		// For Debug
 		List<Card> cards = new List<Card>(){
-			Card.GetCard(1),
-			Card.GetCard(2),
-			Card.GetCard(3),
-			Card.GetCard(4),
-			Card.GetCard(5),
-			Card.GetCard(6),
+			currentCardDeck[0],
+			currentCardDeck[1],
+			currentCardDeck[2],
+			currentCardDeck[3],
+			currentCardDeck[4],
+			currentCardDeck[7],
 		};
 		return cards;
 	}

@@ -105,6 +105,8 @@ public class CharacterManager : GameMonoBehaviour
 				callback();
 			}
 		);
+
+		userCharacter.ResetMoveUp();
 	}
 
 	public IEnumerator UserCharacterAction(Card card, bool resetStatus = true)

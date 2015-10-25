@@ -2,11 +2,13 @@ using UnityEngine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 public class CardManager : GameMonoBehaviour
 {
 	private List<Card> currentCardDeck = new List<Card>();
 	private List<Card> trashedCards = new List<Card>();
+	private const int CARD_SELECT_COUNT = 5;
 
 	private CardListParts cardListParts;
 	private ButtonParts startBattleButtonParts;
@@ -105,27 +107,36 @@ public class CardManager : GameMonoBehaviour
 	private void SetDeck()
 	{
 		Deck deck = Deck.GetDeck();
-		currentCardDeck = deck.cards;
+		currentCardDeck = ShuffleCards(deck.cards);
 		trashedCards = new List<Card>();
 	}
 
 	private List<Card> SelectCardsFromDeck()
 	{
-		// For Debug
-		List<Card> cards = new List<Card>(){
-			currentCardDeck[0],
-			currentCardDeck[1],
-			currentCardDeck[2],
-			currentCardDeck[3],
-			currentCardDeck[4],
-			currentCardDeck[7],
-		};
-		return cards;
+		UpdateDeck();
+
+		return currentCardDeck.Take(6).ToList();
 	}
 
 	private void UpdateDeck()
 	{
+		if (currentCardDeck.Count < CARD_SELECT_COUNT && trashedCards.Count > 0)
+		{
+			currentCardDeck.AddRange(GetShuffledTrashCards());
+		}
+	}
 
+	private List<Card> ShuffleCards(List<Card> cards)
+	{
+		System.Random random = new System.Random();
+		return cards.OrderBy(x => random.Next()).ToList();
+	}
+
+	private List<Card> GetShuffledTrashCards()
+	{
+		List<Card> shuffledTrashCards = ShuffleCards(trashedCards);
+		trashedCards = new List<Card>();
+		return shuffledTrashCards;
 	}
 #endregion
 

@@ -153,6 +153,17 @@ public class CardManager : GameMonoBehaviour
 
 		UpdateDeck();
 	}
+
+	public void AddCardToDeck(int id)
+	{
+		trashedCards.Add(Card.GetCard(id));
+	}
+
+	public void RemoveCardFromDeck(Card card)
+	{
+		currentCardDeck.Remove(card);
+		trashedCards.Remove(card);
+	}
 #endregion
 
 #region Button

@@ -240,13 +240,11 @@ public class CharacterManager : GameMonoBehaviour
 		System.Random random = new System.Random();
 		List<StageCell> cellList = cells.OrderBy(x => random.Next()).Take(count).ToList();
 
-		int index = 0;
-		foreach (Monster monster in monsterList)
+		foreach (var monster in monsterList.Select((x,i) => new {Value = x, Index = i}))
 		{
-			MonsterCharacter mc = AddMonster(monster);
-			mc.MoveTo(cellList[index], GetCanvasPosition);
+			MonsterCharacter mc = AddMonster(monster.Value);
+			mc.MoveTo(cellList[monster.Index], GetCanvasPosition);
 			monsters.Add(mc);
-			index++;
 		}
 	}
 

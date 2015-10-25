@@ -115,7 +115,7 @@ public class GameManager : GameMonoBehaviour
 
 		List<StageCell> route = stageManager.GetRoute();
 		int lastIndex = route.Count - 1;
-		foreach (var cell in route.Select((cell,i) => new {Value = cell, Index = i}))
+		foreach (var cell in route.Select((x,i) => new {Value = x, Index = i}))
 		{
 			bool isMoveDone = false;
 

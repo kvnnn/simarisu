@@ -186,7 +186,7 @@ public class CharacterManager : GameMonoBehaviour
 
 	private int CalculateCure(BaseCharacter character, Card card)
 	{
-		return character.cure + card.value;
+		return character.GetCure() + card.value;
 	}
 #endregion
 

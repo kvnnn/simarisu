@@ -9,7 +9,7 @@ public class BaseCharacter : GameMonoBehaviour
 	protected int hp;
 	private int damage;
 	private int damageUp = 0;
-	public int cure {get; private set;}
+	private int cure;
 	private int move;
 	private int moveUp = 0;
 
@@ -91,6 +91,11 @@ public class BaseCharacter : GameMonoBehaviour
 		if (isDead) {OnDead();}
 	}
 
+	public int GetCure()
+	{
+		return cure;
+	}
+
 	public void Cure(int cure)
 	{
 		Damage(cure * -1);
@@ -108,9 +113,12 @@ public class BaseCharacter : GameMonoBehaviour
 
 	private void ResetStatusUp()
 	{
-		damageUp = 0;
-		moveUp = 0;
+		ResetDamageUp();
+		ResetMoveUp();
 	}
+
+	public void ResetDamageUp() {damageUp = 0;}
+	public void ResetMoveUp() {moveUp = 0;}
 
 	protected virtual void OnDead() {}
 #endregion

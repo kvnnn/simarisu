@@ -113,13 +113,16 @@ public class GameManager : GameMonoBehaviour
 
 		characterManager.HideUserCharacterHpLabel();
 
-		foreach (StageCell cell in stageManager.GetRoute())
+		List<StageCell> route = stageManager.GetRoute();
+		int lastIndex = route.Count - 1;
+		foreach (var cell in route.Select((cell,i) => new {Value = cell, Index = i}))
 		{
 			bool isMoveDone = false;
 
 			yield return StartCoroutine(characterManager.MoveUserCharacter(
 				selectedCards[1],
-				cell,
+				cell.Value,
+				cell.Index == lastIndex,
 				()=>{isMoveDone = true;}
 			));
 

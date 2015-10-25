@@ -201,6 +201,19 @@ public class GameManager : GameMonoBehaviour
 		startBattleButtonParts.buttonClick = StartBattleButtonClick;
 		cardManager.SetUIParts(cardListParts, startBattleButtonParts);
 	}
+
+	private void ShowRanges(Vector2 pivot, List<Vector2> ranges)
+	{
+		foreach (Vector2 range in ranges)
+		{
+			Vector2 position = range + pivot;
+			StageCell cell = stageManager.GetCell(position);
+			if (cell != null)
+			{
+				cell.SetRangeColor();
+			}
+		}
+	}
 #endregion
 
 #region Event
@@ -228,18 +241,8 @@ public class GameManager : GameMonoBehaviour
 	{
 		if (card.isAttack || card.isCure)
 		{
-			Vector2 characterPosition = characterManager.GetUserCharacterCell().Position();
-			foreach (Vector2 range in card.ranges)
-			{
-				Vector2 position = range + characterPosition;
-				StageCell cell = stageManager.GetCell(position);
-				if (cell != null)
-				{
-					cell.SetRangeColor();
-				}
-			}
+			ShowRanges(characterManager.GetUserCharacterCell().Position(), card.ranges);
 		}
-
 	}
 
 	private void CardPartsPushUp()

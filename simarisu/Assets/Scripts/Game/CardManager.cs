@@ -51,11 +51,15 @@ public class CardManager : GameMonoBehaviour
 
 		this.startBattleButtonParts = startBattleButtonParts;
 
-		UpdateParts();
+		UpdateParts(true);
 	}
 
-	public void UpdateParts()
+	public void UpdateParts(bool isInit = false)
 	{
+		if (!isInit)
+		{
+			TrashCards(GetSelectedCards());
+		}
 		selectedCardParts = new CardParts[MAX_COUNT];
 
 		UpdateCardParts();
@@ -137,6 +141,17 @@ public class CardManager : GameMonoBehaviour
 		List<Card> shuffledTrashCards = ShuffleCards(trashedCards);
 		trashedCards = new List<Card>();
 		return shuffledTrashCards;
+	}
+
+	private void TrashCards(List<Card> cards)
+	{
+		foreach (Card card in cards)
+		{
+			trashedCards.Add(card);
+			currentCardDeck.Remove(card);
+		}
+
+		UpdateDeck();
 	}
 #endregion
 

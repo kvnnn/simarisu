@@ -2,9 +2,14 @@ using UnityEngine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 public class CardManager : GameMonoBehaviour
 {
+	private List<Card> currentCardDeck = new List<Card>();
+	private List<Card> trashedCards = new List<Card>();
+	private const int CARD_SELECT_COUNT = 5;
+
 	private CardListParts cardListParts;
 	private ButtonParts startBattleButtonParts;
 
@@ -14,15 +19,14 @@ public class CardManager : GameMonoBehaviour
 	public System.Action<Card> cardPartsPushDown;
 	public System.Action cardPartsPushUp;
 
-	// private List<Card> originalCardDeck = new List<Card>();
-	// private List<Card> currentCardDeck = new List<Card>();
-
 	private bool isTouchLock = true;
 
 	private readonly string[] SELECTED_CARD_ORDER_TEXTS = new string[]{"移動前", "移動中", "移動後"};
 
 	public void Init(System.Action<Card> cardPartsPushDown, System.Action cardPartsPushUp)
 	{
+		SetDeck();
+
 		this.cardPartsPushDown = cardPartsPushDown;
 		this.cardPartsPushUp = cardPartsPushUp;
 	}
@@ -47,11 +51,15 @@ public class CardManager : GameMonoBehaviour
 
 		this.startBattleButtonParts = startBattleButtonParts;
 
-		UpdateParts();
+		UpdateParts(true);
 	}
 
-	public void UpdateParts()
+	public void UpdateParts(bool isInit = false)
 	{
+		if (!isInit)
+		{
+			TrashCards(GetSelectedCards());
+		}
 		selectedCardParts = new CardParts[MAX_COUNT];
 
 		UpdateCardParts();
@@ -100,23 +108,61 @@ public class CardManager : GameMonoBehaviour
 	}
 
 #region Deck
+	private void SetDeck()
+	{
+		Deck deck = Deck.GetDeck();
+		currentCardDeck = ShuffleCards(deck.cards);
+		trashedCards = new List<Card>();
+	}
+
 	private List<Card> SelectCardsFromDeck()
 	{
-		// For Debug
-		List<Card> cards = new List<Card>(){
-			Card.GetCard(1),
-			Card.GetCard(2),
-			Card.GetCard(3),
-			Card.GetCard(4),
-			Card.GetCard(5),
-			Card.GetCard(6),
-		};
-		return cards;
+		UpdateDeck();
+
+		return currentCardDeck.Take(6).ToList();
 	}
 
 	private void UpdateDeck()
 	{
+		if (currentCardDeck.Count < CARD_SELECT_COUNT && trashedCards.Count > 0)
+		{
+			currentCardDeck.AddRange(GetShuffledTrashCards());
+		}
+	}
 
+	private List<Card> ShuffleCards(List<Card> cards)
+	{
+		System.Random random = new System.Random();
+		return cards.OrderBy(x => random.Next()).ToList();
+	}
+
+	private List<Card> GetShuffledTrashCards()
+	{
+		List<Card> shuffledTrashCards = ShuffleCards(trashedCards);
+		trashedCards = new List<Card>();
+		return shuffledTrashCards;
+	}
+
+	private void TrashCards(List<Card> cards)
+	{
+		foreach (Card card in cards)
+		{
+			trashedCards.Add(card);
+			currentCardDeck.Remove(card);
+		}
+
+		UpdateDeck();
+	}
+
+	public void AddCardToDeck(int id)
+	{
+		trashedCards.Add(Card.GetCard(id));
+	}
+
+	public void RemoveCardFromDeck(Card card)
+	{
+		currentCardDeck.Remove(card);
+		trashedCards.Remove(card);
 	}
 #endregion
 

@@ -16,7 +16,7 @@ public class MonsterCharacter : BaseCharacter
 
 	public Card SelectCard()
 	{
-		List<Card> cards = monster.card;
+		List<Card> cards = monster.cards;
 
 		// return null; //For Debug
 		return cards[Random.Range(0, cards.Count - 1)];

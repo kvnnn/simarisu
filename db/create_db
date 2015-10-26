@@ -2,3 +2,4 @@
 .read ./monster
 .read ./card
 .read ./stage
+.read ./deck

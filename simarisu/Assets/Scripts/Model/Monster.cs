@@ -7,7 +7,7 @@ using System.Collections.Generic;
 	name 				: text
 	description	: text
 	sprite 			: text
-	card				: text
+	cards				: text
 	hp					: integer
 	damage			: integer
 	cure				: integer
@@ -36,7 +36,7 @@ public class Monster
 	public string name {get; private set;}
 	public string description {get; private set;}
 	public string sprite {get; private set;}
-	private string cardStr;
+	private string cardsStr;
 	public int hp {get; private set;}
 	public int damage {get; private set;}
 	public int cure {get; private set;}
@@ -50,28 +50,28 @@ public class Monster
 		name = rawData["name"].ToString();
 		description = rawData["description"].ToString();
 		sprite = rawData["sprite"].ToString();
-		cardStr = rawData["card"].ToString();
+		cardsStr = rawData["cards"].ToString();
 		hp = (int)rawData["hp"];
 		damage = (int)rawData["damage"];
 		cure = (int)rawData["cure"];
 		move = (int)rawData["move"];
 	}
 
-	private List<Card> _card;
-	public List<Card> card
+	private List<Card> _cards;
+	public List<Card> cards
 	{
 		get
 		{
-			if (_card == null)
+			if (_cards == null)
 			{
-				_card = new List<Card>();
-				string[] ids = cardStr.Split(',');
+				_cards = new List<Card>();
+				string[] ids = cardsStr.Split(',');
 				foreach (string id in ids)
 				{
-					_card.Add(Card.GetCard(id));
+					_cards.Add(Card.GetCard(id));
 				}
 			}
-			return _card;
+			return _cards;
 		}
 	}
 #endregion

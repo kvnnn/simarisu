@@ -29,7 +29,7 @@ public class GameManager : GameMonoBehaviour
 		ResetGameStatus();
 
 		stageManager.Init(OnCellPointerEnter);
-		characterManager.Init();
+		characterManager.Init(ShowRanges, HideRanges);
 		cardManager.Init(CardPartsPushDown, CardPartsPushUp);
 
 		PrepareGame();
@@ -109,6 +109,7 @@ public class GameManager : GameMonoBehaviour
 	{
 		List<Card> selectedCards = cardManager.GetSelectedCards();
 
+		// Action Before Move
 		yield return StartCoroutine(characterManager.UserCharacterAction(selectedCards[0]));
 
 		characterManager.HideUserCharacterHpLabel();
@@ -119,21 +120,25 @@ public class GameManager : GameMonoBehaviour
 		{
 			bool isMoveDone = false;
 
-			yield return StartCoroutine(characterManager.MoveUserCharacter(
-				selectedCards[1],
+			// Move Character
+			characterManager.MoveUserCharacter(
 				cell.Value,
-				cell.Index == lastIndex,
 				()=>{isMoveDone = true;}
-			));
+			);
 
+			// Wait til move finish
 			while (!isMoveDone)
 			{
 				yield return null;
 			}
+
+			// Action while moving
+			yield return StartCoroutine(characterManager.UserCharacterAction(selectedCards[1], cell.Index == lastIndex));
 		}
 
 		characterManager.ShowUserCharacterHpLabel();
 
+		// Action after move
 		yield return StartCoroutine(characterManager.UserCharacterAction(selectedCards[2]));
 
 		yield return null;
@@ -201,6 +206,24 @@ public class GameManager : GameMonoBehaviour
 		startBattleButtonParts.buttonClick = StartBattleButtonClick;
 		cardManager.SetUIParts(cardListParts, startBattleButtonParts);
 	}
+
+	private void HideRanges()
+	{
+		stageManager.ResetAllRangeCellColor();
+	}
+
+	private void ShowRanges(Vector2 pivot, Card card)
+	{
+		foreach (Vector2 range in card.ranges)
+		{
+			Vector2 position = range + pivot;
+			StageCell cell = stageManager.GetCell(position);
+			if (cell != null)
+			{
+				cell.SetRangeColor();
+			}
+		}
+	}
 #endregion
 
 #region Event
@@ -228,23 +251,13 @@ public class GameManager : GameMonoBehaviour
 	{
 		if (card.isAttack || card.isCure)
 		{
-			Vector2 characterPosition = characterManager.GetUserCharacterCell().Position();
-			foreach (Vector2 range in card.ranges)
-			{
-				Vector2 position = range + characterPosition;
-				StageCell cell = stageManager.GetCell(position);
-				if (cell != null)
-				{
-					cell.SetRangeColor();
-				}
-			}
+			ShowRanges(characterManager.GetUserCharacterCell().Position(), card);
 		}
-
 	}
 
 	private void CardPartsPushUp()
 	{
-		stageManager.ResetAllRangeCellColor();
+		HideRanges();
 	}
 #endregion
 }

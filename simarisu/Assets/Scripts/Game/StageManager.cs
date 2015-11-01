@@ -56,6 +56,7 @@ public class StageManager : GameMonoBehaviour
 #region Route
 	public List<StageCell> GetRoute()
 	{
+		route.RemoveAt(0);
 		return route;
 	}
 

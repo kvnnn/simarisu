@@ -31,11 +31,17 @@ public class CharacterManager : GameMonoBehaviour
 
 	private int sortingOrder = 0;
 
+	private System.Action<Vector2, Card> showRanges;
+	private System.Action hideRanges;
+
 	private const float MOVE_SPEED = 0.25f;
 	private const float ATTACK_INTERVAL = 0.25f;
 
-	public void Init()
+	public void Init(System.Action<Vector2, Card> showRanges, System.Action hideRanges)
 	{
+		this.showRanges = showRanges;
+		this.hideRanges = hideRanges;
+
 		PrepareGame();
 	}
 
@@ -95,10 +101,8 @@ public class CharacterManager : GameMonoBehaviour
 #endregion
 
 #region CharacterAction
-	public IEnumerator MoveUserCharacter(Card card, StageCell cell, bool resetStatus, System.Action callback)
+	public void MoveUserCharacter(StageCell cell, System.Action callback)
 	{
-		yield return StartCoroutine(UserCharacterAction(card, resetStatus));
-
 		LeanTween.move(userCharacter.gameObject, cell.PositionInWorld(), MOVE_SPEED).setOnComplete(
 			()=> {
 				userCharacter.MoveTo(cell, GetCanvasPosition, false);
@@ -128,6 +132,8 @@ public class CharacterManager : GameMonoBehaviour
 	{
 		if (card == null) {yield break;}
 
+		showRanges(character.GetCurrentCell().Position(), card);
+
 		switch (card.type)
 		{
 			case Card.Type.Attack:
@@ -147,6 +153,8 @@ public class CharacterManager : GameMonoBehaviour
 		}
 
 		yield return new WaitForSeconds(ATTACK_INTERVAL);
+
+		hideRanges();
 	}
 
 	private void Attack(BaseCharacter character, Card card, bool resetStatus)

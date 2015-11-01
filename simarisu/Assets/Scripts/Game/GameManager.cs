@@ -29,7 +29,7 @@ public class GameManager : GameMonoBehaviour
 		ResetGameStatus();
 
 		stageManager.Init(OnCellPointerEnter);
-		characterManager.Init();
+		characterManager.Init(ShowRanges, HideRanges);
 		cardManager.Init(CardPartsPushDown, CardPartsPushUp);
 
 		PrepareGame();
@@ -119,17 +119,17 @@ public class GameManager : GameMonoBehaviour
 		{
 			bool isMoveDone = false;
 
-			yield return StartCoroutine(characterManager.MoveUserCharacter(
-				selectedCards[1],
+			characterManager.MoveUserCharacter(
 				cell.Value,
-				cell.Index == lastIndex,
 				()=>{isMoveDone = true;}
-			));
+			);
 
 			while (!isMoveDone)
 			{
 				yield return null;
 			}
+
+			yield return StartCoroutine(characterManager.UserCharacterAction(selectedCards[1], cell.Index == lastIndex));
 		}
 
 		characterManager.ShowUserCharacterHpLabel();
@@ -202,9 +202,14 @@ public class GameManager : GameMonoBehaviour
 		cardManager.SetUIParts(cardListParts, startBattleButtonParts);
 	}
 
-	private void ShowRanges(Vector2 pivot, List<Vector2> ranges)
+	private void HideRanges()
 	{
-		foreach (Vector2 range in ranges)
+		stageManager.ResetAllRangeCellColor();
+	}
+
+	private void ShowRanges(Vector2 pivot, Card card)
+	{
+		foreach (Vector2 range in card.ranges)
 		{
 			Vector2 position = range + pivot;
 			StageCell cell = stageManager.GetCell(position);
@@ -241,13 +246,13 @@ public class GameManager : GameMonoBehaviour
 	{
 		if (card.isAttack || card.isCure)
 		{
-			ShowRanges(characterManager.GetUserCharacterCell().Position(), card.ranges);
+			ShowRanges(characterManager.GetUserCharacterCell().Position(), card);
 		}
 	}
 
 	private void CardPartsPushUp()
 	{
-		stageManager.ResetAllRangeCellColor();
+		HideRanges();
 	}
 #endregion
 }

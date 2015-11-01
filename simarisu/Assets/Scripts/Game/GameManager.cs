@@ -109,6 +109,7 @@ public class GameManager : GameMonoBehaviour
 	{
 		List<Card> selectedCards = cardManager.GetSelectedCards();
 
+		// Action Before Move
 		yield return StartCoroutine(characterManager.UserCharacterAction(selectedCards[0]));
 
 		characterManager.HideUserCharacterHpLabel();
@@ -119,21 +120,25 @@ public class GameManager : GameMonoBehaviour
 		{
 			bool isMoveDone = false;
 
+			// Move Character
 			characterManager.MoveUserCharacter(
 				cell.Value,
 				()=>{isMoveDone = true;}
 			);
 
+			// Wait til move finish
 			while (!isMoveDone)
 			{
 				yield return null;
 			}
 
+			// Action while moving
 			yield return StartCoroutine(characterManager.UserCharacterAction(selectedCards[1], cell.Index == lastIndex));
 		}
 
 		characterManager.ShowUserCharacterHpLabel();
 
+		// Action after move
 		yield return StartCoroutine(characterManager.UserCharacterAction(selectedCards[2]));
 
 		yield return null;
